@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文京区高齢者福祉ガイド｜相談からサービス利用まで</title>
+<meta name="description" content="文京区の高齢者福祉を、相談・要介護認定・サービス利用までの順番で案内する非公式ガイド。あんしん相談センターの電話、費用のめやす、区内事業所127件の検索つき。">
+<style>
+:root{
+  --paper:#faf7f0; --surface:#ffffff; --ink:#24231e; --muted:#5f5b50;
+  --line:#ddd7c9; --green:#1d5c45; --green-deep:#14432f; --green-tint:#e8f0ea;
+  --red:#b03a24; --red-tint:#f7ece9; --focus:#0b57d0;
+  --step:18px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--step);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"BIZ UDGothic","UD デジタル 教科書体","メイリオ","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.85;text-wrap:pretty;
+}
+a{color:var(--green-deep);text-underline-offset:3px}
+a:hover{color:var(--red)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--green-deep);color:#fff;padding:.6em 1em;z-index:100}
+.skip:focus{left:0}
+.wrap{max-width:46rem;margin:0 auto;padding:0 1.1rem}
+.wide{max-width:60rem}
+
+/* header */
+header.site{
+  position:sticky;top:0;z-index:50;background:var(--green-deep);color:#fff;
+  border-bottom:4px solid var(--green);
+}
+.hrow{max-width:60rem;margin:0 auto;padding:.5rem 1.1rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.htitle{font-weight:700;font-size:1.05rem;letter-spacing:.02em;margin:0}
+.htitle a{color:#fff;text-decoration:none}
+.hnav{display:flex;gap:.15rem;flex-wrap:wrap;margin-left:auto}
+.hnav a{
+  color:#fff;text-decoration:none;font-size:.9rem;padding:.5rem .6rem;border-radius:6px;
+  min-height:44px;display:inline-flex;align-items:center
+}
+.hnav a:hover{background:rgba(255,255,255,.16);color:#fff}
+.fs{display:flex;gap:.3rem;align-items:center;margin-left:.6rem;padding-left:.6rem;border-left:1px solid rgba(255,255,255,.35)}
+.fs span{font-size:.75rem;opacity:.85}
+.fs button{
+  font:inherit;font-size:.8rem;min-width:44px;min-height:44px;cursor:pointer;
+  background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:6px
+}
+.fs button[aria-pressed="true"]{background:#fff;color:var(--green-deep);font-weight:700}
+.fs button:hover{background:rgba(255,255,255,.2);color:#fff}
+.fs button[aria-pressed="true"]:hover{color:var(--green-deep)}
+
+/* main guide links under title */
+.mainnav{display:flex;gap:.8rem;margin:1.3rem 0 .4rem;flex-wrap:wrap}
+.mainnav a{
+  flex:1 1 14rem;display:flex;justify-content:space-between;align-items:center;gap:.6rem;
+  background:var(--surface);border:2px solid var(--green);color:var(--green-deep);
+  font-weight:700;font-size:1.08rem;padding:.85em 1em;border-radius:10px;
+  text-decoration:none;min-height:44px
+}
+.mainnav a::after{content:"→";font-size:1.2em}
+.mainnav a:hover{background:var(--green);color:#fff}
+.hrs{display:block;font-size:.86rem;color:var(--muted);margin-top:.3em;line-height:1.55;white-space:nowrap;font-weight:400}
+
+/* guide block (離脱設計) */
+.guide{
+  background:var(--green-tint);border:2px solid var(--green);border-radius:10px;
+  padding:1.1rem 1.2rem;margin:1.4rem 0;line-height:2.0
+}
+.guide h2{font-size:1.12rem;margin:.1rem 0 .5rem}
+.guide ul{margin:.5rem 0;padding-left:1.3rem}
+.guide li{margin:.4rem 0}
+.guide .no{color:var(--muted)}
+
+/* sections */
+section{margin:2.6rem 0;scroll-margin-top:5rem}
+h2.sec{
+  font-size:1.5rem;line-height:1.4;margin:0 0 .3rem;
+  border-bottom:3px solid var(--green);padding-bottom:.35rem;
+  display:flex;gap:.6rem;align-items:baseline
+}
+h2.sec .num{
+  background:var(--green);color:#fff;font-size:.95rem;min-width:2.1rem;height:2.1rem;
+  display:inline-flex;align-items:center;justify-content:center;border-radius:6px;flex:none
+}
+h3{font-size:1.18rem;margin:1.6rem 0 .5rem;line-height:1.5}
+p{margin:.7rem 0}
+.lead{color:var(--muted);font-size:.95rem;margin-top:.4rem}
+.src{font-size:.82rem;color:var(--muted);margin-top:.35rem}
+
+/* tel */
+.telbtn{
+  display:inline-flex;align-items:center;gap:.4em;background:var(--red);color:#fff !important;
+  text-decoration:none;font-weight:700;padding:.55em .9em;border-radius:8px;
+  min-height:44px;white-space:nowrap
+}
+.telbtn:hover{background:#8f2d1a;color:#fff !important}
+.telbtn .num{font-size:1.08em;letter-spacing:.03em}
+
+/* tables */
+.tscroll{overflow-x:auto;margin:.8rem 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.95rem;background:var(--surface)}
+th,td{border:1px solid var(--line);padding:.55em .7em;text-align:left;vertical-align:top}
+th{background:var(--green-tint);font-weight:700;white-space:nowrap}
+td.nw{white-space:nowrap}
+tbody tr:nth-child(even) td{background:#fdfcf8}
+td.tel{white-space:nowrap;padding:.75em .85em}
+caption{caption-side:bottom;font-size:.82rem;color:var(--muted);text-align:left;padding-top:.4rem}
+
+/* steps */
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:1rem 0}
+ol.steps>li{
+  counter-increment:st;position:relative;padding:.2rem 0 .2rem 3.4rem;margin:1.1rem 0
+}
+ol.steps>li::before{
+  content:counter(st);position:absolute;left:0;top:.15rem;
+  background:var(--green);color:#fff;font-weight:700;
+  width:2.3rem;height:2.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem
+}
+ol.steps h3{margin:.15rem 0 .3rem;font-size:1.15rem}
+ol.steps p{margin:.35rem 0}
+.steptag{font-size:.8rem;color:var(--green-deep);font-weight:700;letter-spacing:.08em}
+
+/* notice */
+.notice{background:var(--red-tint);border-left:5px solid var(--red);padding:.8rem 1rem;border-radius:0 8px 8px 0;margin:1rem 0;font-size:.95rem}
+.notice strong{color:var(--red)}
+
+/* two list (区制度) */
+dl.izoku{margin:.8rem 0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+dl.izoku>div{display:grid;grid-template-columns:11.5rem 1fr;gap:0;border-top:1px solid var(--line)}
+dl.izoku>div:first-child{border-top:none}
+dl.izoku dt{background:var(--green-tint);padding:.7em .9em;font-weight:700;margin:0;font-size:.95rem}
+dl.izoku dd{padding:.7em .9em;margin:0;font-size:.95rem}
+dl.izoku dd small{display:block;color:var(--muted);font-size:.85rem}
+@media (max-width:44rem){
+  header.site{position:static}
+  .hnav{margin-left:0}
+}
+@media (max-width:34rem){dl.izoku>div{grid-template-columns:1fr}dl.izoku dt{padding-bottom:.2em}}
+
+/* glossary */
+details.glo{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:.5rem 0;padding:0}
+details.glo summary{
+  cursor:pointer;padding:.75em 1em;font-weight:700;min-height:44px;display:flex;align-items:center;gap:.5em
+}
+details.glo summary::marker{color:var(--green)}
+details.glo[open] summary{border-bottom:1px solid var(--line);background:var(--green-tint)}
+details.glo .body{padding:.7em 1em .9em}
+details.glo .yomi{font-size:.85rem;color:var(--muted);font-weight:400}
+details.glo p{margin:.4rem 0;font-size:.95rem}
+
+/* provider finder */
+.finder{background:var(--surface);border:2px solid var(--green);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0}
+.finder .frow{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+#q{
+  font:inherit;flex:1 1 14rem;min-width:12rem;padding:.6em .8em;min-height:44px;
+  border:2px solid var(--line);border-radius:8px;background:#fff
+}
+#q:focus{border-color:var(--green)}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin:.7rem 0 .3rem}
+.chip{
+  font:inherit;font-size:.85rem;cursor:pointer;min-height:44px;padding:.35em .8em;
+  border:1.5px solid var(--green);background:#fff;color:var(--green-deep);border-radius:999px
+}
+.chip[aria-pressed="true"]{background:var(--green);color:#fff;font-weight:700}
+.chip:hover{background:var(--green-tint)}
+.chip[aria-pressed="true"]:hover{background:var(--green-deep)}
+#fcount{font-size:.9rem;color:var(--muted);margin:.5rem 0}
+#flist{list-style:none;padding:0;margin:.4rem 0 0;max-height:34rem;overflow-y:auto;border-top:1px solid var(--line)}
+#flist li{border-bottom:1px solid var(--line);padding:.7rem .2rem}
+#flist .pname{font-weight:700;font-size:1.02rem}
+#flist .pcat{
+  display:inline-block;font-size:.75rem;background:var(--green-tint);color:var(--green-deep);
+  border-radius:4px;padding:.1em .5em;margin-right:.45em;vertical-align:.12em
+}
+#flist .pmeta{font-size:.87rem;color:var(--muted);display:block;margin-top:.15rem}
+#flist .ptel{font-weight:700}
+#flist .prow{display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap}
+#flist a.fav{font-size:.85rem;white-space:nowrap}
+#fempty{padding:1rem .3rem;color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--green-deep);color:#e8efe9;margin-top:3rem;padding:1.6rem 0 2.2rem;font-size:.88rem}
+footer.site a{color:#fff}
+footer.site h2{font-size:1rem;margin:.2rem 0 .5rem;color:#fff}
+footer.site ul{padding-left:1.2rem;margin:.3rem 0}
+footer.site li{margin:.2rem 0}
+.foot-note{border-top:1px solid rgba(255,255,255,.3);margin-top:1.1rem;padding-top:.9rem}
+
+@media print{
+  header.site,.finder .frow,.chips,#q,.fs{display:none}
+  body{background:#fff;font-size:12pt}
+  a::after{content:" (" attr(href) ")";font-size:.8em;word-break:break-all}
+  details.glo{border:1px solid #999}
+  details.glo>summary{list-style:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+
+<header class="site">
+  <div class="hrow">
+    <p class="htitle"><a href="#top">文京区高齢者福祉ガイド</a></p>
+    <nav class="hnav" aria-label="ページ内メニュー">
+      <a href="#soudan">相談する</a>
+      <a href="#nagare">ながれ</a>
+      <a href="#hiyou">費用</a>
+      <a href="#seido">区の制度</a>
+      <a href="#jigyo">事業所</a>
+      <a href="#glossary">用語</a>
+    </nav>
+    <div class="fs" role="group" aria-label="文字の大きさ">
+      <span>文字</span>
+      <button type="button" data-size="16" aria-pressed="false">小</button>
+      <button type="button" data-size="18" aria-pressed="true">標準</button>
+      <button type="button" data-size="22" aria-pressed="false">大</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap" >
+<a id="top"></a>
+
+<nav class="mainnav" aria-label="主要な内容へ">
+  <a href="#nagare">【介護保険の使い方】</a>
+  <a href="#seido">【独自の高齢者福祉サービス】</a>
+</nav>
+
+<div class="guide">
+  <h2>このサイトの読み方（最初に読んでください）</h2>
+  <p>文京区の高齢者福祉を、<strong>「相談する → 認定を受ける → サービスを始める」</strong>の順番で並べた案内です。文京区公式の情報（「わたしたちの介護保険」令和8年4月版ほか）をもとに、個人が読みやすくまとめ直した<strong>非公式</strong>のページです。</p>
+  <ul>
+    <li>できることがわかる：相談先の電話番号・手続きの順番・費用のめやす・<span style="white-space:nowrap">区内事業所127件</span>の検索</li>
+    <li>できることの限界：料金や制度は<strong>変わることがあります</strong>。申し込み・判断は、必ず区や事業所の最新案内を確認してください</li>
+    <li class="no">各項目の下に出典リンクを付けています。迷ったら、出典の公式ページを開くか、まず下の相談先へ電話してください</li>
+  </ul>
+  <p><strong>もう読むのが大変な方は、このまま<a href="#soudan">相談先の電話番号</a>だけ使ってください。それで十分です。</strong></p>
+</div>
+
+<!-- 1 相談 -->
+<section id="soudan" aria-labelledby="h-soudan">
+  <h2 class="sec" id="h-soudan"><span class="num">1</span>まず、相談する</h2>
+  <p class="lead">介護の相談はどこにすればいいのか分からない、というときの最初の行き先です。相談は無料です。本人でも家族でも大丈夫です。</p>
+
+  <h3>高齢者あんしん相談センター（地域包括支援センター）</h3>
+  <p>住んでいる地区のセンターが総合窓口です。「介護予防の相談」「要介護認定の申請」「サービス選び」「認知症の相談」「見守り」まで、高齢者まわりのことをまとめて相談できます。</p>
+  <div class="tscroll">
+  <table>
+    <caption>出典: 文京区公式「高齢者あんしん相談センター（地域包括支援センター）」（2026年9月22日HTTP200確認）</caption>
+    <thead><tr><th>地区</th><th>センター</th><th>所在地</th><th>電話</th></tr></thead>
+    <tbody>
+      <tr><td>富坂</td><td class="nw">高齢者あんしん相談センター富坂</td><td>本駒込2-29-24（パシフィックスクエア千石6階）</td><td class="tel"><a class="telbtn" href="tel:0339428128"><span class="num">03-3942-8128</span></a><span class="hrs">月〜金 9:00〜19:00<br>土日祝 9:00〜17:30</span></td></tr>
+      <tr><td>富坂</td><td class="nw">富坂分室</td><td>小石川2-18-18（礫川地域活動センター3階）</td><td class="tel"><a class="telbtn" href="tel:0358055032"><span class="num">03-5805-5032</span></a><span class="hrs">月〜土 9:00〜17:30</span></td></tr>
+      <tr><td>大塚</td><td class="nw">高齢者あんしん相談センター大塚</td><td>大塚4-50-1（特別養護老人ホーム文京大塚みどりの郷内）</td><td class="tel"><a class="telbtn" href="tel:0339419678"><span class="num">03-3941-9678</span></a><span class="hrs">月〜金 9:00〜19:00<br>土日祝 9:00〜17:30</span></td></tr>
+      <tr><td>大塚</td><td class="nw">大塚分室</td><td>音羽1-15-12（東急ドエル・アルス音羽1階）</td><td class="tel"><a class="telbtn" href="tel:0363041093"><span class="num">03-6304-1093</span></a><span class="hrs">月〜土 9:00〜17:30</span></td></tr>
+      <tr><td>本富士</td><td class="nw">高齢者あんしん相談センター本富士</td><td>本郷2-40-11（かねやすビル7階）</td><td class="tel"><a class="telbtn" href="tel:0338118088"><span class="num">03-3811-8088</span></a><span class="hrs">月〜金 9:00〜19:00<br>土日祝 9:00〜17:30</span></td></tr>
+      <tr><td>本富士</td><td class="nw">本富士分室</td><td>西片2-19-15（グッドライフケアセンター向丘内）</td><td class="tel"><a class="telbtn" href="tel:0338137888"><span class="num">03-3813-7888</span></a><span class="hrs">月〜土 9:00〜17:30</span></td></tr>
+      <tr><td>駒込</td><td class="nw">高齢者あんしん相談センター駒込</td><td>千駄木5-19-2（特別養護老人ホーム文京千駄木の郷内）</td><td class="tel"><a class="telbtn" href="tel:0338275422"><span class="num">03-3827-5422</span></a><span class="hrs">月〜金 9:00〜19:00<br>土日祝 9:00〜17:30</span></td></tr>
+      <tr><td>駒込</td><td class="nw">駒込分室</td><td>本駒込2-28-10（文京グリーンコートイーストウィング1階）</td><td class="tel"><a class="telbtn" href="tel:0369121461"><span class="num">03-6912-1461</span></a><span class="hrs">月〜土 9:00〜17:30</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="src">受付時間の詳細: 本所＝月曜〜金曜 9:00〜19:00、土曜・日曜・祝日 9:00〜17:30／分室＝月曜〜土曜 9:00〜17:30。休業日は年末年始（12月29日〜1月3日）で、分室は日曜・祝日休み。出典: <a href="https://www.city.bunkyo.lg.jp/b017/p003149/index.html" target="_blank" rel="noopener">文京区公式「高齢者あんしん相談センター（地域包括支援センター）」</a>（2026年9月22日HTTP200確認）</p>
+
+  <h3>文京区 介護保険課・区役所の代表</h3>
+  <p>認定の申請書類の確認、制度そのものについての質問は区の窓口へ。開庁時間は月〜金 午前8時30分〜午後5時（祝日・年末年始を除く）です。</p>
+  <p><a class="telbtn" href="tel:0338127111">文京区役所 代表 <span class="num">03-3812-7111</span></a></p>
+
+  <div class="notice">
+    <strong>急ぐとき・見守りが心配なとき：</strong>
+    見守り・虐待などの相談は、あんしん相談センターの「高齢者見守り相談窓口」でも受け付けています。
+    緊急の短期入所は「緊急ショートステイ事業」、一人暮らしの電気・見守りは「あんしん電話／あんしん電球」もあります（<a href="#seido">区の制度の一覧</a>へ）。
+  </div>
+  <p class="src">出典: <a href="https://www.city.bunkyo.lg.jp/b017/p003170.html" target="_blank" rel="noopener">高齢者あんしん相談センター（文京区公式）</a>／<a href="https://www.city.bunkyo.lg.jp/tetsuzuki/kaigohoken/index.html" target="_blank" rel="noopener">介護保険（文京区公式）</a></p>
+</section>
+
+<!-- 2 流れ -->
+<section id="nagare" aria-labelledby="h-nagare">
+  <h2 class="sec" id="h-nagare"><span class="num">2</span>手続きのながれ（4ステップ）</h2>
+  <p class="lead">介護保険のサービスを使うまでには、順番が決まっています。全部でこの4つだけです。</p>
+
+  <ol class="steps">
+    <li>
+      <span class="steptag">STEP 1</span>
+      <h3>相談して、要介護認定を申請する</h3>
+      <p>区の窓口または高齢者あんしん相談センターに申請します。本人・家族のほか、ケアマネジャーや介護保険施設に依頼して代行してもらうこともできます。</p>
+      <p><strong>申請に必要なもの:</strong> 介護保険被保険者証／医療保険の資格がわかるもの／主治医（かかりつけ医）の氏名・病院名など／マイナンバーと本人確認書類（マイナンバーカード・運転免許証・パスポート等）。主治医がいない場合は、あんしん相談センターで医師の紹介を受けられます。</p>
+      <p class="src">マイナポータルの「ぴったりサービス」から24時間の電子申請もできます（対応手続きは区の介護保険ページで確認）。</p>
+    </li>
+    <li>
+      <span class="steptag">STEP 2</span>
+      <h3>調査と審査を受ける</h3>
+      <p>区の調査員が自宅に来て、心身の状態や生活の状況を全国共通の項目で聞き取ります（訪問調査）。<strong>ありのまま、普段どおりの状態を伝えることが大切です。</strong>24時間の様子、介護する人が同席しての説明が役に立ちます。</p>
+      <p>その後、コンピュータで一次判定、保健・医療・福祉の専門家による二次判定（認定審査）が行われます。主治医の意見書は区の依頼で作成されます。</p>
+    </li>
+    <li>
+      <span class="steptag">STEP 3</span>
+      <h3>認定結果の通知が届く</h3>
+      <p>結果は7段階に分かれます。認定結果通知書・介護保険被保険者証・負担割合証が届きます。</p>
+      <div class="tscroll">
+      <table>
+        <caption>出典: 「わたしたちの介護保険」令和8年4月版</caption>
+        <thead><tr><th>判定</th><th>意味</th><th>使えるもの</th></tr></thead>
+        <tbody>
+          <tr><td>要介護1〜5</td><td>介護が必要な度合い（数字が大きいほど重い）</td><td>介護サービス＋総合事業</td></tr>
+          <tr><td>要支援1・2</td><td>軽い支援で自立を保てると判定</td><td>介護予防サービス＋総合事業</td></tr>
+          <tr><td>事業対象者</td><td>要支援に近いが正式な認定は無い（区の総合事業の対象）</td><td>総合事業（訪問型・通所型サービスC）</td></tr>
+          <tr><td>非該当</td><td>自立した生活が送れる方</td><td>介護予防・一般介護予防事業</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="src">認定には有効期間があります。体の状態が変わったら、ケアマネジャーに相談して区分変更（認定の見直し）を申請できます。結果に不服がある場合の審査請求は、通知を知った翌日から3か月以内（東京都介護保険審査会）。</p>
+    </li>
+    <li>
+      <span class="steptag">STEP 4</span>
+      <h3>ケアプランを作って、サービスを始める</h3>
+      <p>要介護1〜5の方は居宅介護支援事業者（ケアマネジャーがいる事業所）に連絡し、ケアプラン（利用計画）を作ってもらいます。<strong>ケアプランの作成と相談は無料</strong>です（介護保険で全額負担）。</p>
+      <p>要支援・事業対象者・自立の方は、あんしん相談センターが介護予防ケアプランを作ります。施設に入る場合は、施設に直接申し込みます。</p>
+      <p>サービス内容と料金を確認して契約すれば開始です。事業者は途中で変更できます。</p>
+    </li>
+  </ol>
+  <p class="src">出典: <a href="https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf" target="_blank" rel="noopener">わたしたちの介護保険（PDF・令和8年4月版）</a></p>
+</section>
+
+<!-- 3 費用 -->
+<section id="hiyou" aria-labelledby="h-hiyou">
+  <h2 class="sec" id="h-hiyou"><span class="num">3</span>費用はいくらか</h2>
+
+  <h3>自己負担は1〜3割</h3>
+  <p>原則1割負担です。ただし所得に応じて2割・3割になる場合があります。住民税が非課税の方や生活保護受給の方は1割です。正確な判定は、あんしん相談センターか区の窓口に確認してください。負担の割合は「介護保険負担割合証」に書かれています。</p>
+
+  <h3>主なサービスの自己負担（1割のめやす）</h3>
+  <div class="tscroll">
+  <table>
+    <caption>出典: 「わたしたちの介護保険」令和8年4月版。めやすは令和7年8月時点の情報。実際は所得状況（1・2・3割）と事業所・内容で変わります。食費・滞在費・日常生活費は別途です。</caption>
+    <thead><tr><th>サービス</th><th>めやす</th></tr></thead>
+    <tbody>
+      <tr><td>訪問介護（身体介護）20分〜30分未満</td><td>279円／回</td></tr>
+      <tr><td>訪問介護（身体介護）30分〜1時間未満</td><td>442円／回</td></tr>
+      <tr><td>訪問介護（生活援助）20分〜45分未満／45分以上</td><td>204円／251円</td></tr>
+      <tr><td>通院等乗降介助</td><td>111円／回</td></tr>
+      <tr><td>訪問看護（ステーション）20分〜30分未満・要介護</td><td>537円／回</td></tr>
+      <tr><td>通所介護（デイサービス）1日・要介護1／要介護5</td><td>846円／1,531円</td></tr>
+      <tr><td>通所リハビリ（デイケア）1日・要介護1／要介護5</td><td>718円／1,252円</td></tr>
+      <tr><td>特別養護老人ホーム 多床室 1日・要介護1／要介護5</td><td>731円／1,041円<br>（新規入所は原則要介護3以上）</td></tr>
+      <tr><td>介護老人保健施設 多床室 1日・要介護1／要介護5</td><td>875円／1,110円</td></tr>
+      <tr><td>認知症対応型共同生活介護 包括型 1日・要介護1／要介護5</td><td>591円／887円</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="notice">
+    <strong>ケアマネジャーの相談・ケアプラン作成は無料。</strong>
+    事業者と契約するときは、重要事項説明書で内容・料金・キャンセル料・解約方法を確認しましょう。利用途中でも事業者を変えられます。
+  </div>
+</section>
+
+<!-- 4 区の制度 -->
+<section id="seido" aria-labelledby="h-seido">
+  <h2 class="sec" id="h-seido"><span class="num">4</span>介護保険のほかに、文京区だけの制度</h2>
+  <p class="lead">「まだ介護認定は受けていない」「在宅のまま少し困っている」ときに使える区独自の制度・サービスです。どれも区のページから申し込めます。</p>
+  <dl class="izoku">
+    <div><dt>高齢者スマホスタート助成</dt><dd>スマートフォンの購入を助成（デジタルデバイド解消）<small><a href="https://www.city.bunkyo.lg.jp/b017/p007632.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>緊急ショートステイ事業</dt><dd>緊急時の短期入所<small><a href="https://www.city.bunkyo.lg.jp/b020/p007738.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>見守りあんしん電話・あんしん電球</dt><dd>職員が電話で見守り／IoT電球で暮らしを見守る<small><a href="https://www.city.bunkyo.lg.jp/b017/p003188.html" target="_blank" rel="noopener">あんしん電話</a>・<a href="https://www.city.bunkyo.lg.jp/b017/p003190.html" target="_blank" rel="noopener">あんしん電球</a></small></dd></div>
+    <div><dt>高齢者見守り相談窓口</dt><dd>あんしん相談センター4か所に設置<small><a href="https://www.city.bunkyo.lg.jp/b017/p003171.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>シルバーカー（歩行補助車）の給付</dt><dd>歩行補助車の購入給付<small><a href="https://www.city.bunkyo.lg.jp/b017/p003183.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>車いすステーション事業</dt><dd>車いすの貸出<small><a href="https://www.city.bunkyo.lg.jp/b017/p003192.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>紙おむつ 現物支給・おむつ代 費用助成</dt><dd>対象者は申請が必要<small><a href="https://www.city.bunkyo.lg.jp/b017/p003184.html" target="_blank" rel="noopener">現物支給</a>・<a href="https://www.city.bunkyo.lg.jp/b017/p003185.html" target="_blank" rel="noopener">費用助成</a></small></dd></div>
+    <div><dt>補聴器 購入費用助成</dt><dd>購入費の助成（上限72,450円）<small><a href="https://www.city.bunkyo.lg.jp/b017/p003186.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>高齢者マッサージサービス</dt><dd>1回30分のマッサージ<small><a href="https://www.city.bunkyo.lg.jp/b017/p003246.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+    <div><dt>長寿ふれあい食堂・長寿のお祝い</dt><dd>地域の交流の場・長寿祝い<small><a href="https://www.city.bunkyo.lg.jp/b017/p003320.html" target="_blank" rel="noopener">ふれあい食堂</a>・<a href="https://www.city.bunkyo.lg.jp/b017/p003182.html" target="_blank" rel="noopener">お祝い</a></small></dd></div>
+    <div><dt>成年後見・もの忘れ医療相談</dt><dd>判断力の低下への備え・認知症の相談<small><a href="https://www.city.bunkyo.lg.jp/b017/p003173.html" target="_blank" rel="noopener">成年後見</a>・<a href="https://www.city.bunkyo.lg.jp/b017/p003174.html" target="_blank" rel="noopener">もの忘れ</a></small></dd></div>
+    <div><dt>高齢者虐待の防止</dt><dd>虐待の通報・相談窓口<small><a href="https://www.city.bunkyo.lg.jp/b017/p003172.html" target="_blank" rel="noopener">区のページ</a></small></dd></div>
+  </dl>
+  <p class="src">出典: 文京区公式「高齢者福祉」（リンクは2026年9月22日HTTP200確認）</p>
+</section>
+
+<!-- 5 事業所 -->
+<section id="jigyo" class="wide" style="max-width:60rem;margin-left:auto;margin-right:auto" aria-labelledby="h-jigyo">
+  <h2 class="sec" id="h-jigyo"><span class="num">5</span>区内の事業所をさがす（127件）</h2>
+  <p class="lead">文京区内に所在する、介護保険の在宅サービス事業所です。とうきょう福祉ナビゲーション（福ナビ）の実測データ（2026年9月22日取得）をもとにしています。</p>
+
+  <div class="finder">
+    <div class="frow">
+      <label for="q" class="skip">事業所名・住所で検索</label>
+      <input id="q" type="search" placeholder="事業所名・法人名・住所で絞り込む（例: 千駄木、ケアワーク）" autocomplete="off">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="サービスの種類で絞り込む"></div>
+    <p id="fcount" aria-live="polite"></p>
+    <ul id="flist"></ul>
+    <p id="fempty" hidden>条件に合う事業所が見つかりませんでした。地区名で探すか、条件を外してみてください。</p>
+  </div>
+
+  <div class="notice">
+    <strong>この一覧の限界:</strong>
+    福ナビは事業者登録制の情報サイトで、全事業所の網羅を保証しません。掲載は「指定を受けている」情報で、空き状況は違います。契約前には各事業所へ電話で確認を。
+    文京区外に所在し文京区に伺える事業所は含みません（その検索は区の「介護・医療機関情報検索システム」<a href="https://carepro-navi.jp/bunkyo" target="_blank" rel="noopener">carepro-navi.jp/bunkyo</a>へ）。
+    詳細な公表情報は<a href="https://www.fukunavi.or.jp/" target="_blank" rel="noopener">福ナビ</a>の各事業所ページを参照。
+  </div>
+</section>
+
+<!-- 6 用語 -->
+<section id="glossary" aria-labelledby="h-glo">
+  <h2 class="sec" id="h-glo"><span class="num">6</span>分かりづらい言葉</h2>
+  <p class="lead">冊子や窓口で出てくる言葉を、生活の言葉に置き換えました。開くと説明が出ます。</p>
+
+  <details class="glo"><summary>被保険者 <span class="yomi">（ほけんしゃの対象になる人）</span></summary><div class="body"><p>介護保険に入っている人のこと。40歳以上なら、手続きなしで自動的に入っています。「保険に入る・入らない」は選べません。</p></div></details>
+
+  <details class="glo"><summary>第1号／第2号被保険者</summary><div class="body"><p>第1号＝<strong>65歳以上</strong>の人。第2号＝<strong>40〜64歳</strong>の人。<br>第2号は、決められた病気（特定疾病：がん、パーキンソン病、糖尿病による腎症など16疾病）の場合しか介護保険のサービスは使えません。</p></div></details>
+
+  <details class="glo"><summary>要介護認定 <span class="yomi">（ようかいごにんてい）</span></summary><div class="body"><p>「どのくらい介護が必要か」を区が判定すること。合格・不合格ではなく、必要度のランク付けです。申請→訪問調査→一次判定→二次判定→通知、の順で進みます。</p></div></details>
+
+  <details class="glo"><summary>要介護1〜5／要支援1・2</summary><div class="body"><p>判定結果の7段階のランク。<strong>要支援1→要支援2（軽い）→要介護1→…→要介護5（重い）</strong>。数字が大きいほど介護が必要な度合いが大きい、という意味です。要支援と要介護では使えるサービスの種類が違います。</p></div></details>
+
+  <details class="glo"><summary>事業対象者</summary><div class="body"><p>要支援に近いけれど正式な認定は無い人で、区の総合事業（訪問型サービスC・通所型サービスC）の対象になる人。「何の対象？」と分かりにくい言葉ですが、区が独自に決める枠だと思ってください。</p></div></details>
+
+  <details class="glo"><summary>ケアマネジャー（居宅介護支援専門員）</summary><div class="body"><p>介護の専門アドバイザー。相談に乗り、サービス先を紹介し、計画（ケアプラン）を作り、利用後も様子を見てくれます。<strong>費用は自己負担なし</strong>（保険で負担）。略して「ケアマネ」とも呼ばれます。</p></div></details>
+
+  <details class="glo"><summary>ケアプラン</summary><div class="body"><p>「どんなサービスを、週に何回、どんな組み合わせで使うか」という計画書。原則、ケアマネジャーが無料で作ってくれます。自分で作るものではありません。</p></div></details>
+
+  <details class="glo"><summary>居宅サービス／施設サービス</summary><div class="body"><p>居宅サービス＝<strong>自宅に住んだまま</strong>受けるサービス（訪問・通所・短期入所）。<br>施設サービス＝<strong>施設に入所して</strong>受けるサービス（特養・老健など）。「居宅」は「自宅」という意味です。</p></div></details>
+
+  <details class="glo"><summary>地域密着型サービス</summary><div class="body"><p>住み慣れた地域で受けるためのサービス群（グループホーム、小規模多機能型、定期巡回など）。<strong>原則として文京区に住んでいる人しか使えません。</strong>引っ越したら使えなくなる可能性があります。</p></div></details>
+
+  <details class="glo"><summary>訪問介護と訪問看護のちがい</summary><div class="body"><p>訪問介護＝ホームヘルパーが身体介護（食事・入浴・排せつの介助）や生活援助（掃除・洗濯・買い物・調理）をします。<br>訪問看護＝看護師が医療的なケア（処置・服薬管理・観察）をします。名前が似ていますが、やってもらう人の職業が違います。</p></div></details>
+
+  <details class="glo"><summary>生活援助で使えない家事</summary><div class="body"><p>訪問介護の生活援助は「本人が一人でできない家事」が対象です。家族のための家事、本人が家にいない間の家事、花木の水やり・ペットの世話・大掃除・預金の引き出しなどは対象になりません。必要ならケアマネジャーに相談を。</p></div></details>
+
+  <details class="glo"><summary>特別養護老人ホーム（特養）／老人保健施設（老健）</summary><div class="body"><p>特養＝介護の必要な度合いが高い人が入る施設。新規入所は原則<strong>要介護3以上</strong>で、待つことが多いです。<br>老健＝リハビリ中心の施設。医学的管理のもとで回復し、<strong>自宅に帰ること</strong>を目指します。</p></div></details>
+
+  <details class="glo"><summary>ユニット型／多床室</summary><div class="body"><p>入所施設の部屋のタイプ。ユニット型＝10人以下の少人数グループの個室。多床室＝4人部屋。<strong>部屋のタイプで食費・居住費の自己負担が変わります</strong>（ユニット型個室は高め）。契約前に総額を確認しましょう。</p></div></details>
+
+  <details class="glo"><summary>総合事業（介護予防・日常生活支援総合事業）</summary><div class="body"><p>2015年にできた、区が主体で運営する仕組み。訪問型サービス・通所型サービス・介護予防教室など。文京区では「訪問型サービスC」「通所型サービスC」のような名前で展開されています。</p></div></details>
+
+  <p class="src">出典: 文京区「わたしたちの介護保険」専門用語集（トオルさん構想＋グリ作成、元資料: 令和8年4月版冊子）</p>
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <h2>このサイトについて</h2>
+    <p>文京区の高齢者福祉・介護保険を案内する<strong>非公式</strong>の個人サイトです。文京区は関与していません。</p>
+    <ul>
+      <li>主な出典: <a href="https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf" target="_blank" rel="noopener">わたしたちの介護保険（令和8年4月版）</a>／<a href="https://www.city.bunkyo.lg.jp/kenkou/koureisfukushi/index.html" target="_blank" rel="noopener">文京区 高齢者福祉</a>／<a href="https://www.city.bunkyo.lg.jp/tetsuzuki/kaigohoken/index.html" target="_blank" rel="noopener">文京区 介護保険</a></li>
+      <li>事業所データ: とうきょう福祉ナビゲーション（福ナビ）実測取得 2026年9月22日</li>
+      <li>リンク・電話番号の確認日: 2026年9月22日</li>
+    </ul>
+    <p class="foot-note">制度・料金・電話番号は変わります。申し込みの前に、必ず文京区公式サイトまたは窓口で最新情報を確認してください。<br>迷ったら: 高齢者あんしん相談センター（地区別電話は<a href="#soudan" style="color:#fff">このページの1番上</a>）／文京区役所 03-3812-7111</p>
+  </div>
+</footer>
+
+<script id="provider-data" type="application/json">[{"c":"訪問介護（介護予防）","b":"ケアリッツ白山","o":"株式会社ケアリッツ・アンド・パートナーズ","a":"東京都文京区白山4丁目21番15号 ホワイトキューブマツシタ102号室","t":"03-6240-0891","d":"2023年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500892\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ＡＬＳＯＫケアステーション文京","o":"ＡＬＳＯＫ介護株式会社","a":"東京都文京区白山5丁目7番9号 シャトレー白山1階","t":"03-5319-2673","d":"2024年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500986\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ヘルパーステーションパワーエール","o":"株式会社パワーエール","a":"東京都文京区白山5丁目21番9号 スカイコート文京白山第2、101号室","t":"03-4363-5468","d":"2024年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500991\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"有限会社リンデンケア","o":"有限会社リンデンケア","a":"東京都文京区小石川3丁目27番6号 コスモ小石川102号室","t":"03-6801-9723","d":"2004年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500296\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"グッドライフケア訪問介護文京","o":"株式会社グッドライフケア","a":"東京都文京区小石川2丁目19番1号 林田ビル1階","t":"03-3868-2910","d":"2014年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500531\u0026SVCSBR_CD=004\u0026SVCDBRCD=21","e":"令和07年度"},{"c":"訪問介護（介護予防）","b":"ピカ１ケア","o":"エイチアイケーサービス合同会社","a":"東京都文京区小石川5丁目34番10号","t":"03-6801-5436","d":"2017年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500645\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"あいむすび文京","o":"巴電気通信株式会社","a":"東京都文京区小石川5丁目38番4号","t":"03-5844-6388","d":"2023年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500896\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ニチイケアセンター茗荷谷","o":"株式会社ニチイ学館","a":"東京都文京区春日2丁目10番15号 志知ビル2階","t":"03-5840-8516","d":"2000年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500759\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"よりそい訪問ステーション","o":"一般社団法人ＹＯＲＩＳＯＩＮＥＴ","a":"東京都文京区後楽2丁目16番5号 福永ビル202号室","t":"080-1140-1259","d":"2025年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501014\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ＳＯＭＰＯケア文京訪問介護","o":"ＳＯＭＰＯケア株式会社","a":"東京都文京区小日向2丁目8番15号","t":"03-4362-8959","d":"2018年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500710\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"お・結びケアサービス","o":"合同会社Ｆ＆Ｋ","a":"東京都文京区千石4丁目46番14号 青山ビル401号","t":"03-6822-4041","d":"2020年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500844\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"老松ケアサービス","o":"有限会社老松ケアサービス","a":"東京都文京区大塚5丁目15番10号 三恵ビル1階","t":"03-3941-0811","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500011\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"東京保健生活協同組合介護センター健生","o":"東京保健生活協同組合","a":"東京都文京区大塚6丁目9番10号 大塚診療所2階","t":"03-3943-7490","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500014\u0026SVCSBR_CD=004\u0026SVCDBRCD=21","e":"平成16年度"},{"c":"訪問介護（介護予防）","b":"ケアシステム助丸","o":"ｋｕｋｏｒ株式会社","a":"東京都文京区大塚5丁目15番10号 三恵ビル302号室","t":"03-5810-1737","d":"2024年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500980\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"フィット西片ケアサービス","o":"株式会社ＦＩＴ西片","a":"東京都文京区白山1丁目6番5号 シルバープラザ白山104号室","t":"03-3868-3522","d":"2014年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500534\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"有限会社加藤介護サービス","o":"有限会社加藤介護サービス","a":"東京都文京区本駒込1丁目25番24号","t":"03-3946-3581","d":"1999年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500018\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"有限会社渡瀬","o":"有限会社渡瀬","a":"東京都文京区本駒込1丁目21番14号","t":"03-3946-7151","d":"2000年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500020\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"あいえるＰｉＡ２４","o":"特定非営利活動法人スタジオアイエル文京","a":"東京都文京区本駒込3丁目15番10号","t":"03-5814-9225","d":"2007年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500665\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"有限会社あゆみ介護文京","o":"有限会社あゆみ介護文京","a":"東京都文京区千駄木5丁目28番5号","t":"03-3821-8135","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500023\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"佐々木ケアサービス株式会社在宅介護事業部千駄木営業所","o":"佐々木ケアサービス株式会社","a":"東京都文京区千駄木4丁目1番22号","t":"03-5832-8522","d":"2004年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500290\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ケアステーションふくしあ文京","o":"株式会社ふくしあ","a":"東京都文京区千駄木4丁目7番15号 202号室","t":"03-5809-0716","d":"2005年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500328\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ヘルパーステーションケアワーク東京","o":"株式会社ケアワーク弥生","a":"東京都文京区千駄木4丁目9番6号 101号室","t":"03-5815-5814","d":"2011年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500467\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"有限会社アドワンスサポート・コスモス","o":"有限会社アドワンス","a":"東京都文京区千駄木5丁目49番1号","t":"03-5814-1554","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500758\u0026SVCSBR_CD=004\u0026SVCDBRCD=21","e":"平成23年度"},{"c":"訪問介護（介護予防）","b":"ホームケアよすが","o":"株式会社Ｓｏｕｒａ","a":"東京都文京区千駄木3丁目42番5号 セントラルヴィラ千駄木102号室","t":"080-7030-8794","d":"2020年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500815\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ケア２１文京","o":"株式会社ケア２１","a":"東京都文京区向丘2丁目34番12号 清水ビル1階","t":"03-3828-5490","d":"2024年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500974\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ケアワーク弥生介護サービス部","o":"株式会社ケアワーク弥生","a":"東京都文京区弥生2丁目15番13号","t":"03-3811-1056","d":"1999年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500026\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"ヘルパーステーションせら","o":"株式会社けせら","a":"東京都文京区本郷3丁目15番2号 本郷二村ビル201号室","t":"03-5840-7040","d":"2003年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500260\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"訪問介護クオーレ","o":"株式会社拓","a":"東京都文京区本郷4丁目33番12号","t":"03-6240-0174","d":"2017年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500647\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"メリッサケア","o":"クードシュバル株式会社","a":"東京都文京区本郷6丁目3番2号 102号室","t":"070-2160-0234","d":"2024年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500972\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"訪問介護事業所きずな本郷赤門店","o":"株式会社快活快護","a":"東京都文京区本郷4丁目5番10号 サンファミリー本郷203号室","t":"03-5990-9227","d":"2024年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500990\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"訪問介護プルコッチ","o":"合同会社リアン","a":"東京都文京区本郷1丁目25番2号 Trust Value本郷502号室","t":"03-5654-5743","d":"2026年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501065\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"カインド・ケア・ステーション文京","o":"有限会社カインドケア","a":"東京都文京区湯島4丁目6番12号 湯島ハイタウンB棟916号室","t":"03-3868-8758","d":"2002年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500031\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問介護（介護予防）","b":"リーベ訪問介護ステーション","o":"株式会社インテンド","a":"東京都文京区湯島2丁目16番10号 MASSビルディング3階","t":"03-5844-6596","d":"2023年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500898\u0026SVCSBR_CD=004\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ナースステーション東京文京支店","o":"株式会社日本在宅ケア教育研究所","a":"東京都文京区白山2丁目20番9号 藤井ビル1階","t":"03-5615-8238","d":"2018年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500691\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションソレイユハートケア","o":"株式会社Ａｉｌｅ","a":"東京都文京区白山5丁目17番10号 101号室","t":"03-6902-9184","d":"2024年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500975\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"一般社団法人小石川医師会訪問看護ステーション","o":"一般社団法人小石川医師会","a":"東京都文京区小石川5丁目6番9号","t":"03-3947-0616","d":"2000年3月22日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500033\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションホームケア文京","o":"株式会社ミレニア","a":"東京都文京区小石川2丁目23番12号 エスティビル小石川401号室","t":"03-5615-9715","d":"2016年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500600\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"あいあーる東京訪問看護ステーション","o":"あいあーる合同会社","a":"東京都文京区小石川1丁目13番12号 WAKOU小石川ビル5階","t":"03-6240-0208","d":"2026年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501063\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"よつば訪問看護ステーション","o":"ジェニックス株式会社","a":"東京都文京区春日2丁目1番10号 美津穂マンション201号室","t":"050-1750-6289","d":"2026年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501064\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"東京中央訪問看護リハビリステーション","o":"株式会社ＴＬＳ","a":"東京都文京区後楽2丁目23番15号 大星マンション202号室","t":"03-6801-6932","d":"2017年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500662\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ひかわした訪問看護ステーション","o":"東京保健生活協同組合","a":"東京都文京区千石4丁目1番2号 千石にじの家1階","t":"03-3944-1357","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500035\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"星医療酸器訪問看護・リハビリステーション巣鴨","o":"株式会社星医療酸器","a":"東京都文京区千石4丁目16番2号 小林ビル203号室","t":"03-5976-2655","d":"2014年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500542\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ゆりの樹訪問看護リハビリステーション","o":"医療法人社団一専会","a":"東京都文京区関口1丁目21番19号 九條ビル4階","t":"03-6902-9186","d":"2019年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500755\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"Ｇｒｉｔ．ｉｎｃ Ｈｏｍｅ Ｎｕｒｓｅ Ｓｔａｔｉｏｎ","o":"株式会社Ｇｒｉｔ","a":"東京都文京区関口1丁目8番6号 メゾン文京関口2、803号室","t":"03-5261-2877","d":"2025年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501028\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"東大看護ステーション目白台","o":"一般社団法人東大看護学実装普及研究所","a":"東京都文京区目白台3丁目28番10号 Tonowa Garden目白台","t":"050-3645-9012","d":"2025年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501005\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"なのはな訪問看護ステーション","o":"ＲＡＢＬＯ株式会社","a":"東京都文京区本駒込2丁目9番3号 202号室","t":"03-5981-8614","d":"2017年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500657\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションはな本駒込","o":"株式会社ＯＺビルメンテナンス","a":"東京都文京区本駒込3丁目29番8号 コーポ文京1階","t":"03-6824-0308","d":"2023年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500894\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ＣＯＣＯ訪問看護ステーション","o":"株式会社オレンジ","a":"東京都文京区本駒込4丁目9番11号 101号室","t":"03-5832-9331","d":"2026年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501039\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションきょうわ","o":"一般社団法人東京在宅看護協和会","a":"東京都文京区千駄木5丁目17番3号","t":"03-3822-0128","d":"2001年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500039\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"つねいろ訪問看護ステーション","o":"合同会社ｓｕｍｍａ","a":"東京都文京区千駄木1丁目22番30号 TRUST VALUE千駄木603号室","t":"03-5842-1832","d":"2025年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501029\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーション東大前","o":"三誠メディカル株式会社","a":"東京都文京区向丘2丁目9番10号 コート追分101号室","t":"03-3868-2007","d":"2018年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500697\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"はれの樹訪問看護リハビリステーション","o":"医療法人社団一専会","a":"東京都文京区向丘1丁目4番11号 アカデミー向丘1階","t":"03-6801-5527","d":"2023年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500905\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"やよい訪問看護ステーション","o":"医療法人社団ＹＡＹＯＩ","a":"東京都文京区弥生1丁目5番11号 弥生クリニックビル3階","t":"03-6240-0738","d":"2021年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500849\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"一般財団法人慈愛病院","o":"一般財団法人慈愛会","a":"東京都文京区本郷6丁目12番5号","t":"03-3812-7362","d":"2004年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500007\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションけせら","o":"株式会社けせら","a":"東京都文京区本郷3丁目15番2号 本郷二村ビル201号室","t":"03-3815-1170","d":"2000年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500041\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"在宅看護センター本郷","o":"株式会社Ｃｒｅａｄｅ","a":"東京都文京区本郷4丁目7番12号 101号室","t":"03-5615-8902","d":"2016年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500615\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ゆい訪問看護ステーション","o":"結美株式会社","a":"東京都文京区本郷3丁目34番4号 本郷JKHビル3階","t":"03-6240-0395","d":"2018年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500681\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ハニー訪問看護ステーション","o":"株式会社ＰＦＬ","a":"東京都文京区本郷3丁目36番12号 グリーンヒルズ本郷202号室","t":"03-6240-0824","d":"2022年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500890\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"訪問看護ステーションレインボーコンパス","o":"一般社団法人レインボーコンパス","a":"東京都文京区本郷3丁目2番7号 お茶の水サニービル1階","t":"03-5844-6175","d":"2025年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501006\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"おおぞら訪問看護ステーション","o":"株式会社ブルーウイング","a":"東京都文京区本郷2丁目31番8号 2階","t":"03-5615-8677","d":"2025年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501012\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"龍岡訪問看護ステーション","o":"医療法人社団龍岡会","a":"東京都文京区湯島4丁目9番8号","t":"03-3811-2688","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500042\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"リーベ訪問看護リハビリステーション","o":"株式会社インテンド","a":"東京都文京区湯島2丁目16番10号 TRUST VALUE湯島3階","t":"03-5844-6590","d":"2017年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500626\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"ホーム訪問看護ステーション","o":"合同会社ホーム訪問看護ステーション","a":"東京都文京区湯島3丁目22番4号 第二天野ハイツ102号室","t":"03-6874-4951","d":"2017年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500663\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問看護（介護予防）","b":"まるまる訪問看護ステーション湯島","o":"株式会社ＭＩＫＯＴＯ","a":"東京都文京区湯島4丁目6番12号 湯島ハイタウンB1417","t":"03-4431-3226","d":"2022年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500885\u0026SVCSBR_CD=006\u0026SVCDBRCD=21"},{"c":"訪問リハビリテーション（介護予防）","b":"須田整形外科クリニック","o":"医療法人社団翔貴会須田整形外科クリニック","a":"東京都文京区後楽2丁目23番15号","t":"03-3811-0881","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500051\u0026SVCSBR_CD=007\u0026SVCDBRCD=21"},{"c":"訪問リハビリテーション（介護予防）","b":"医療法人社団日成会介護老人保健施設音羽えびすの郷","o":"医療法人社団日成会","a":"東京都文京区音羽1丁目22番14号","t":"03-3941-0177","d":"2018年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500680\u0026SVCSBR_CD=007\u0026SVCDBRCD=21"},{"c":"訪問リハビリテーション（介護予防）","b":"龍岡訪問リハビリテーション","o":"医療法人社団龍岡会","a":"東京都文京区湯島4丁目9番8号","t":"03-3811-0088","d":"2003年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500411\u0026SVCSBR_CD=007\u0026SVCDBRCD=21"},{"c":"訪問入浴介護（介護予防）","b":"訪問入浴せらぴ文京","o":"合同会社Ｔｈｅｒａｐｙ","a":"東京都文京区小日向3丁目1番6号 インペリアルハイツアミダ103号室","t":"03-5810-1681","d":"2025年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501032\u0026SVCSBR_CD=005\u0026SVCDBRCD=21"},{"c":"訪問入浴介護（介護予防）","b":"アスケア訪問入浴文京","o":"株式会社ＡＳＣａｒｅ","a":"東京都文京区向丘2丁目36番9号 日興パレス文京第2ビル1階101号室","t":"050-3317-6866","d":"2007年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500383\u0026SVCSBR_CD=005\u0026SVCDBRCD=21"},{"c":"夜間対応型訪問介護","b":"ＳＯＭＰＯケア白山夜間訪問介護","o":"ＳＯＭＰＯケア株式会社","a":"東京都文京区白山5丁目17番19号 鳥居本ビル201号室","t":"03-5805-1650","d":"2018年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500715\u0026SVCSBR_CD=326\u0026SVCDBRCD=21"},{"c":"定期巡回・随時対応型訪問介護看護","b":"グッドライフケア２４","o":"株式会社グッドライフケア","a":"東京都文京区小石川2丁目19番1号 林田ビル1階","t":"03-5844-6093","d":"2014年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500526\u0026SVCSBR_CD=391\u0026SVCDBRCD=21","e":"令和06年度"},{"c":"定期巡回・随時対応型訪問介護看護","b":"せら定期巡回・随時対応型訪問介護看護","o":"株式会社けせら","a":"東京都文京区本郷3丁目15番2号 本郷二村ビル201号室","t":"03-5840-7040","d":"2022年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500889\u0026SVCSBR_CD=391\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ＡＬＳＯＫケアステーション文京","o":"ＡＬＳＯＫ介護株式会社","a":"東京都文京区白山5丁目7番9号 シャトレー白山1階","t":"03-5319-2673","d":"2024年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500985\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"一般社団法人小石川医師会居宅介護支援事業所","o":"一般社団法人小石川医師会","a":"東京都文京区小石川5丁目6番9号","t":"03-5978-9795","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500087\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"有限会社リンデンケア","o":"有限会社リンデンケア","a":"東京都文京区小石川3丁目27番6号 コスモ小石川102号室","t":"03-6801-9723","d":"2004年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500296\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアプランあかり","o":"株式会社フォレスト","a":"東京都文京区小石川3丁目6番15号","t":"03-5615-9428","d":"2023年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500966\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ピカ１ケア","o":"エイチアイケーサービス合同会社","a":"東京都文京区小石川5丁目34番10号 長島ビル301号室","t":"03-6801-5436","d":"2026年1月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501036\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"あしつよ・文京","o":"株式会社星医療酸器","a":"東京都文京区春日2丁目13番1号 芳文堂ビル7階","t":"03-6801-6402","d":"2012年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500495\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ニチイケアセンター茗荷谷","o":"株式会社ニチイ学館","a":"東京都文京区春日2丁目10番15号 志知ビル2階","t":"03-5840-8516","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500759\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所こひなた","o":"一般社団法人まつふじ","a":"東京都文京区小日向1丁目5番13号","t":"03-5976-6587","d":"2026年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501040\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"星医療酸器訪問看護・リハビリステーション巣鴨","o":"株式会社星医療酸器","a":"東京都文京区千石4丁目16番2号 小林ビル203号室","t":"03-5976-2677","d":"2014年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500542\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"老松ケアサービス指定居宅介護支援事業所","o":"有限会社老松ケアサービス","a":"東京都文京区大塚5丁目15番10号 三恵ビル103号","t":"03-3941-3666","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500089\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"リハビリ道場","o":"ＰＴ有限会社","a":"東京都文京区大塚6丁目27番6号 グリーンハウス","t":"03-3943-3408","d":"2008年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500414\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所健生","o":"東京保健生活協同組合","a":"東京都文京区大塚4丁目3番1号","t":"03-5319-2776","d":"2016年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500622\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"大塚介護保険サービスセンター","o":"社会福祉法人洛和福祉会","a":"東京都文京区大塚4丁目50番1号","t":"03-3946-8131","d":"2017年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500635\u0026SVCSBR_CD=016\u0026SVCDBRCD=21","e":"令和02年度"},{"c":"居宅介護支援事業者","b":"音羽介護サービス","o":"株式会社中和","a":"東京都文京区音羽1丁目14番8号 ハイツ音羽801号室","t":"03-3943-1182","d":"2000年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500015\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"いちふじケアマネステーション","o":"医療法人社団一専会","a":"東京都文京区関口1丁目13番14号 向井ビル4階","t":"03-6280-7590","d":"2022年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500887\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアサポートたつき","o":"株式会社香洋","a":"東京都文京区目白台2丁目12番13号 目白台濱野BLD101号室","t":"03-6912-2017","d":"2014年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500540\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"トータルケアかなめ文京","o":"トータルケアマネジメント株式会社","a":"東京都文京区白山1丁目30番3号 3階","t":"03-6821-1308","d":"2025年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501027\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"あ・らゆーるサポートセンター","o":"セコム医療システム株式会社","a":"東京都文京区白山1丁目19番6号 シンク白山ビル3階","t":"03-5803-6875","d":"2005年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1311600518\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"有限会社加藤介護サービス","o":"有限会社加藤介護サービス","a":"東京都文京区本駒込1丁目25番24号","t":"03-3946-3581","d":"1999年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500018\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"有限会社渡瀬","o":"有限会社渡瀬","a":"東京都文京区本駒込1丁目21番14号","t":"03-3946-7151","d":"1999年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500106\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"リトルケトル介護サービス","o":"株式会社リトルケトル","a":"東京都文京区本駒込2丁目20番10号 ロアジス文京205","t":"03-6902-1912","d":"2011年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500475\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所ＳＩＮＳＵＮ","o":"株式会社ＦＯＲＺＡ","a":"東京都文京区本駒込5丁目45番8号 ソシヤル中村101号室","t":"03-5842-1080","d":"2016年6月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500602\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"昭和介護保険サービスセンター","o":"社会福祉法人芙蓉会","a":"東京都文京区本駒込2丁目28番31号","t":"03-5395-2376","d":"2017年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500640\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"有限会社あゆみ介護文京","o":"有限会社あゆみ介護文京","a":"東京都文京区千駄木5丁目28番5号","t":"03-3821-8135","d":"1999年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500023\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"佐々木ケアサービス株式会社在宅介護事業部千駄木営業所","o":"佐々木ケアサービス株式会社","a":"東京都文京区千駄木4丁目1番22号","t":"03-5832-8523","d":"2004年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500290\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアステーションふくしあ文京","o":"株式会社ふくしあ","a":"東京都文京区千駄木4丁目7番15号 202号室","t":"03-5809-0716","d":"2009年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500328\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"有限会社アドワンスサポート・コスモス","o":"有限会社アドワンス","a":"東京都文京区千駄木5丁目49番1号","t":"03-5814-1577","d":"2003年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500758\u0026SVCSBR_CD=016\u0026SVCDBRCD=21","e":"平成23年度"},{"c":"居宅介護支援事業者","b":"おとのは","o":"株式会社ＣａｒｅＣｒａｆｔ","a":"東京都文京区千駄木3丁目22番11号 シャルマン文京千駄木503号室","t":"03-5832-9181","d":"2025年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501026\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"奉優会千駄木の郷居宅介護支援事業所","o":"社会福祉法人奉優会","a":"東京都文京区千駄木5丁目19番2号","t":"03-5842-1962","d":"2026年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501042\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアプランセンター東大前","o":"三誠メディカル株式会社","a":"東京都文京区向丘2丁目9番10号 コート追分101号室","t":"03-3868-2300","d":"2024年9月15日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500989\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアプランひまわり","o":"合同会社たくみ","a":"東京都文京区向丘2丁目18番6号 ヒルズコート102号室","t":"03-5834-7585","d":"2025年9月2日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501030\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"サルースケアプランセンター駒込","o":"株式会社ミライズ","a":"東京都文京区向丘1丁目10番2号 THEPLAZAオーベル白山1205号室","t":"03-5654-5812","d":"2025年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501033\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"ケアワーク弥生介護支援部","o":"株式会社ケアワーク弥生","a":"東京都文京区弥生2丁目15番13号","t":"03-3811-1259","d":"1999年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500114\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所けせら","o":"株式会社けせら","a":"東京都文京区本郷3丁目15番2号 本郷二村ビル5階","t":"03-5840-6871","d":"2000年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500118\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所小石川みやびの郷","o":"医療法人社団日成会","a":"東京都文京区本郷4丁目17番9号 401号室","t":"03-5689-6612","d":"2013年5月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500506\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所クオーレ","o":"株式会社拓","a":"東京都文京区本郷5丁目4番8号 菊坂スクエアー1階","t":"03-6240-0166","d":"2018年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500676\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"本郷ケアプランセンター","o":"合同会社Ｋ＆Ｙ","a":"東京都文京区本郷3丁目22番9号 GSハイム御茶ノ水603号室","t":"03-5990-9498","d":"2024年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500973\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"メリッサケア","o":"クードシュバル株式会社","a":"東京都文京区本郷6丁目3番2号 102号室","t":"03-5990-9515","d":"2024年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500979\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"春プランセンター","o":"レガーレ合同会社","a":"東京都文京区本郷4丁目25番11号 ハイシティ本郷菊坂601号室","t":"03-5654-5838","d":"2024年9月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500987\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"指定居宅介護支援事業所ソナタケア","o":"株式会社ソナタ","a":"東京都文京区本郷4丁目25番11号 ハイシティ本郷菊坂705号","t":"03-5615-8640","d":"2025年3月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310501004\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"龍岡ケアーマネイジメントセンター","o":"医療法人社団龍岡会","a":"東京都文京区湯島4丁目9番8号","t":"03-3811-0808","d":"1999年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500121\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所ゆしまの郷","o":"社会福祉法人東六会","a":"東京都文京区湯島3丁目29番10号","t":"03-3836-3528","d":"2004年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500321\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"あ・むろケアプラン事務所","o":"合同会社エージー","a":"東京都文京区湯島3丁目42番2号","t":"03-3832-0931","d":"2013年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500522\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"リーベ居宅介護支援事業所","o":"株式会社インテンド","a":"東京都文京区湯島2丁目16番10号 TRUSTVALUE湯島3階","t":"03-5844-6591","d":"2017年2月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500627\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"居宅介護支援事業者","b":"居宅介護支援事業所てんじん","o":"合同会社てんじん","a":"東京都文京区湯島3丁目32番7号","t":"03-3831-5228","d":"2024年9月15日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500988\u0026SVCSBR_CD=016\u0026SVCDBRCD=21"},{"c":"福祉用具貸与（介護予防）","b":"ダスキンヘルスレント文京豊島ステーション","o":"株式会社いつわワールド","a":"東京都文京区小石川5丁目30番11号 パークハイム美樹","t":"03-5844-6975","d":"2022年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500888\u0026SVCSBR_CD=015\u0026SVCDBRCD=21"},{"c":"福祉用具貸与（介護予防）","b":"株式会社ライフケア","o":"株式会社ライフケア","a":"東京都文京区水道1丁目5番16号 升本ビル2階","t":"03-5805-6683","d":"2006年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310300395\u0026SVCSBR_CD=015\u0026SVCDBRCD=21"},{"c":"福祉用具貸与（介護予防）","b":"有限会社あゆみ介護文京","o":"有限会社あゆみ介護文京","a":"東京都文京区千駄木5丁目28番5号","t":"03-3821-8135","d":"2004年1月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500023\u0026SVCSBR_CD=015\u0026SVCDBRCD=21"},{"c":"福祉用具貸与（介護予防）","b":"有限会社アドワンスサポート・コスモス","o":"有限会社アドワンス","a":"東京都文京区千駄木5丁目49番1号","t":"03-5814-1554","d":"2003年12月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500758\u0026SVCSBR_CD=015\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"ダスキンヘルスレント文京豊島ステーション","o":"株式会社いつわワールド","a":"東京都文京区小石川5丁目30番11号 パークハイム美樹","t":"03-5844-6975","d":"2022年11月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500888\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"株式会社ライフケア","o":"株式会社ライフケア","a":"東京都文京区水道1丁目5番16号 升本ビル2階","t":"03-5805-6683","d":"2006年8月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310300395\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"株式会社行田製作所","o":"株式会社行田製作所","a":"東京都文京区本駒込4丁目6番7号","t":"03-3824-1155","d":"2006年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500068\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"有限会社あゆみ介護文京","o":"有限会社あゆみ介護文京","a":"東京都文京区千駄木5丁目28番5号","t":"03-3821-8135","d":"2006年4月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500023\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"有限会社アドワンスサポート・コスモス","o":"有限会社アドワンス","a":"東京都文京区千駄木5丁目49番1号","t":"03-5814-1554","d":"2006年7月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500758\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"},{"c":"福祉用具販売（介護予防）","b":"株式会社田中工務店","o":"株式会社田中工務店","a":"東京都文京区向丘2丁目10番20号","t":"03-3814-7891","d":"2006年10月1日","u":"https://www.fukunavi.or.jp/fukunavi/controller?cmd=jgy_dt\u0026actionID=jgytik\u0026JGY_CD=1310500417\u0026SVCSBR_CD=435\u0026SVCDBRCD=21"}]</script>
+<script>
+(function(){
+  "use strict";
+  /* ---- font size ---- */
+  var KEY="bkg-font-size";
+  function applySize(px){
+    document.documentElement.style.setProperty("--step",px+"px");
+    document.querySelectorAll(".fs button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.size===String(px) ? "true":"false");
+    });
+    try{localStorage.setItem(KEY,px);}catch(e){}
+  }
+  document.querySelectorAll(".fs button").forEach(function(b){
+    b.addEventListener("click",function(){applySize(b.dataset.size);});
+  });
+  try{var saved=localStorage.getItem(KEY); if(saved){applySize(saved);}}catch(e){}
+
+  /* ---- provider finder ---- */
+  var data=[];
+  try{data=JSON.parse(document.getElementById("provider-data").textContent);}catch(e){data=[];}
+
+  var cats=[];
+  data.forEach(function(p){if(cats.indexOf(p.c)<0)cats.push(p.c);});
+
+  var chipsEl=document.getElementById("chips");
+  var active={};
+  cats.forEach(function(c){
+    var n=data.filter(function(p){return p.c===c;}).length;
+    var b=document.createElement("button");
+    b.type="button";b.className="chip";b.setAttribute("aria-pressed","false");
+    b.textContent=c+"（"+n+"）";
+    b.addEventListener("click",function(){
+      var on=b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed",on?"false":"true");
+      if(on){delete active[c];}else{active[c]=true;}
+      render();
+    });
+    chipsEl.appendChild(b);
+  });
+
+  var qEl=document.getElementById("q");
+  var listEl=document.getElementById("flist");
+  var cntEl=document.getElementById("fcount");
+  var emptyEl=document.getElementById("fempty");
+
+  function esc(s){return String(s).replace(/[&<>"]/g,function(m){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m];});}
+
+  function render(){
+    var q=(qEl.value||"").trim().toLowerCase();
+    var sel=Object.keys(active);
+    var out=[];
+    for(var i=0;i<data.length;i++){
+      var p=data[i];
+      if(sel.length && sel.indexOf(p.c)<0) continue;
+      if(q){
+        var hay=(p.b+" "+p.o+" "+p.a).toLowerCase();
+        if(hay.indexOf(q)<0) continue;
+      }
+      out.push(p);
+    }
+    var html="";
+    for(var j=0;j<out.length;j++){
+      var p=out[j];
+      html+='<li>'
+        +'<div class="prow"><span class="pname"><span class="pcat">'+esc(p.c)+'</span>'+esc(p.b)+'</span>'
+        +(p.t?'<a class="telbtn ptel" href="tel:'+esc(String(p.t).replace(/[^0-9]/g,""))+'"><span class="num">'+esc(p.t)+'</span></a>':'')
+        +'</div>'
+        +'<span class="pmeta">'+esc(p.o)+'｜'+esc(p.a)+'｜指定 '+esc(p.d)+(p.e?'｜第三者評価 '+esc(p.e):'')+'</span>'
+        +(p.u?'<a class="fav" href="'+esc(p.u)+'" target="_blank" rel="noopener">福ナビで詳細を見る</a>':'')
+        +'</li>';
+    }
+    listEl.innerHTML=html;
+    cntEl.textContent=out.length+"件表示（全"+data.length+"件）";
+    emptyEl.hidden=out.length!==0;
+    listEl.hidden=out.length===0;
+  }
+  qEl.addEventListener("input",render);
+  render();
+})();
+</script>
+</body>
+</html>
