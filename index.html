@@ -109,6 +109,23 @@ tbody tr:nth-child(even) td{background:#fdfcf8}
 td.tel{white-space:nowrap;padding:.75em .85em}
 caption{caption-side:bottom;font-size:.82rem;color:var(--muted);text-align:left;padding-top:.4rem}
 
+/* スマホ: あんしん相談センター表をカード型に（横スクロール解消） */
+@media (max-width:44rem){
+  table.centers, .centers tbody, .centers tr, .centers td{ display:block; width:auto; }
+  .centers{ background:none; border:none; }
+  .centers thead{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  .centers tr{ border:1px solid var(--line); border-radius:10px; background:var(--surface); margin:.7rem 0; padding:.7rem .85rem; }
+  .centers td{ border:none; padding:.12rem 0; }
+  .centers td.nw{ white-space:normal; }
+  .centers td:nth-child(1){ display:inline-block; background:var(--green-tint); color:var(--green-deep); font-weight:700; font-size:.85rem; padding:.15em .7em; border-radius:999px; }
+  .centers td:nth-child(2){ font-weight:700; font-size:1.06rem; line-height:1.5; margin-top:.3rem; }
+  .centers td:nth-child(3){ color:var(--muted); font-size:.92rem; }
+  .centers td.tel{ padding-top:.55rem; }
+  .centers .telbtn{ display:flex; justify-content:center; width:100%; font-size:1.1rem; }
+  .centers .hrs{ text-align:center; white-space:normal; font-size:.88rem; }
+  .centers caption{ display:block; position:static; }
+}
+
 /* steps */
 ol.steps{list-style:none;counter-reset:st;padding:0;margin:1rem 0}
 ol.steps>li{
@@ -248,7 +265,7 @@ footer.site li{margin:.2rem 0}
   <h3>高齢者あんしん相談センター（地域包括支援センター）</h3>
   <p>住んでいる地区のセンターが総合窓口です。「介護予防の相談」「要介護認定の申請」「サービス選び」「認知症の相談」「見守り」まで、高齢者まわりのことをまとめて相談できます。</p>
   <div class="tscroll">
-  <table>
+  <table class="centers">
     <caption>出典: 文京区公式「高齢者あんしん相談センター（地域包括支援センター）」（2026年9月22日HTTP200確認）</caption>
     <thead><tr><th>地区</th><th>センター</th><th>所在地</th><th>電話</th></tr></thead>
     <tbody>
