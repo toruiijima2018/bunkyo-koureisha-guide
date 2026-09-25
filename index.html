@@ -124,6 +124,16 @@ caption{caption-side:bottom;font-size:.82rem;color:var(--muted);text-align:left;
   .centers .telbtn{ display:flex; justify-content:center; width:100%; font-size:1.1rem; }
   .centers .hrs{ text-align:center; white-space:normal; font-size:.88rem; }
   .centers caption{ display:block; position:static; }
+
+  /* 他の表（認定・料金）もカード型に */
+  table.m-cards, .m-cards tbody, .m-cards tr, .m-cards td{ display:block; width:auto; }
+  .m-cards{ background:none; border:none; }
+  .m-cards thead{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  .m-cards tr{ border:1px solid var(--line); border-radius:10px; background:var(--surface); margin:.7rem 0; padding:.65rem .85rem; }
+  .m-cards td{ border:none; padding:.18rem 0; }
+  .m-cards td:first-child{ font-weight:700; color:var(--green-deep); font-size:1.02rem; line-height:1.55; }
+  .m-cards td:last-child{ font-weight:700; }
+  .m-cards caption{ display:block; position:static; }
 }
 
 /* steps */
@@ -318,7 +328,7 @@ footer.site li{margin:.2rem 0}
       <h3>認定結果の通知が届く</h3>
       <p>結果は7段階に分かれます。認定結果通知書・介護保険被保険者証・負担割合証が届きます。</p>
       <div class="tscroll">
-      <table>
+      <table class="m-cards">
         <caption>出典: 「わたしたちの介護保険」令和8年4月版</caption>
         <thead><tr><th>判定</th><th>意味</th><th>使えるもの</th></tr></thead>
         <tbody>
@@ -351,7 +361,7 @@ footer.site li{margin:.2rem 0}
 
   <h3>主なサービスの自己負担（1割のめやす）</h3>
   <div class="tscroll">
-  <table>
+  <table class="m-cards">
     <caption>出典: 「わたしたちの介護保険」令和8年4月版。めやすは令和7年8月時点の情報。実際は所得状況（1・2・3割）と事業所・内容で変わります。食費・滞在費・日常生活費は別途です。</caption>
     <thead><tr><th>サービス</th><th>めやす</th></tr></thead>
     <tbody>
