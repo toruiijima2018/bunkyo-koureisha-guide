@@ -40,7 +40,7 @@ header.site{position:sticky;top:0;z-index:50;background:var(--green-deep);color:
 .fs button[aria-pressed="true"]{background:#fff;color:var(--green-deep);font-weight:700}
 .fs button:hover{background:rgba(255,255,255,.2);color:#fff}
 .fs button[aria-pressed="true"]:hover{color:var(--green-deep)}
-@media (max-width:44rem){header.site{position:static}.hnav{margin-left:0}}
+@media (max-width:44rem){header.site{position:static}.hnav{margin-left:0}.hnav a{font-size:1rem;padding:.7rem .75rem}.fs button{min-width:54px;min-height:50px;font-size:.95rem}.fs span{font-size:.85rem}}
 
 .intro{background:var(--green-tint);border:2px solid var(--green);border-radius:12px;padding:1.2rem 1.3rem;margin:1.4rem 0;line-height:2.0}
 .intro h2{font-size:1.2rem;margin:.1rem 0 .5rem}
@@ -102,6 +102,8 @@ details.svc .body a.official{font-size:.92rem;word-break:break-all;display:inlin
 .intro .norm a,.htitle a{display:inline-flex;align-items:center;min-height:44px}
 footer.site p a,footer.site li a{display:inline-flex;align-items:center;min-height:44px}
 
+.nb{white-space:nowrap}
+strong{white-space:nowrap}
 .notice{background:#fdf3e7;border-left:5px solid #c77b1f;padding:.85rem 1.05rem;border-radius:0 10px 10px 0;margin:1rem 0;font-size:.97rem}
 
 footer.site{background:var(--green-deep);color:#e8efe9;margin-top:3.5rem;padding:1.7rem 0 2.4rem;font-size:.92rem}
@@ -164,7 +166,7 @@ footer.site li{margin:.3rem 0}
   </div>
 
   <p>近くの「高齢者あんしん相談センター」でも、同じ相談ができます。場所と電話は下にあります。</p>
-  <p class="src">電話番号は2026年9月26日、文京区公式ページで確認しました。</p>
+  <p class="src">電話番号は<span class="nb">2026年9月26日</span>、文京区公式ページで確認しました。</p>
 </section>
 
 <!-- 相談 -->
@@ -276,11 +278,11 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003184.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <details class="svc"><summary>スマホを買うとき、3万円まで助成</summary><div class="body">
+  <details class="svc"><summary>スマホを買うとき、<span class="nb">3万円まで</span>助成</summary><div class="body">
     <p>スマホを<strong>初めて買う人</strong>、古いスマホからの買い替えの人に、<strong>最大30,000円</strong>助成します。</p>
-    <p class="warn">期間: 令和8年4月1日〜令和9年3月31日</p>
+    <p class="warn">期間: <span class="nb">令和8年4月1日</span>〜<span class="nb">令和9年3月31日</span></p>
     <h4>大事な条件（4つ）</h4>
-    <ol><li>区の<strong>指定の店</strong>で買う（4店舗）</li><li><strong>買った日に</strong>、その店で申請</li><li>スマホ教室を受ける</li><li>アプリを2つ入れる（東京都公式アプリとLINE）</li></ol>
+    <ol><li>区の<strong>指定の店</strong>で買う（<span class="nb">4店舗</span>）</li><li><strong>買った日に</strong>、その店で申請</li><li>スマホ教室を受ける</li><li>アプリを2つ入れる（東京都公式アプリとLINE）</li></ol>
     <h4>持っていくもの</h4>
     <ul><li>マイナンバーカードか運転免許証</li><li>本人名義の通帳かキャッシュカード</li></ul>
     <p>連絡先: <a class="telbtn" href="tel:0358031213">03-5803-1213</a></p>
@@ -301,7 +303,7 @@ footer.site li{margin:.3rem 0}
   </div></details>
 
   <details class="svc"><summary>長寿のお祝い</summary><div class="body">
-    <p>お誕生の節目に、品物やお金を<strong>届けてくれます</strong>。<strong>申し込みは不要</strong>（何もしなくても届きます）。9月15日時点の年齢です。</p>
+    <p>お誕生の節目に、品物やお金を<strong>届けてくれます</strong>。<strong>申し込みは不要</strong>（何もしなくても届きます）。<span class="nb">9月15日時点</span>の年齢です。</p>
     <ul>
       <li><strong>77歳・88歳</strong>: カタログギフト（9月に届く）</li>
       <li><strong>80歳・85〜99歳</strong>: 敬老金（80歳・85歳は現金書留）</li>
@@ -330,7 +332,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003185.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <details class="svc"><summary>補聴器を買うお金の助成（最大72,450円）</summary><div class="body">
+  <details class="svc"><summary>補聴器を買うお金の助成（<span class="nb">最大72,450円</span>）</summary><div class="body">
     <p class="warn">いちばん大事: 買ってから申請はできません。必ず「買う前に」区の許可をもらってください。</p>
     <h4>使える人（4つ全部OK）</h4>
     <ul><li>文京区に住む65歳以上</li><li>聴覚の障害者手帳を持っていない</li><li>お医者さんが「必要」と認めた</li><li>過去5年以内に使っていない</li></ul>
@@ -340,7 +342,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003186.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <details class="svc"><summary>車いすを1週間、無料で借りる</summary><div class="body">
+  <details class="svc"><summary>車いすを<span class="nb">1週間</span>、無料で借りる</summary><div class="body">
     <p>一時的に車いすが必要なとき、<strong>無料で1週間</strong>借りられます。通院や買い物に。</p>
     <h4>大事なこと（5つ）</h4>
     <ol><li>身分証明書を持っていく</li><li>各場所に1台だけ → <strong>先に電話で確かめる</strong></li><li>取りに行って、返しに行く（運搬は自分で）</li><li>借りた場所に返す</li><li>押してもらうための車いすです</li></ol>
@@ -349,7 +351,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003192.html" target="_blank" rel="noopener">区のページを確認する（場所の一覧）</a></p>
   </div></details>
 
-  <details class="svc"><summary>高齢者マッサージ（1回30分・500円）</summary><div class="body">
+  <details class="svc"><summary>高齢者マッサージ（<span class="nb">1回30分・500円</span>）</summary><div class="body">
     <p>国家資格のある先生が、区の施設でマッサージをしてくれます。<strong>1回30分・500円・月1回まで</strong>（先着順）。</p>
     <h4>使える人</h4>
     <ul><li>文京区に住む60歳以上</li></ul>
@@ -359,7 +361,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003246.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <details class="svc"><summary>長寿ふれあい食堂（7か所）</summary><div class="body">
+  <details class="svc"><summary>長寿ふれあい食堂（<span class="nb">7か所</span>）</summary><div class="body">
     <p>地域の人が運営する、<strong>気軽に立ち寄れる食堂</strong>です。区が助けています。</p>
     <ul><li>つゆくさ食堂（千石3-3-7）</li><li>なかよし食堂（白山2-13-6）</li><li>かづさや食堂（大塚6-18-1）</li><li>こまじい食堂（本駒込5-11-4）</li><li>ぼっこdeランチ（小日向1-18-22）</li><li>ランチdeおおつか（大塚5-2-10）</li><li>本駒シニア食堂（本駒込4-35-15）</li></ul>
     <p class="warn">行く前に、電話か連絡をしてください（ご飯の準備があるため）。連絡先は区のページのPDFに載っています。</p>
@@ -386,7 +388,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003175.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <details class="svc"><summary>車いすを1か月、無料で借りる</summary><div class="body">
+  <details class="svc"><summary>車いすを<span class="nb">1か月</span>、無料で借りる</summary><div class="body">
     <p>一時的に車いすが必要な人に、原則1か月、<strong>無料</strong>で貸します。</p>
     <h4>1週間の貸し出し（車いすステーション）との違い</h4>
     <ul><li>車いすステーション = 1週間まで・町の20か所</li><li><strong>この制度 = 1か月まで・区の窓口</strong></li></ul>
@@ -414,7 +416,7 @@ footer.site li{margin:.3rem 0}
     <p><a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003266.html" target="_blank" rel="noopener">区のページを確認する</a></p>
   </div></details>
 
-  <p class="src">この17件は文京区公式のやさしい日本語変換（2026-08-25作成）をもとに、電話番号・URLを2026年9月26日に全区公式ページで再確認しました。</p>
+  <p class="src">この17件は文京区公式のやさしい日本語変換（2026-08-25作成）をもとに、電話番号・URLを<span class="nb">2026年9月26日</span>に全区公式ページで再確認しました。</p>
 </section>
 
 </main>
@@ -425,7 +427,7 @@ footer.site li{margin:.3rem 0}
     <p>文京区の高齢者福祉・介護保険を案内する<strong>非公式</strong>の個人ページです。文京区は関与していません。</p>
     <ul>
       <li>主な出典: <a href="https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf" target="_blank" rel="noopener">わたしたちの介護保険（令和8年4月版）</a>／<a href="https://www.city.bunkyo.lg.jp/kenkou/koureisfukushi/index.html" target="_blank" rel="noopener">文京区 高齢者福祉</a></li>
-      <li>電話番号の確認日: 2026年9月26日</li>
+      <li>電話番号の確認日: <span class="nb">2026年9月26日</span></li>
     </ul>
     <p class="foot-note">制度とお金の金額は変わることがあります。申し込む前に、区か相談所に電話で確かめてください。<br>
     文京区役所: <a href="tel:0338127111">03-3812-7111</a>／高齢福祉課: <a href="tel:0358031213">03-5803-1213</a><br>
