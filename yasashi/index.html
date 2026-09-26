@@ -67,7 +67,8 @@ p{margin:.8rem 0}
 /* カード（全ページ共通・表は使わない） */
 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.9rem 1.05rem;margin:.9rem 0}
 .card .pill{display:inline-block;background:var(--green-tint);color:var(--green-deep);font-weight:700;font-size:.88rem;padding:.15em .7em;border-radius:999px;margin-right:.4em}
-.card .name{font-weight:700;font-size:1.12rem;line-height:1.55;display:block;margin-top:.35rem}
+.card .name{font-weight:700;font-size:1.12rem;line-height:1.55;display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.card .name:hover{text-decoration:underline}
 .card .addr{color:var(--muted);font-size:.95rem;display:block}
 .card .note{font-size:.95rem;margin:.35rem 0 0}
 
@@ -97,7 +98,9 @@ details.svc .body ul,.details .body ol{margin:.3em 0;padding-left:1.4em}
 details.svc .body li{margin:.25em 0}
 details.svc .body .warn{color:var(--red);font-weight:700}
 details.svc .body .telbtn{font-size:1rem;margin:.4em 0}
-details.svc .body a.official{font-size:.92rem;word-break:break-all}
+details.svc .body a.official{font-size:.92rem;word-break:break-all;display:inline-flex;align-items:center;min-height:44px}
+.intro .norm a,.htitle a{display:inline-flex;align-items:center;min-height:44px}
+footer.site p a,footer.site li a{display:inline-flex;align-items:center;min-height:44px}
 
 .notice{background:#fdf3e7;border-left:5px solid #c77b1f;padding:.85rem 1.05rem;border-radius:0 10px 10px 0;margin:1rem 0;font-size:.97rem}
 
