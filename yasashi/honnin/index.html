@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本人版のやさしい説明｜文京区高齢者福祉ガイド</title>
+<meta name="description" content="ご本人・高齢の配偶者向け。介護保険の認定申請を、やさしい日本語で簡潔に案内します。やること3つ・持ちもの・電話番号。">
+<style>
+:root{
+  --paper:#faf7f0; --surface:#ffffff; --ink:#24231e; --muted:#5f5b50;
+  --line:#ddd7c9; --green:#1d5c45; --green-deep:#14432f; --green-tint:#e8f0ea;
+  --red:#b03a24; --red-tint:#fbeeE9; --focus:#0b57d0;
+  --step:21px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--step);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"BIZ UDGothic","UD デジタル 教科書体","メイリオ","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  line-height:2.0;text-wrap:pretty;
+}
+a{color:var(--green-deep);text-underline-offset:3px}
+a:hover{color:var(--red)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--green-deep);color:#fff;padding:.6em 1em;z-index:100}
+.skip:focus{left:0}
+.wrap{max-width:44rem;margin:0 auto;padding:0 1.1rem}
+
+header.site{position:sticky;top:0;z-index:50;background:var(--green-deep);color:#fff;border-bottom:4px solid var(--green)}
+.hrow{max-width:60rem;margin:0 auto;padding:.5rem 1.1rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.htitle{font-weight:700;font-size:1.05rem;margin:0}
+.htitle a{color:#fff;text-decoration:none}
+.hnav{display:flex;gap:.2rem;flex-wrap:wrap;margin-left:auto}
+.hnav a{color:#fff;text-decoration:none;font-size:.92rem;padding:.5rem .55rem;border-radius:6px;min-height:44px;display:inline-flex;align-items:center}
+.hnav a:hover{background:rgba(255,255,255,.16)}
+.fs{display:flex;gap:.3rem;align-items:center;margin-left:.5rem;padding-left:.5rem;border-left:1px solid rgba(255,255,255,.35)}
+.fs span{font-size:.8rem;opacity:.85}
+.fs button{font:inherit;font-size:.85rem;min-width:46px;min-height:46px;cursor:pointer;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:6px}
+.fs button[aria-pressed="true"]{background:#fff;color:var(--green-deep);font-weight:700}
+.fs button:hover{background:rgba(255,255,255,.2);color:#fff}
+.fs button[aria-pressed="true"]:hover{color:var(--green-deep)}
+@media (max-width:44rem){header.site{position:static}.hnav{margin-left:0}.hnav a{font-size:1rem;padding:.7rem .75rem}.fs button{min-width:54px;min-height:50px;font-size:.95rem}.fs span{font-size:.85rem}}
+
+.intro{background:var(--green-tint);border:2px solid var(--green);border-radius:12px;padding:1.2rem 1.3rem;margin:1.4rem 0;line-height:2.0}
+.intro h2{font-size:1.2rem;margin:.1rem 0 .5rem}
+.intro p{margin:.55rem 0}
+.intro .norm{font-size:.95rem}
+
+section{margin:3rem 0;scroll-margin-top:5rem}
+h2.sec{font-size:1.55rem;line-height:1.5;margin:0 0 .4rem;border-bottom:3px solid var(--green);padding-bottom:.4rem;display:flex;gap:.6rem;align-items:baseline}
+h2.sec .num{background:var(--green);color:#fff;font-size:1rem;min-width:2.2rem;height:2.2rem;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;flex:none}
+h3{font-size:1.2rem;margin:1.5rem 0 .5rem;line-height:1.6}
+p{margin:.8rem 0}
+.src{font-size:.88rem;color:var(--muted);margin-top:.4rem}
+.lead{color:var(--muted);font-size:1rem}
+
+/* 電話ボックス */
+.telbox{background:var(--red-tint);border:3px solid var(--red);border-radius:14px;padding:1.1rem 1.2rem;margin:1.2rem 0}
+.telbox h3{margin:.2rem .3rem .6rem;font-size:1.15rem;color:var(--red)}
+.telrow{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem .9rem;margin:.6rem 0}
+.telrow .who{font-weight:700;font-size:1.02rem}
+.telrow .when{display:block;font-size:.85rem;color:var(--muted);font-weight:400}
+.telbtn{display:inline-flex;align-items:center;gap:.4em;background:var(--red);color:#fff !important;text-decoration:none;font-weight:700;padding:.6em 1em;border-radius:10px;min-height:48px;white-space:nowrap;font-size:1.12rem}
+.telbtn:hover{background:#8f2d1a;color:#fff !important}
+
+/* カード（全ページ共通・表は使わない） */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.9rem 1.05rem;margin:.9rem 0}
+.card .pill{display:inline-block;background:var(--green-tint);color:var(--green-deep);font-weight:700;font-size:.88rem;padding:.15em .7em;border-radius:999px;margin-right:.4em}
+.card .name{font-weight:700;font-size:1.12rem;line-height:1.55;display:inline-flex;align-items:center;min-height:44px;text-decoration:none}
+.card .name:hover{text-decoration:underline}
+.card .addr{color:var(--muted);font-size:.95rem;display:block}
+.card .note{font-size:.95rem;margin:.35rem 0 0}
+
+/* ステップ */
+ol.steps{list-style:none;counter-reset:st;padding:0;margin:1rem 0}
+ol.steps>li{counter-increment:st;position:relative;padding:.3rem 0 .3rem 3.6rem;margin:1.3rem 0}
+ol.steps>li::before{content:counter(st);position:absolute;left:0;top:.2rem;background:var(--green);color:#fff;font-weight:700;width:2.5rem;height:2.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+ol.steps h3{margin:.1rem 0 .3rem;font-size:1.18rem}
+ol.steps p{margin:.35rem 0}
+.steptag{font-size:.85rem;color:var(--green-deep);font-weight:700;letter-spacing:.08em}
+
+/* お金のリスト */
+.pricelist{margin:.8rem 0}
+.pricelist .prow{display:flex;justify-content:space-between;gap:1rem;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem;margin:.55rem 0;flex-wrap:wrap}
+.pricelist .svc{font-weight:700}
+.pricelist .fee{font-weight:700;color:var(--green-deep);font-size:1.08rem;white-space:nowrap}
+
+/* サービス詳細（開閉式） */
+details.svc{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;margin:.75rem 0}
+details.svc summary{cursor:pointer;padding:.95em 1.05em;font-weight:700;font-size:1.06rem;min-height:52px;display:flex;align-items:center;gap:.5em;line-height:1.5}
+details.svc summary::marker{color:var(--green)}
+details.svc[open] summary{border-bottom:1.5px solid var(--line);background:var(--green-tint);border-radius:10px 10px 0 0}
+details.svc .body{padding:.8em 1.05em 1em;font-size:.98rem}
+details.svc .body h4{font-size:1rem;margin:.9em 0 .3em;color:var(--green-deep)}
+details.svc .body h4:first-child{margin-top:.2em}
+details.svc .body ul,.details .body ol{margin:.3em 0;padding-left:1.4em}
+details.svc .body li{margin:.25em 0}
+details.svc .body .warn{color:var(--red);font-weight:700}
+details.svc .body .telbtn{font-size:1rem;margin:.4em 0}
+details.svc .body a.official{font-size:.92rem;word-break:break-all;display:inline-flex;align-items:center;min-height:44px}
+.intro .norm a,.htitle a{display:inline-flex;align-items:center;min-height:44px}
+footer.site p a,footer.site li a{display:inline-flex;align-items:center;min-height:44px}
+
+.nb{white-space:nowrap}
+strong{white-space:nowrap}
+.notice{background:#fdf3e7;border-left:5px solid #c77b1f;padding:.85rem 1.05rem;border-radius:0 10px 10px 0;margin:1rem 0;font-size:.97rem}
+
+footer.site{background:var(--green-deep);color:#e8efe9;margin-top:3.5rem;padding:1.7rem 0 2.4rem;font-size:.92rem}
+footer.site a{color:#fff}
+footer.site h2{font-size:1.05rem;margin:.2rem 0 .5rem;color:#fff}
+footer.site ul{padding-left:1.2rem;margin:.3rem 0}
+footer.site li{margin:.3rem 0}
+.foot-note{border-top:1px solid rgba(255,255,255,.3);margin-top:1.1rem;padding-top:.9rem}
+
+@media print{header.site,.fs{display:none}body{background:#fff;font-size:12pt}details.svc{border:1px solid #999}details.svc>summary{list-style:none}details.svc .body{display:block !important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+
+<header class="site">
+  <div class="hrow">
+    <p class="htitle"><a href="#top">やさしい日本語版 文京区高齢者福祉ガイド</a></p>
+    <nav class="hnav" aria-label="ページ内メニュー">
+      <a href="#yaru">やること3つ</a>
+      <a href="#mochimono">持っていくもの</a>
+      <a href="#money">お金</a>
+      <a href="#tel">電話</a>
+    </nav>
+    <div class="fs" role="group" aria-label="文字の大きさ">
+      <span>文字</span>
+      <button type="button" data-size="18" aria-pressed="false">小</button>
+      <button type="button" data-size="21" aria-pressed="true">標準</button>
+      <button type="button" data-size="24" aria-pressed="false">大</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+<main id="main" class="wrap">
+<a id="top"></a>
+
+<div class="intro">
+  <h2>このページの説明</h2>
+  <p>このページは、<strong>「区に、介護が必要かどうかを調べてください」とお願いする方法</strong>のページです。</p>
+  <p>ご本人・ご夫婦で読んでください。むずかしい言葉は、かんたんな言葉に変えました。読むことは<strong>3つだけ</strong>です。</p>
+  <p>読みにくいときは、上の「文字」で大きさを変えてください。</p>
+  <p class="norm">家族が代理でやる場合は → <a href="../kazoku/">家族版のやさしい説明へ</a></p>
+  <p class="norm">文京区ぜんぶの案内がよければ → <a href="../">やさしい日本語版へ</a>／<a href="../../">ふつうの日本語版へ</a></p>
+</div>
+
+<!-- やることは3つ -->
+<section id="yaru" aria-labelledby="h-yaru">
+  <h2 class="sec" id="h-yaru"><span class="num">1</span>やることは、3つだけ</h2>
+  <ol class="steps">
+    <li>
+      <span class="steptag">ひとつめ</span>
+      <h3>区に「申請したい」と言う</h3>
+      <p>近くの高齢者あんしん相談センターか、区の窓口で大丈夫です。<strong>相談は無料</strong>です。</p>
+      <p><strong>家族が行ってもかまいません</strong>（お子さんが代理で申請できます）。</p>
+      <p>わからなければ、<strong>まず電話</strong>。「介護の申請をしたい」と言うだけで大丈夫です。</p>
+    </li>
+    <li>
+      <span class="steptag">ふたつめ</span>
+      <h3>家で、話を聞く</h3>
+      <p><strong>区の人が家に来る</strong>ので、出かける必要はありません。だいたい<strong>1時間</strong>くらいです。</p>
+      <p><strong>ありのまま・普段どおり</strong>で大丈夫。ご家族がそばにいてもかまいません。</p>
+      <p>伝えたいことは、あらかじめ紙にメモしておくと伝えやすいです。</p>
+      <p>かかりつけの医師の<strong>名前と病院の電話番号</strong>をメモしておきましょう（申請書に書きます）。<strong>医師への手紙は区が送ってくれる</strong>ので、あなたが医療機関に行く必要はありません。</p>
+      <div class="notice"><strong>注意：</strong>最近（1〜2か月以内）受診していないと、医師が意見書を書けないことがあります。かかりつけ医に一言しておくと安心です。</div>
+    </li>
+    <li>
+      <span class="steptag">みっつめ</span>
+      <h3>手紙を待つ</h3>
+      <p><strong>申請から、原則30日以内（約1か月）で結果の手紙</strong>が届きます。いっしょに<strong>新しい介護保険証</strong>が届きます。</p>
+      <p>30日を超えるときは、区から<strong>「認定等延期通知書」</strong>が届きます。</p>
+    </li>
+  </ol>
+</section>
+
+<!-- 持っていくもの -->
+<section id="mochimono" aria-labelledby="h-mochimono">
+  <h2 class="sec" id="h-mochimono"><span class="num">2</span>持っていくもの（4つ）</h2>
+  <div class="card">
+    <ul>
+      <li>□ <strong>介護保険の保険証</strong></li>
+      <li>□ <strong>医療保険がわかるもの</strong>（保険証・資格確認書など）</li>
+      <li>□ <strong>マイナンバーがわかるもの</strong>（マイナンバーカード／通知カード／マイナンバーの書かれた住民票）</li>
+      <li>□ <strong>本人確認</strong>（マイナンバーカード・運転免許証・パスポートなど）</li>
+    </ul>
+    <p class="note">＋ <strong>医師のメモ</strong>：医師の名前・病院名・電話番号</p>
+  </div>
+
+  <ul>
+    <li>書き方がわからなくても、<strong>窓口で手伝ってもらえます</strong>。</li>
+    <li>マイナンバーが書けなくても、<strong>空欄で受付</strong>してもらえます（区が調べます）。</li>
+    <li><strong>ご本人が行けないときは</strong>、家族に代理をお願いできます。そのときは<strong>委任状と、家族の身分証</strong>が別に必要です。</li>
+  </ul>
+</section>
+
+<!-- お金 -->
+<section id="money" aria-labelledby="h-money">
+  <h2 class="sec" id="h-money"><span class="num">3</span>お金のこと</h2>
+  <p class="lead">先に金額を書いておきます。</p>
+
+  <div class="pricelist">
+    <div class="prow"><span class="svc">相談</span><span class="fee">無料</span></div>
+    <div class="prow"><span class="svc">ケアマネジャーと計画をつくる</span><span class="fee">無料</span></div>
+    <div class="prow"><span class="svc">デイサービス 1日（介護1）</span><span class="fee">846円（1割のめやす）</span></div>
+    <div class="prow"><span class="svc">訪問介護 20〜30分（介護1）</span><span class="fee">279円（1割のめやす）</span></div>
+  </div>
+  <p>食事代・滞在代は別です。金額の目安は「わたしたちの介護保険（令和8年4月版）」の表を転載しました（目安の時点: 令和7年8月）。</p>
+
+  <p>認定がおりる<strong>前</strong>にかかった介護費も、申請した日からさかのぼって払ってもらえます（非該当だった場合をのぞく）。</p>
+</section>
+
+<!-- 電話 -->
+<section id="tel" aria-labelledby="h-tel">
+  <h2 class="sec" id="h-tel"><span class="num">4</span>電話（どこにかけても大丈夫）</h2>
+
+  <div class="telbox">
+    <h3>近くの相談センター（どこにかけてもOK）</h3>
+    <div class="telrow">
+      <span class="who">富坂<span class="when">本駒込・小石川／月〜金 9:00〜19:00・土日祝 9:00〜17:30</span></span>
+      <a class="telbtn" href="tel:0339428128">03-3942-8128</a>
+    </div>
+    <div class="telrow">
+      <span class="who">大塚<span class="when">大塚・音羽・小日向／月〜金 9:00〜19:00・土日祝 9:00〜17:30</span></span>
+      <a class="telbtn" href="tel:0339419678">03-3941-9678</a>
+    </div>
+    <div class="telrow">
+      <span class="who">本富士<span class="when">本郷・向丘・弥生／月〜金 9:00〜19:00・土日祝 9:00〜17:30</span></span>
+      <a class="telbtn" href="tel:0338118088">03-3811-8088</a>
+    </div>
+    <div class="telrow">
+      <span class="who">駒込<span class="when">千駄木・根津・千石／月〜金 9:00〜19:00・土日祝 9:00〜17:30</span></span>
+      <a class="telbtn" href="tel:0338275422">03-3827-5422</a>
+    </div>
+    <div class="telrow">
+      <span class="who">認定の細かい質問はここ<span class="when">文京区介護保険課 認定調査係</span></span>
+      <a class="telbtn" href="tel:0358031377">03-5803-1377</a>
+    </div>
+  </div>
+  <p>介護保険の申請も、どのセンターでも受付けてもらえます。<strong>地区がわからなくても、どこにかけても大丈夫</strong>です（介護保険証の表紙に地区が書いてあります）。</p>
+  <p class="src">電話番号は<span class="nb">2026年9月28日</span>、文京区公式ページで確認しました。年末年始（12月29日〜1月3日）は休みです。</p>
+
+</section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <h2>このページについて</h2>
+    <p>文京区の高齢者福祉・介護保険を案内する<strong>非公式</strong>の個人ページです。文京区は関与していません。</p>
+    <ul>
+      <li>主な出典: <a href="https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf" target="_blank" rel="noopener">わたしたちの介護保険（令和8年4月版）</a>／<a href="https://www.city.bunkyo.lg.jp/b020/p000544.html" target="_blank" rel="noopener">申請からサービス利用までの流れ</a>／<a href="https://www.city.bunkyo.lg.jp/b020/p007469.html" target="_blank" rel="noopener">要介護認定を受けるための質問と回答</a>／<a href="https://www.city.bunkyo.lg.jp/kenkou/koureisfukushi/index.html" target="_blank" rel="noopener">文京区 高齢者福祉</a></li>
+      <li>電話番号の確認日: <span class="nb">2026年9月28日</span></li>
+    </ul>
+    <p class="foot-note">制度とお金の金額は変わることがあります。申し込む前に、区か相談所に電話で確かめてください。<br>
+    文京区役所: <a href="tel:0338127111">03-3812-7111</a>／高齢福祉課: <a href="tel:0358031213">03-5803-1213</a><br>
+    やさしい日本語版: <a href="../">トップページへ</a>／ふつうの日本語版: <a href="../../">トップページへ</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="bkg-easy-font-size";
+  function applySize(px){
+    document.documentElement.style.setProperty("--step",px+"px");
+    document.querySelectorAll(".fs button").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.size===String(px) ? "true":"false");
+    });
+    try{localStorage.setItem(KEY,px);}catch(e){}
+  }
+  document.querySelectorAll(".fs button").forEach(function(b){
+    b.addEventListener("click",function(){applySize(b.dataset.size);});
+  });
+  try{var saved=localStorage.getItem(KEY); if(saved){applySize(saved);}else{applySize(21);}}catch(e){}
+})();
+</script>
+</body>
+</html>
