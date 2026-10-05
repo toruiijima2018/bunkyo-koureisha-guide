@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>家族版のやさしい説明｜文京区高齢者福祉ガイド</title>
-<meta name="description" content="ご自宅で介護予定のご家族向け。家族が代理人として介護保険の申請をする方法を、やさしい日本語で案内します。必要なもの・30日の流れ・電話番号。">
+<title>事業者・ケアマネジャー版のやさしい説明｜文京区高齢者福祉ガイド</title>
+<meta name="description" content="居宅介護支援事業者・相談員向け。介護保険の認定申請を説明するための台本・用語の言い換え表・根拠URL・渡せる資料へのリンクをまとめています。">
 <style>
 :root{
   --paper:#faf7f0; --surface:#ffffff; --ink:#24231e; --muted:#5f5b50;
@@ -103,7 +103,7 @@ details.svc .body a.official{font-size:.92rem;word-break:break-all;display:inlin
 footer.site p a,footer.site li a{display:inline-flex;align-items:center;min-height:44px}
 
 .nb{white-space:nowrap}
-strong{white-space:normal} /* このページでは太字の折り返しを許可（長い語があるため） */
+strong{white-space:normal} /* このページでは太字の折り返しを許可 */
 .notice{background:#fdf3e7;border-left:5px solid #c77b1f;padding:.85rem 1.05rem;border-radius:0 10px 10px 0;margin:1rem 0;font-size:.97rem}
 
 footer.site{background:var(--green-deep);color:#e8efe9;margin-top:3.5rem;padding:1.7rem 0 2.4rem;font-size:.92rem}
@@ -123,11 +123,12 @@ footer.site li{margin:.3rem 0}
   <div class="hrow">
     <p class="htitle"><a href="#top">やさしい日本語版 文京区高齢者福祉ガイド</a></p>
     <nav class="hnav" aria-label="ページ内メニュー">
-      <a href="#gaido">はじめに</a>
-      <a href="#dairi">代理の申請</a>
-      <a href="#ishi">医師の判断</a>
-      <a href="#nagare">30日の流れ</a>
-      <a href="#money">お金</a>
+      <a href="#tsukai">使い方</a>
+      <a href="#daihon">説明の台本</a>
+      <a href="#goi">言い換え表</a>
+      <a href="#nagare">30日の図</a>
+      <a href="#watasu">渡す資料</a>
+      <a href="#shogen">根拠</a>
       <a href="#tel">電話</a>
     </nav>
     <div class="fs" role="group" aria-label="文字の大きさ">
@@ -144,134 +145,128 @@ footer.site li{margin:.3rem 0}
 <a id="top"></a>
 
 <div class="intro">
-  <h2>このページの説明</h2>
-  <p>このページは、<strong>ご家族が代理人になって、介護の申請を進める</strong>ためのページです。</p>
-  <p>対象は「ご自宅で、これから介護が必要になるかもしれないご家族」です。むずかしい言葉は、かんたんな言葉に変えました。</p>
-  <p>読みにくいときは、上の「文字」で大きさを変えてください。</p>
-  <p class="norm">ご本人・高齢の配偶者向けがよければ → <a href="../honnin/">本人版のやさしい説明へ</a></p>
-  <p class="norm">ケアマネジャー・説明する方へ → <a href="../pro/">事業者版（説明用）へ</a></p>
-  <p class="norm">文京区ぜんぶの案内がよければ → <a href="../">やさしい日本語版へ</a>／<a href="../../">ふつうの日本語版へ</a></p>
+  <h2>このページの説明（事業者・ケアマネジャーの皆さまへ）</h2>
+  <p>このページは、<strong>利用者さんに認定申請を説明するときの「台本」と「資料」</strong>です。文京区の公式情報だけを使い、<strong>確認日と出典URLを全部つけ</strong>ています。</p>
+  <p>説明のあと、<strong>本人・ご家族それぞれの版をあとで渡せます</strong>（下の「渡す資料」から）。そのまま印刷もできます。</p>
+  <p class="norm">ご本人向け → <a href="../honnin/">本人版（かんたん）</a>／ご家族向け → <a href="../kazoku/">家族版（代理で申請）</a></p>
+  <p class="norm">文京区ぜんぶの案内 → <a href="../">やさしい日本語版</a>／<a href="../../">ふつうの日本語版</a></p>
 </div>
 
-<!-- はじめに -->
-<section id="gaido" aria-labelledby="h-gaido">
-  <h2 class="sec" id="h-gaido"><span class="num">1</span>先に、知っておいてほしい3つのこと</h2>
-  <p class="lead">やさしいために、まず手間と時間を先にお伝えします。</p>
+<!-- 使い方 -->
+<section id="tsukai" aria-labelledby="h-tsukai">
+  <h2 class="sec" id="h-tsukai"><span class="num">1</span>この資料の使い方</h2>
+  <ol class="steps">
+    <li><span class="steptag">最初に</span><h3>見せるのは「30日の流れ」だけでもいい</h3><p>話が長いと伝わりません。<strong>申請→家への調査→約30日→結果の手紙</strong>の1本道を先に見せると、利用者さんの不安（いつまで待つのか）に先回りできます。</p></li>
+    <li><span class="steptag">次に</span><h3>必要書類は本人分と代理分を分けて</h3><p>家族が代理で進めるケースでは<strong>「委任状＋本人の介護保険証（原本）＋家族の本人確認」</strong>が増えます。混ぜて説明すると取りこぼしやすいポイントです。</p></li>
+    <li><span class="steptag">最後に</span><h3>渡して終わる</h3><p>このあと<strong>本人版か家族版を渡してください</strong>（印刷・URL送付どちらも可）。迷うときは相談センターの電話が出口です。</p></li>
+  </ol>
+</section>
+
+<!-- 説明の台本 -->
+<section id="daihon" aria-labelledby="h-daihon">
+  <h2 class="sec" id="h-daihon"><span class="num">2</span>説明の台本——そのまま話せる順序</h2>
+  <p class="lead">下の言葉は、利用者さんにそのまま使える言い回しにしてあります。</p>
   <ol class="steps">
     <li>
-      <span class="steptag">時間</span>
-      <h3>申請から結果まで、原則30日（約1か月）かかります</h3>
-      <p>急がせることはできませんが、<strong>申請した日からサービスを使える</strong>ので、待っている間の介護費もあとから払ってもらえます（非該当だった場合をのぞく）。</p>
+      <span class="steptag">手順 1</span>
+      <h3>「区か相談センターで、申請をしたいと言うだけです」</h3>
+      <p>相談は無料です。ご本人が行けなくても、ご家族が代理でできます。そのときは委任状と、ご家族の本人確認の書類が別途必要です。</p>
     </li>
     <li>
-      <span class="steptag">もの</span>
-      <h3>持ちものがいくつかあります</h3>
-      <p>下のチェックリストを見てください。<strong>家族が代理で申請するときは、家族の身分証がもう1つ必要</strong>です。</p>
+      <span class="steptag">手順 2</span>
+      <h3>「持ちものは、保険証・医療保険がわかるもの・マイナンバー・本人確認の4つ」</h3>
+      <p>マイナンバーが書けなくても空欄で受付できます（区が住民票などから調べます）。</p>
     </li>
     <li>
-      <span class="steptag">医師</span>
-      <h3>医師の判断（主治医意見書）が要ります</h3>
-      <p>でも、<strong>これは区が医師に直接たのみます</strong>。患者さんが医療機関に行く必要はありません（例外は次の「医師の判断」で説明します）。</p>
+      <span class="steptag">手順 3</span>
+      <h3>「医師の意見は、区が医師に直接たのみます」</h3>
+      <p>ただし<strong>1〜2か月以内に受診していないと、医師が意見書を書けないことがあります</strong>。かかりつけ医への一言をおすすめしてください。主治医は、日頃もっとも状態を知っている先生を指定します（身内の医師は原則不可）。</p>
+    </li>
+    <li>
+      <span class="steptag">手順 4</span>
+      <h3>「家に調査にきます。家族も同席できます」</h3>
+      <p>だいたい1時間。ありのまま・普段どおりで大丈夫です。伝えたいことは事前にメモしておくと伝わります。</p>
+    </li>
+    <li>
+      <span class="steptag">手順 5</span>
+      <h3>「結果は原則30日以内。手紙が届きます」</h3>
+      <p>認定結果通知書と新しい介護保険証が届きます。<strong>申請日にさかのぼってサービスを使える</strong>ので、待っている間の費用もあとから請求できます（非該当だった場合をのぞく）。30日を超えるときは区から「認定等延期通知書」が届きます。</p>
     </li>
   </ol>
-  <p><strong>それでも、家族が代理で申請できます。</strong> 本人が窓口に行けなくても大丈夫です。</p>
 </section>
 
-<!-- 代理の申請 -->
-<section id="dairi" aria-labelledby="h-dairi">
-  <h2 class="sec" id="h-dairi"><span class="num">2</span>家族が、代理で申請できます</h2>
-  <p class="lead">文京区の公式のルールです——「申請は、本人又は代理人（家族、成年後見人等）が行うことができます」。相談センター、ケアマネの事業所、介護保険施設に<strong>代行してもらう</strong>こともできます。</p>
+<!-- 言い換え表 -->
+<section id="goi" aria-labelledby="h-goi">
+  <h2 class="sec" id="h-goi"><span class="num">3</span>専門用語と、やさしい言い換えの対応表</h2>
+  <p class="lead">左が正式名称、右がそのまま伝わる言い回しです。説明時は右側を優先してください。</p>
 
-  <h3>持っていくもの（チェックリスト）</h3>
+  <div class="card"><span class="pill">要介護認定</span>「どのくらい大変か、区に調べてもらう手続き」</div>
+  <div class="card"><span class="pill">主治医意見書</span>「かかりつけの医師から、区へ送られる手紙（区が依頼します）」</div>
+  <div class="card"><span class="pill">認定調査（訪問調査）</span>「区の人が家に来て、1時間ほど話を聞きます」</div>
+  <div class="card"><span class="pill">一次判定・二次判定</span>「コンピュータの計算と、専門家会議の2段階で決まります」</div>
+  <div class="card"><span class="pill">認定等延期通知書</span>「30日を超えそうなとき、区から届くお知らせ」</div>
+  <div class="card"><span class="pill">居宅介護支援事業者</span>「ケアマネジャー（サービスの計画を立てる人）」</div>
+  <div class="card"><span class="pill">代理権の確認</span>「ご家族が代わりに申請していいよの証拠（委任状、本人の介護保険証など）」</div>
+  <div class="card"><span class="pill">介護保険被保険者証</span>「介護保険の保険証」</div>
 
-  <div class="card">
-    <span class="pill">ご本人分</span>
-    <ul>
-      <li>□ <strong>介護保険の保険証</strong>（介護保険被保険者証）</li>
-      <li>□ <strong>医療保険がわかるもの</strong>（資格確認書・保険証など）</li>
-      <li>□ <strong>マイナンバーがわかるもの</strong>——マイナンバーカード／通知カード（今の住民票と氏名・住所が一致しているもの）／個人番号が書かれた住民票</li>
-      <li>□ <strong>本人確認</strong>——マイナンバーカード、運転免許証、パスポートなど写真つきのもの（写真のない書類は2種類）。または、介護保険負担割合証＋診察券など</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <span class="pill">代理人（あなた）分</span>
-    <ul>
-      <li>□ <strong>代理権が確認できるもの</strong>——<strong>委任状</strong>、本人の介護保険の保険証（原本）など</li>
-      <li>□ <strong>代理人の本人確認</strong>——あなたのマイナンバーカード、運転免許証など</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <span class="pill">申請書そのもの</span>
-    <ul>
-      <li>□ 申請書と連絡票——区の窓口でもらいます</li>
-      <li>□ または、<strong>マイナポータルの電子申請</strong>もできます（メールが区に届いた日が申請日です）</li>
-    </ul>
-  </div>
-
-  <div class="notice"><strong>わからないことがあっても大丈夫：</strong>マイナンバーがわからない等で書けないときは、<strong>空欄のままで受付</strong>してもらえます（区が住民票などから調べます）。</div>
-
-  <p class="src">公式の記載: 文京区「申請からサービス利用までの流れ」の「申請に必要なもの」「代理人が手続きを行う場合」（2026年9月28日でHTTP200確認）。</p>
+  <p class="src">言い換えは本サイト「やさしい日本語版」の変換ルール（生活の言葉に置き換える・元の情報は削らない）に基づきます。</p>
 </section>
 
-<!-- 医師の判断 -->
-<section id="ishi" aria-labelledby="h-ishi">
-  <h2 class="sec" id="h-ishi"><span class="num">3</span>医師の判断（主治医意見書）について</h2>
-  <ul>
-    <li>申請書には<strong>主治医を書く欄</strong>があります。書いたら、<strong>区がその医師に「主治医意見書」の作成を依頼</strong>します（本人・家族が医師に取りに行く仕組みではありません）。</li>
-    <li>意見書は<strong>一次判定・二次判定に反映される、とても大事なもの</strong>です。</li>
-    <li>主治医は「日頃からご本人の状態を一番よく知っている先生」を指定します。<strong>原則として、身内の医師は指定できません。</strong></li>
-    <li>主治医がいないときは、高齢者あんしん相談センターで医師の紹介を受けて受診します。</li>
-  </ul>
-
-  <div class="notice"><strong>注意：</strong>最近（<strong>1〜2か月以内</strong>）受診していないと、医師が<strong>意見書を書けないことがあります</strong>。その場合は早急の受診が必要です。→ <strong>かかりつけ医に「介護の申請をするので、意見書をお願いすることがあります」と一言しておくとスムーズ</strong>です。</div>
-
-  <h3>申請書のためにメモしておく4つ</h3>
-  <ol>
-    <li>医師の氏名（フルネーム）</li>
-    <li>医療機関名・診療科目</li>
-    <li>所在地</li>
-    <li>電話番号</li>
-  </ol>
-
-  <p class="src">公式の記載: 文京区「要介護認定を受けるための質問と回答」（2026年9月28日でHTTP200確認）。</p>
-</section>
-
-<!-- 30日の流れ -->
+<!-- 30日の図 -->
 <section id="nagare" aria-labelledby="h-nagare">
-  <h2 class="sec" id="h-nagare"><span class="num">4</span>30日の流れ——「いつまで待つか」</h2>
+  <h2 class="sec" id="nagare"><span class="num">4</span>見せる用——30日の流れ</h2>
+  <p class="lead">スマホでこの5つを見せると、話が1本道になります。</p>
   <ol class="steps">
-    <li><span class="steptag">手順 1</span><h3>申請</h3><p>窓口・相談センター・郵送・電子申請のどれかで。</p></li>
-    <li><span class="steptag">手順 2</span><h3>家に調査が来る</h3><p>区の職員などが伺い、<strong>本人と家族</strong>に聞き取りをします（だいたい1時間）。家族は同席できます。</p></li>
-    <li><span class="steptag">手順 3</span><h3>主治医意見書</h3><p><strong>区が医師に依頼</strong>します。手間はかかりません。</p></li>
-    <li><span class="steptag">手順 4</span><h3>審査・判定</h3><p>一次判定（調査＋意見書）→ 二次判定（専門家が審査）。</p></li>
-    <li><span class="steptag">手順 5</span><h3>結果の手紙</h3><p>認定結果通知書と<strong>新しい介護保険証</strong>が届きます。</p></li>
+    <li><span class="steptag">1</span><h3>申請</h3><p>窓口・相談センター・郵送・電子申請（マイナポータル）のどれか。到達日が申請日。</p></li>
+    <li><span class="steptag">2</span><h3>家への調査</h3><p>区の職員などが伺い、本人と家族に聞き取り。新規は原則、文京区の職員が実施します。</p></li>
+    <li><span class="steptag">3</span><h3>主治医意見書</h3><p>区が医師に依頼。一次・二次判定の重要な資料になります。</p></li>
+    <li><span class="steptag">4</span><h3>審査・判定</h3><p>一次判定（調査＋意見書）→ 二次判定（保健・医療・福祉の専門家）。</p></li>
+    <li><span class="steptag">5</span><h3>結果の手紙</h3><p>原則30日以内に、認定結果通知書＋新しい介護保険証。遅れるときは認定等延期通知書。</p></li>
   </ol>
-
-  <div class="notice"><strong>30日を超えるときは：</strong>区から<strong>「認定等延期通知書」</strong>が届きます。おもな理由は、①入院中で容態が決まらない ②受診がなく医師が意見書を書けない ③調査の日程調整です。</div>
-
   <p class="src">公式の記載: 文京区「申請からサービス利用までの流れ」——「申請から認定までは原則として30日以内」（2026年9月28日でHTTP200確認）。</p>
 </section>
 
-<!-- お金 -->
-<section id="money" aria-labelledby="h-money">
-  <h2 class="sec" id="h-money"><span class="num">5</span>お金の見通し</h2>
-  <p class="lead">先に金額を書いておきます。</p>
-
-  <div class="pricelist">
-    <div class="prow"><span class="svc">相談</span><span class="fee">無料</span></div>
-    <div class="prow"><span class="svc">ケアマネジャーと計画をつくる</span><span class="fee">無料</span></div>
-    <div class="prow"><span class="svc">デイサービス 1日（介護1）</span><span class="fee">846円（1割のめやす）</span></div>
-    <div class="prow"><span class="svc">訪問介護 20〜30分（介護1）</span><span class="fee">279円（1割のめやす）</span></div>
+<!-- 渡す資料 -->
+<section id="watasu" aria-labelledby="h-watasu">
+  <h2 class="sec" id="h-watasu"><span class="num">5</span>あとで渡す資料</h2>
+  <div class="card">
+    <span class="pill">ご本人・ご夫婦へ</span>
+    <a class="name" href="../honnin/" style="color:var(--green-deep)">本人版——やることは3つだけ</a>
+    <span class="addr">最短・最大文字。A4印刷にも対応</span>
+    <p class="note">URLで渡すなら: <span class="nb">…/yasashi/honnin/</span></p>
   </div>
-  <p>食事代・滞在代は別です。金額の目安は「わたしたちの介護保険（令和8年4月版）」の表を転載しました（目安の時点: 令和7年8月）。</p>
+  <div class="card">
+    <span class="pill">ご家族（代理申請）へ</span>
+    <a class="name" href="../kazoku/" style="color:var(--green-deep)">家族版——代理で申請する</a>
+    <span class="addr">委任状など、代理人の持ち物が2列チェックリスト</span>
+    <p class="note">URLで渡すなら: <span class="nb">…/yasashi/kazoku/</span></p>
+  </div>
+  <ul>
+    <li><strong>印刷のコツ</strong>: このページや2版はA4印刷対応です（ヘッダーは印刷されません）。大きい文字で見せたいときは、画面上の「文字」ボタンで「大」にしてから印刷してください。</li>
+    <li><strong>注意</strong>: このサイトは文京区の公式情報に基づく<strong>非公式の個人ページ</strong>です。制度の最新確認は公式ページ（下の根拠欄）を優先してください。</li>
+  </ul>
+</section>
 
+<!-- 根拠 -->
+<section id="shogen" aria-labelledby="h-shogen">
+  <h2 class="sec" id="h-shogen"><span class="num">6</span>根拠——出典と確認日</h2>
+  <p class="lead">説明の信頼性のために、どの原典から来たかを全部書いておきます。</p>
+  <ul>
+    <li><strong>30日以内・申請に必要なもの・代理申請・主治医意見書の依頼</strong> → 文京区「申請からサービス利用までの流れ」<br>
+      <a class="official" href="https://www.city.bunkyo.lg.jp/b020/p000544.html" target="_blank" rel="noopener">https://www.city.bunkyo.lg.jp/b020/p000544.html</a></li>
+    <li><strong>遅れる理由・1〜2か月以内の受診・身内医師の原則不可・電話（認定調査係）</strong> → 文京区「要介護認定を受けるための質問と回答」<br>
+      <a class="official" href="https://www.city.bunkyo.lg.jp/b020/p007469.html" target="_blank" rel="noopener">https://www.city.bunkyo.lg.jp/b020/p007469.html</a></li>
+    <li><strong>制度・金額・仕組み</strong> → 文京区「わたしたちの介護保険」（令和8年4月版）<br>
+      <a class="official" href="https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf" target="_blank" rel="noopener">https://www.city.bunkyo.lg.jp/documents/564/watasitatinokaigohoken.pdf</a></li>
+    <li><strong>相談センターの場所・電話・時間</strong> → 文京区「高齢者あんしん相談センター」<br>
+      <a class="official" href="https://www.city.bunkyo.lg.jp/b017/p003149.html" target="_blank" rel="noopener">https://www.city.bunkyo.lg.jp/b017/p003149.html</a></li>
+  </ul>
+  <p class="src">確認日: <span class="nb">2026年9月28日</span>（HTTP200で本文取得・原文照合）。以降の制度改正は公式ページを優先してください。</p>
 </section>
 
 <!-- 電話 -->
 <section id="tel" aria-labelledby="h-tel">
-  <h2 class="sec" id="h-tel"><span class="num">6</span>分からなくなったら、電話で大丈夫</h2>
+  <h2 class="sec" id="h-tel"><span class="num">7</span>確認は電話でもできます</h2>
 
   <div class="telbox">
     <h3>近くの相談センター（どこにかけてもOK）</h3>
@@ -296,12 +291,12 @@ footer.site li{margin:.3rem 0}
       <a class="telbtn" href="tel:0358031377">03-5803-1377</a>
     </div>
   </div>
-  <p>介護保険の申請も、どのセンターでも受付けてもらえます。<strong>地区がわからなくても、どこにかけても大丈夫</strong>です（介護保険証の表紙に地区が書いてあります）。</p>
   <p class="src">電話番号は<span class="nb">2026年9月28日</span>、文京区公式ページで確認しました。年末年始（12月29日〜1月3日）は休みです。</p>
 
 </section>
 
 </main>
+
 
 <footer class="site">
   <div class="wrap">
@@ -334,5 +329,4 @@ footer.site li{margin:.3rem 0}
   try{var saved=localStorage.getItem(KEY); if(saved){applySize(saved);}else{applySize(21);}}catch(e){}
 })();
 </script>
-</body>
-</html>
+</body></html>
