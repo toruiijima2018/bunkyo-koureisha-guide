@@ -242,12 +242,12 @@
     <path d="M14 74 a24 24 0 0 1 10 -26" stroke-width="6"/>
     <path d="M44 34 l9 9 M36 42 l9 9" stroke-width="4"/></g></symbol>
   <symbol id="p-cuff" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <!-- 上腕（横にするりと）＋巻いた帯＋帯から出るチューブと丸い風船 -->
-    <path d="M14 58 q22 -14 52 -8"/>
-    <path d="M16 76 q22 -12 50 -6"/>
-    <path d="M40 44 l0 28 M58 41 l0 28" stroke-width="9"/>
-    <path d="M66 58 C82 58 88 70 82 78" stroke-width="5"/>
-    <circle cx="80" cy="86" r="7" stroke-width="5"/></g></symbol>
+    <!-- 腕（左右に伸びる水平の筒）＋腕より大きくはみ出して巻く帯＋帯の下のチューブとポンプ -->
+    <path d="M8 50 H30 M70 50 H92"/>
+    <path d="M8 66 H30 M70 66 H92"/>
+    <rect x="30" y="36" width="40" height="44" rx="12"/>
+    <path d="M62 76 C62 86 70 90 78 88" stroke-width="5"/>
+    <circle cx="85" cy="86" r="6" stroke-width="5"/></g></symbol>
 </defs></svg>
 
 <header class="app">
@@ -407,7 +407,7 @@
 
 const SCENARIOS = [
   {
-    id:"nurse", title:"看護師が きたひ", note:"訪問看護のはじめての説明（事業者チェック用・仮内容）", pict:"p-staff",
+    id:"nurse", title:"看護師が きた ひ", note:"訪問看護のはじめての説明（事業者チェック用・仮内容）", pict:"p-staff",
     check:"看護師さんは 今日、からだの なにを みましたか？",
     steps:[
       {pict:"p-staff", head:"看護師が きます", body:"【しろい ふく】を きた【看護師】が【ひとりで】 きます。【なまえ】は ○○さん です。", hl:{blue:["しろい ふく","看護師","ひとりで"]},
