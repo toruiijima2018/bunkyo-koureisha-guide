@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v7）</title>
+<title>ひとつずつ｜リハビリPTの訪問（プロトタイプ v1）</title>
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
@@ -236,10 +236,14 @@
 
   <symbol id="p-repeat" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M26 50 A24 24 0 1 1 50 74"/><path d="M60 64 L50 74 L60 84"/></g></symbol>
+  <symbol id="p-exercise" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 22 V58 H66 M66 58 V82" stroke-width="4"/>
+    <circle cx="44" cy="26" r="8"/><path d="M44 34 V56 H58 M58 56 V80 M44 42 L60 32"/>
+    <path d="M78 34 V16 M71 22 L78 15 L85 22" stroke-width="4"/></g></symbol>
 </defs></svg>
 
 <header class="app">
-  <div class="name">ひとつずつ<span>｜目の前説明タブレット v7</span></div>
+  <div class="name">ひとつずつ<span>｜リハビリPTの訪問（プロトタイプ v1）</span></div>
   <div class="sp"></div>
   <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
   <div id="propanel">
@@ -366,6 +370,9 @@
 "use strict";
 /* ============================================================
    ひとつずつ（仮称）— 目の前説明タブレット プロトタイプ v4
+   訪問リハビリPTプロト：v7の配色・単一ペイン・せつめいしゃトグルを流用。
+   内容は訪問リハビリPTプロト（仮）。「わかった」は本人にタップさせる前提。
+   ※ 事業者チェック用：各ステップのせつめいしゃメモに（仮）・確認事項を明記。
    v7の修正（配色：クリーム地＋赤/青の意味づけ）:
      ・背景をクリーム（#F9F2E1）に。地とカードの差で「温かいが混らない」
      ・青＝いま知ってほしい要点（じかん・日・もの）／赤＝注意・やめていい・大事
@@ -392,56 +399,27 @@
 
 const SCENARIOS = [
   {
-    id:"visit", title:"訪問介護で すること", note:"初回説明・サービス内容の確認（3〜5分）", pict:"p-staff",
-    check:"あしたは なんじに きますか？",
+    id:"pt", title:"リハビリ（PT）が きたひ", note:"訪問リハビリの初回説明（事業者チェック用・仮内容）", pict:"p-walk",
+    check:"きょうのリハビリで なんど すわって うごきましたか？",
     steps:[
-      {pict:"p-clock", head:"いつ きますか", body:"まいしゅう かようびの ごぜん 10じに いきます。", hl:{blue:["かようびの ごぜん 10じ"]},
-       easy:"ようびは かようび。10じ です。", memo:"曜日は生活リズム（デイの日・通院日）と結びつけて確認する。時計は文字盤の数字を指で示す。"},
-      {pict:"p-staff", head:"だれが きますか", body:"かばんを もった ひとが きます。なまえは ○○さん です。", hl:{blue:["かばんを もった ひと"]},
-       easy:"かばんの ひとが きます。", memo:"「かばん」は訪問する人の識別項目（JIS T 0103 f項）。職種（ヘルパー／看護師／ケアマネ）の違いはピクトでは描き分けず、写真で示す。"},
-      {pict:"p-towel", head:"なにを しますか", body:"からだを ふいて、きれいに します。",
-       easy:"タオルで ふきます。", memo:"「清拭」という語は使わない。行為そのものを言う。"},
-      {pict:"p-meal", head:"ごはんの じゅんび", body:"ごはんを あたためて、おさらを ならべます。",
-       easy:"ごはんを あたためます。", memo:"本人の役割（できること）を残す言い方にする。全部やってもらう説明にはしない。"},
-      {pict:"p-phone", head:"おやすみの ときは", body:"でんわを します。おやすみの ときは、でんわが なります。", hl:{red:["でんわ"]},
-       easy:"でんわで れんらくします。", memo:"緊急・変更時の連絡手段は必ず説明する。誰に電話するか（本人／家族）を決めておく。"}
-    ]
-  },
-  {
-    id:"day", title:"デイサービスの いちにち", note:"一日の流れの説明（3〜5分）", pict:"p-car",
-    check:"なにで いきますか？ おふろに はいりますか？",
-    steps:[
-      {pict:"p-car", head:"あさ おむかえ", body:"くるまが うちに きます。のって ください。", hl:{blue:["くるま"]},
-       easy:"くるまが むかえに きます。", memo:"送迎は「順番で前後する」ことも添える。待ち時間の不安を減らす。"},
-      {pict:"p-walk", head:"からだを うごかす", body:"いすに すわって、てと あしを うごかします。",
-       easy:"すわって うごきます。", memo:"「リハビリ」「体操」より具体の動作で。痛みがある日は無理をしない、も伝える。"},
-      {pict:"p-meal", head:"みんなで おひるごはん", body:"12じに たべます。おいしい ごはんです。",
-       easy:"おひるだよ。いっしょに たべよう。", memo:"食事は楽しみの説明にする（義務・訓練にしない）。"},
-      {pict:"p-bath", head:"おふろに はいります", body:"あつくない おふろに はいります。スタッフが そばに います。", hl:{red:["あつくない"]},
-       easy:"あったかい おふろです。", memo:"入浴は抵抗の出やすい場面。事前にタオル・着替えを一緒に確認しておく。"},
-      {pict:"p-home", head:"よる おうちに かえります", body:"4じに くるまで かえります。", hl:{blue:["4じに"]},
-       easy:"4じに かえります。", memo:"帰宅時刻と、誰が家にいるかをセットで伝える。"}
-    ]
-  },
-  {
-    id:"money", title:"おかねの はなし", note:"費用と負担の説明（3〜5分）", pict:"p-money",
-    check:"おかねは まいつき、いくら はらいますか？",
-    steps:[
-      {pict:"p-cal", head:"まいつき はらいます", body:"おかねは、まい つき、はらいます。",
-       easy:"まいつき はらいます。", memo:"最初に総額を出さない。まず「いつ・どこで」の枠から。"},
-      {pict:"p-money", head:"じぶんで はらう ぶん", body:"つかった おかねの 10のうち 1を はらいます。", hl:{red:["10のうち 1"]},
-       easy:"10の うち 1 だけ。", memo:"「1割」という漢語は使わない。「10のうち1」をその場で指で数える。"},
-      {pict:"p-wallet", head:"はらう ほうほう", body:"こうざから ひかれます。げんきんでは ありません。",
-       easy:"こうざから ひかれます。", memo:"口座の場合は通帳の印字を見せるとなお良い。現金派には窓口払いを用意する。"},
-      {pict:"p-paper", head:"おかねの おしらせ", body:"おうちに おてがみが きます。すてないで ください。", hl:{red:["すてないで ください"]},
-       easy:"おてがみが きます。", memo:"「賦課決定通知書」等の正式名称は言わない。封筒の見本を見せる。"},
-      {pict:"p-phone", head:"こまったら そうだん", body:"わからなく なったら、でんわして ください。", hl:{red:["でんわして ください"]},
-       easy:"わからなく なったら でんわ。", memo:"不安の中心は「お金は難しい」という自覚。聞いていい、と言い切る。"}
+      {pict:"p-staff", head:"リハビリの 人が きます", body:"リハビリの 人（PT）が うちまで きます。1にち 50ぶん ぐらいです。", hl:{blue:["50ぶん ぐらい"]},
+       easy:"うごき方を しった 人が きます。", memo:"（仮）「PT」より「リハビリの人」。所要時間は事業所の標準で書き換えてもらう。"},
+      {pict:"p-talk", head:"きょうの ぐあいを はなします", body:"はじめに からだの ぐあい（ねつき・いたみ・むくみ）を ききます。うまく いえなくても だいじょうぶです。", hl:{red:["うまく いえなくても だいじょうぶです"]},
+       easy:"きのうの ようすを はなす。", memo:"（仮）問診はYES/NOで答えられる順番に。言語化が苦手な人は表情ピクトを指差させて拾う。"},
+      {pict:"p-exercise", head:"すわった まま うごきます", body:"イスに すわって、腕と あしを あげ下げします。5回 ずつ やります。", hl:{blue:["5回 ずつ"]},
+       easy:"すわって、5回。", memo:"（仮）回数・セットは評価後の個人プログラムに差替前提。椅子の固定（転倒防止）を説明に入れてほしい。"},
+      {pict:"p-walk", head:"たって あるきます", body:"なにかを つかまって たちます。PTが そばに いて、すこし あるきます。", hl:{blue:["PTが そばに いて"]},
+       easy:"つかまる。そばに いる。すこし あるく。", memo:"（仮）歩行補助具（歩行器／杖）の有無を事前確認。居室のどこでやるか（導線）を事業者に見てもらう。"},
+      {pict:"p-worry", head:"いたかったら やめます", body:"いたい・つらいときは ただちに やめます。「いたい」と いえばとまります。がまんしなくて いいです。", hl:{red:["「いたい」と いえばとまります"]},
+       easy:"いたいと いえば やめる。", memo:"（仮）中止基準（痛みの目安・その日の上限）を事業所の基準で追記してほしい最重要箇所。"},
+      {pict:"p-check", head:"つぎの かいまで つづけます", body:"朝と よるの 1日 2回、イスで 5回 動かします。ノートに ○ を かきます。", hl:{blue:["1日 2回","5回"]},
+       easy:"あさと よる、5回、○を かく。", memo:"（仮）宿題の量は本人の継続率を見て調整。○つけノートは次回の訪問時に持参して確認する設計。"}
     ]
   }
 ];
 
-const PICTS = [
+const PICTS = [  ["p-exercise","イスで うごく","椅子座位の体操（訪問リハ）"],
+
   ["p-home","いえ","自宅・帰宅（名詞）"],["p-car","くるま","送迎（名詞）"],["p-meal","ごはん","食事（名詞）"],
   ["p-med","くすり","服薬（名詞）"],["p-bath","おふろ","入浴（名詞）"],["p-toilet","トイレ","標準図記号＋人の動作"],
   ["p-phone","でんわ","連絡（名詞）。本番はエコモ標準案内用図記号（JIS Z 8210）から借用予定"],["p-money","おかね","費用（名詞）"],["p-cal","カレンダー","日程（名詞）"],
@@ -456,7 +434,7 @@ const PICTS = [
 const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false };
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
-const KEY_LOG = "hitotsuzutsu_log_v2", KEY_SET = "hitotsuzutsu_set_v2";
+const KEY_LOG = "hitotsuzutsu_pt_log_v1", KEY_SET = "hitotsuzutsu_pt_set_v1";
 
 /* ---------- 設定 ---------- */
 function loadSet(){

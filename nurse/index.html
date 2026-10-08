@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v7）</title>
+<title>ひとつずつ｜看護師の訪問（プロトタイプ v1）</title>
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
@@ -236,10 +236,13 @@
 
   <symbol id="p-repeat" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M26 50 A24 24 0 1 1 50 74"/><path d="M60 64 L50 74 L60 84"/></g></symbol>
+  <symbol id="p-thermo" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 14 V56"/><circle cx="50" cy="68" r="12"/>
+    <path d="M62 22 H70 M62 34 H70 M62 46 H70" stroke-width="4"/></g></symbol>
 </defs></svg>
 
 <header class="app">
-  <div class="name">ひとつずつ<span>｜目の前説明タブレット v7</span></div>
+  <div class="name">ひとつずつ<span>｜看護師の訪問（プロトタイプ v1）</span></div>
   <div class="sp"></div>
   <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
   <div id="propanel">
@@ -366,6 +369,9 @@
 "use strict";
 /* ============================================================
    ひとつずつ（仮称）— 目の前説明タブレット プロトタイプ v4
+   看護師訪問プロト：v7の配色・単一ペイン・せつめいしゃトグルを流用。
+   内容は看護師訪問プロト（仮）。「わかった」は本人にタップさせる前提。
+   ※ 事業者チェック用：各ステップのせつめいしゃメモに（仮）・確認事項を明記。
    v7の修正（配色：クリーム地＋赤/青の意味づけ）:
      ・背景をクリーム（#F9F2E1）に。地とカードの差で「温かいが混らない」
      ・青＝いま知ってほしい要点（じかん・日・もの）／赤＝注意・やめていい・大事
@@ -392,56 +398,25 @@
 
 const SCENARIOS = [
   {
-    id:"visit", title:"訪問介護で すること", note:"初回説明・サービス内容の確認（3〜5分）", pict:"p-staff",
-    check:"あしたは なんじに きますか？",
+    id:"nurse", title:"看護師が きたひ", note:"訪問看護のはじめての説明（事業者チェック用・仮内容）", pict:"p-staff",
+    check:"看護師さんは 今日、からだの なにを みましたか？",
     steps:[
-      {pict:"p-clock", head:"いつ きますか", body:"まいしゅう かようびの ごぜん 10じに いきます。", hl:{blue:["かようびの ごぜん 10じ"]},
-       easy:"ようびは かようび。10じ です。", memo:"曜日は生活リズム（デイの日・通院日）と結びつけて確認する。時計は文字盤の数字を指で示す。"},
-      {pict:"p-staff", head:"だれが きますか", body:"かばんを もった ひとが きます。なまえは ○○さん です。", hl:{blue:["かばんを もった ひと"]},
-       easy:"かばんの ひとが きます。", memo:"「かばん」は訪問する人の識別項目（JIS T 0103 f項）。職種（ヘルパー／看護師／ケアマネ）の違いはピクトでは描き分けず、写真で示す。"},
-      {pict:"p-towel", head:"なにを しますか", body:"からだを ふいて、きれいに します。",
-       easy:"タオルで ふきます。", memo:"「清拭」という語は使わない。行為そのものを言う。"},
-      {pict:"p-meal", head:"ごはんの じゅんび", body:"ごはんを あたためて、おさらを ならべます。",
-       easy:"ごはんを あたためます。", memo:"本人の役割（できること）を残す言い方にする。全部やってもらう説明にはしない。"},
-      {pict:"p-phone", head:"おやすみの ときは", body:"でんわを します。おやすみの ときは、でんわが なります。", hl:{red:["でんわ"]},
-       easy:"でんわで れんらくします。", memo:"緊急・変更時の連絡手段は必ず説明する。誰に電話するか（本人／家族）を決めておく。"}
-    ]
-  },
-  {
-    id:"day", title:"デイサービスの いちにち", note:"一日の流れの説明（3〜5分）", pict:"p-car",
-    check:"なにで いきますか？ おふろに はいりますか？",
-    steps:[
-      {pict:"p-car", head:"あさ おむかえ", body:"くるまが うちに きます。のって ください。", hl:{blue:["くるま"]},
-       easy:"くるまが むかえに きます。", memo:"送迎は「順番で前後する」ことも添える。待ち時間の不安を減らす。"},
-      {pict:"p-walk", head:"からだを うごかす", body:"いすに すわって、てと あしを うごかします。",
-       easy:"すわって うごきます。", memo:"「リハビリ」「体操」より具体の動作で。痛みがある日は無理をしない、も伝える。"},
-      {pict:"p-meal", head:"みんなで おひるごはん", body:"12じに たべます。おいしい ごはんです。",
-       easy:"おひるだよ。いっしょに たべよう。", memo:"食事は楽しみの説明にする（義務・訓練にしない）。"},
-      {pict:"p-bath", head:"おふろに はいります", body:"あつくない おふろに はいります。スタッフが そばに います。", hl:{red:["あつくない"]},
-       easy:"あったかい おふろです。", memo:"入浴は抵抗の出やすい場面。事前にタオル・着替えを一緒に確認しておく。"},
-      {pict:"p-home", head:"よる おうちに かえります", body:"4じに くるまで かえります。", hl:{blue:["4じに"]},
-       easy:"4じに かえります。", memo:"帰宅時刻と、誰が家にいるかをセットで伝える。"}
-    ]
-  },
-  {
-    id:"money", title:"おかねの はなし", note:"費用と負担の説明（3〜5分）", pict:"p-money",
-    check:"おかねは まいつき、いくら はらいますか？",
-    steps:[
-      {pict:"p-cal", head:"まいつき はらいます", body:"おかねは、まい つき、はらいます。",
-       easy:"まいつき はらいます。", memo:"最初に総額を出さない。まず「いつ・どこで」の枠から。"},
-      {pict:"p-money", head:"じぶんで はらう ぶん", body:"つかった おかねの 10のうち 1を はらいます。", hl:{red:["10のうち 1"]},
-       easy:"10の うち 1 だけ。", memo:"「1割」という漢語は使わない。「10のうち1」をその場で指で数える。"},
-      {pict:"p-wallet", head:"はらう ほうほう", body:"こうざから ひかれます。げんきんでは ありません。",
-       easy:"こうざから ひかれます。", memo:"口座の場合は通帳の印字を見せるとなお良い。現金派には窓口払いを用意する。"},
-      {pict:"p-paper", head:"おかねの おしらせ", body:"おうちに おてがみが きます。すてないで ください。", hl:{red:["すてないで ください"]},
-       easy:"おてがみが きます。", memo:"「賦課決定通知書」等の正式名称は言わない。封筒の見本を見せる。"},
-      {pict:"p-phone", head:"こまったら そうだん", body:"わからなく なったら、でんわして ください。", hl:{red:["でんわして ください"]},
-       easy:"わからなく なったら でんわ。", memo:"不安の中心は「お金は難しい」という自覚。聞いていい、と言い切る。"}
+      {pict:"p-staff", head:"看護師が きます", body:"しろい ふくを きた 看護師が ひとりで きます。なまえは ○○さん です。", hl:{blue:["しろい ふくを きた 看護師"]},
+       easy:"しろい ふくの 人。", memo:"（仮）初回はひとりで来ることを明示。白衣＋名札を識別項目にする。職種の名前は職能より見た目から。"},
+      {pict:"p-thermo", head:"あったかさと けつあつを はかります", body:"わきのしたに ねつかんを はさんで、うでの カフを まいて はかります。いたくないです。", hl:{red:["いたくないです"]},
+       easy:"あったかさと けつあつを はかるだけ。", memo:"（仮）血圧計カフの脱衣・巻き位置は服の上からで良いか事前に依頼先と確認。痛くないことを先に言う。"},
+      {pict:"p-med", head:"くすりの かくにん", body:"飲んでいる くすりを いっしょに みます。のむ じかんと のみあわせを たしかめます。", hl:{blue:["くすりを いっしょに みます"]},
+       easy:"くすりの ジョイントを いっしょに みる。", memo:"（仮）お薬カレンダー有無・自己管理状況を事前ヒアリング。残薬チェックの可否は事業者判断で追記ほしい。"},
+      {pict:"p-worry", head:"体調が すぐれない ひは", body:"からだが だるい・いたいの はじめは、かんぱつを はかります。つらいときは つたえて ください。", hl:{red:["つらいときは つたえて ください"]},
+       easy:"だるい・いたい ときは いって ください。", memo:"（仮）バイタル測定頻度は服薬管理とセットで事業所の基準を見せてもらう。赤＝「言っていい」の合図。"},
+      {pict:"p-check", head:"これから つづける こと", body:"まいあさ たいおんを はかって、ノートに かきます。つぎの 訪問の とき みせます。", hl:{blue:["まいあさ たいおんを はかって、ノートに かきます"]},
+       easy:"まいあさ、はかって、かいて、みせる。", memo:"（仮）記録ノートのフォーマットは事業所で配るか／スマホ入力の可否（本人がミライロID等になじむか）。次のやることを1画面に。"}
     ]
   }
 ];
 
-const PICTS = [
+const PICTS = [  ["p-thermo","ねつをはかる","体温・血圧測定（訪問看護）"],
+
   ["p-home","いえ","自宅・帰宅（名詞）"],["p-car","くるま","送迎（名詞）"],["p-meal","ごはん","食事（名詞）"],
   ["p-med","くすり","服薬（名詞）"],["p-bath","おふろ","入浴（名詞）"],["p-toilet","トイレ","標準図記号＋人の動作"],
   ["p-phone","でんわ","連絡（名詞）。本番はエコモ標準案内用図記号（JIS Z 8210）から借用予定"],["p-money","おかね","費用（名詞）"],["p-cal","カレンダー","日程（名詞）"],
@@ -456,7 +431,7 @@ const PICTS = [
 const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false };
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
-const KEY_LOG = "hitotsuzutsu_log_v2", KEY_SET = "hitotsuzutsu_set_v2";
+const KEY_LOG = "hitotsuzutsu_nurse_log_v1", KEY_SET = "hitotsuzutsu_nurse_set_v1";
 
 /* ---------- 設定 ---------- */
 function loadSet(){
