@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v5）</title>
+<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v6）</title>
 <style>
   :root{
     --bg:#FFFDF7; --card:#FFFFFF; --ink:#1B2A41; --muted:#44576B; --line:#D8DEE6;
@@ -36,7 +36,7 @@
   main{flex:1 1 auto;min-height:0;display:flex;padding:calc(10px * var(--scale))}
   .view{display:none;flex:1;min-height:0;max-width:1400px;margin:0 auto;width:100%}
   .view.on{display:flex;flex-direction:column}
-  .view.scroll{overflow-y:auto;display:block}
+  .view.scroll{overflow-y:auto}
   .view.scroll.on{display:block}
   h1.vt{font-size:calc(24px * var(--scale));margin:0 0 4px}
   .lead{font-size:calc(15px * var(--scale));color:var(--muted);margin:0 0 calc(12px*var(--scale))}
@@ -55,7 +55,7 @@
   button.big[disabled]{opacity:.3;cursor:default}
 
   /* ---------- ホーム ---------- */
-  .cards{display:grid;gap:calc(12px * var(--scale));grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+  .cards{display:grid;gap:calc(12px * var(--scale));grid-template-columns:1fr;max-width:680px;margin:0 auto;width:100%}
   .card{background:var(--card);border:2px solid var(--line);border-radius:calc(20px*var(--scale));
     padding:calc(14px*var(--scale));display:flex;flex-direction:column;gap:calc(8px*var(--scale));
     cursor:pointer;text-align:left;font-family:inherit}
@@ -100,6 +100,16 @@
   .notes h4{margin:0 0 calc(4px*var(--scale))}
   .notes ul{margin:0;padding-left:1.25em}
   .tag{background:#EEF1F5;border-radius:999px;padding:2px 10px;font-size:calc(13px*var(--scale));color:var(--muted)}
+
+  /* ---------- v6: 利用者モード＝説明だけ／説明者情報の隔離 ---------- */
+  .pro-only{display:none!important}
+  body.pro .pro-only{display:block!important}
+  body.pro .rowbtns.pro-only{display:flex!important}
+  #rotate{display:none;position:fixed;inset:0;z-index:60;background:rgba(27,42,65,.94);color:#fff;
+    flex-direction:column;align-items:center;justify-content:center;gap:calc(14px*var(--scale));
+    text-align:center;padding:24px}
+  #rotate.hide{display:none!important}
+  @media (orientation:landscape){ #rotate:not(.hide){display:flex} }
 
   /* ---------- 記録・一覧 ---------- */
   table{border-collapse:collapse;width:100%;background:var(--card);font-size:calc(14px*var(--scale))}
@@ -158,7 +168,7 @@
     <path d="M30 54 h8 M46 54 h8 M62 54 h8 M30 72 h8 M46 72 h8" stroke-width="4"/></g></symbol>
 
   <symbol id="p-clock" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="50" cy="50" r="34"/><path d="M50 50 V28 M50 50 L68 60"/>
+    <circle cx="50" cy="50" r="34"/><path d="M50 50 L33 40 M50 50 V24"/>
     <path d="M50 16 V22 M84 50 H78 M50 84 V78 M16 50 H22" stroke-width="4"/></g></symbol>
 
   <symbol id="p-walk" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
@@ -224,11 +234,11 @@
 </defs></svg>
 
 <header class="app">
-  <div class="name">ひとつずつ<span>｜目の前説明タブレット v5</span></div>
+  <div class="name">ひとつずつ<span>｜目の前説明タブレット v6</span></div>
   <div class="sp"></div>
   <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
   <div id="propanel">
-    <span class="lab">説明者メニュー：</span>
+    <span class="lab">説明者メニュー（本人に見せない設定・記録類はここ）：</span>
     <button class="chip small" id="tg-auto" aria-pressed="true">よみあげ：オン</button>
     <button class="chip small" id="tg-size" aria-pressed="false">もじ：ふつう</button>
     <button class="chip small" id="tg-memo" aria-pressed="true">メモ：表示</button>
@@ -241,9 +251,9 @@
   <!-- ① ホーム -->
   <section id="v-home" class="view scroll on">
     <h1 class="vt">なにを せつめい しますか？</h1>
-    <p class="lead">利用者の目の前で見せながら説明する画面です。タブレットは<b>ななめ前</b>に置き、読み上げのあいだは<b>顔</b>を見てください。読み上げ中は上の「とめる」でいつでも止められます。</p>
+    <p class="lead pro-only">利用者の目の前で見せながら説明する画面です。タブレットは<b>ななめ前</b>に置き、読み上げのあいだは<b>顔</b>を見てください。読み上げ中は上の「とめる」でいつでも止められます。</p>
     <div class="cards" id="scenarios"></div>
-    <div class="rowbtns">
+    <div class="rowbtns pro-only">
       <button class="big ghost" id="btn-record">きろくを見る</button>
       <button class="big ghost" id="btn-picts">ピクト一覧（説明者の語彙）</button>
     </div>
@@ -274,7 +284,7 @@
       <h2 class="head" id="step-head">—</h2>
       <p class="body" id="step-body">—</p>
       <div class="dots" id="step-dots"></div>
-      <div class="hintbar" id="step-hint">① ななめ前に置く　② よみあげ中は かおを見る　③ おわったら ふせる</div>
+      <div class="hintbar pro-only" id="step-hint">① ななめ前に置く　② よみあげ中は かおを見る　③ おわったら ふせる</div>
       <details class="memo" id="step-memo-box"><summary>せつめいしゃメモ（本人には見せない）</summary><p id="step-memo">—</p></details>
       <div class="actions">
         <div class="arow sub">
@@ -296,14 +306,14 @@
       <div class="pictwrap"><svg class="pict" aria-hidden="true"><use href="#p-smile"/></svg></div>
       <h2 class="head">おはなしは おわりです</h2>
       <p class="body">ありがとう ございました。</p>
-      <div class="notes" style="width:100%;flex:0 0 auto">
+      <div class="notes pro-only" style="width:100%;flex:0 0 auto">
         <h4>できたか たしかめましょう（うながし）</h4>
         <p id="done-q" style="margin:0">—</p>
         <p class="stepno" style="margin-top:4px">※ タップだけで判断しない。答えを聞いて、できたことを記録する。</p>
       </div>
       <div class="actions two">
-        <button class="big primary" id="done-record">きろくを見る</button>
-        <button class="big ghost" id="done-home">はじめに もどる</button>
+        <button class="big primary pro-only" id="done-record">きろくを見る</button>
+        <button class="big primary" id="done-home">はじめに もどる</button>
       </div>
     </div>
   </section>
@@ -338,10 +348,25 @@
   </section>
 </main>
 
+<div id="rotate" role="alert">
+  <svg width="120" height="120" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="30" y="18" width="40" height="66" rx="7" transform="rotate(-16 50 51)"/>
+    <path d="M16 42 a34 34 0 0 1 12 -21"/><path d="M22 11 l7 11 l-13 2"/></g></svg>
+  <p style="font-size:calc(24px*var(--scale));font-weight:800;margin:0">タブレットは 縦おきで つかってください</p>
+  <p style="margin:0;font-size:calc(16px*var(--scale));opacity:.85">ほんばんは タブレットの 縦表示 のみを よていしています。</p>
+  <button class="chip" id="rotate-ok" type="button">横おきで つづける（テストよう）</button>
+</div>
+
 <script>
 "use strict";
 /* ============================================================
    ひとつずつ（仮称）— 目の前説明タブレット プロトタイプ v4
+   v6の修正（目的を「利用者への説明だけ」に絞る）:
+     ・利用者モード＝縦1列の説明フローのみ。メモ・ヒント・案内文・きろく・ピクト一覧・
+       おわりのうながしは「せつめいしゃ用」トグルの内側に隔離（トグルOFFで利用者画面に戻す）
+     ・v5の不具合対応: 「本人には見せない」メモは説明者トグルON時のみ表示
+     ・横表示には「縦置きで使う」オーバーレイ（テスト用 continue 可）
+     ・ホームカードを1列化（横並びのペイン分割 appearance を廃す）
    v5の修正: 困った顔の眉を八の字に（怒り眉をやめる）／くるひとの挙手を頭の外側へ・バッグは左手に／電話は横向き受話器＋台座の☎型に
    v4の修正（視覚検証で判明した誤読への対応）:
              p-worry 眉が怒りに見える→目を追加し眉を緩めた／p-staff 支援要素が弱い→肩かけバッグ＋挙手にして「くる ひと」へ
@@ -418,7 +443,7 @@ const PICTS = [
   ["p-stop","とめる","操作"],["p-repeat","もういちど","操作"]
 ];
 
-const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, log:[], speaking:false };
+const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false };
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const KEY_LOG = "hitotsuzutsu_log_v2", KEY_SET = "hitotsuzutsu_set_v2";
@@ -440,7 +465,7 @@ function applySet(){
   $("#tg-size").setAttribute("aria-pressed", S.big ? "true":"false");
   $("#tg-memo").textContent = S.memo ? "メモ：表示" : "メモ：かくす";
   $("#tg-memo").setAttribute("aria-pressed", S.memo ? "true":"false");
-  $$("#step-memo-box").forEach(e=> e.style.display = S.memo ? "" : "none");
+  $$("#step-memo-box").forEach(e=> e.style.display = (S.pro && S.memo) ? "" : "none");
 }
 
 /* ---------- 読み上げ ---------- */
@@ -586,8 +611,11 @@ function exportCSV(){
 /* ---------- イベント ---------- */
 $("#tg-pro").addEventListener("click", ()=>{
   const p = $("#propanel"), on = p.classList.toggle("on");
+  document.body.classList.toggle("pro", on);
+  S.pro = on; applySet();
   $("#tg-pro").setAttribute("aria-pressed", on ? "true":"false");
 });
+$("#rotate-ok").addEventListener("click", ()=> $("#rotate").classList.add("hide"));
 $("#tg-auto").addEventListener("click", ()=>{ S.auto=!S.auto; saveSet(); applySet(); });
 $("#tg-size").addEventListener("click", ()=>{ S.big=!S.big; saveSet(); applySet(); });
 $("#tg-memo").addEventListener("click", ()=>{ S.memo=!S.memo; saveSet(); applySet(); });
