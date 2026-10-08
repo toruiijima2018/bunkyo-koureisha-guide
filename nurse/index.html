@@ -7,7 +7,7 @@
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
-    --accent:#0B6E4F; --accent-ink:#FFFFFF; --warn:#B3261E; --key:#1558A8; --memo:#FBEFC0;
+    --accent:#0B6E4F; --accent-ink:#FFFFFF; --warn:#B3261E; --key:#1A6FD9; --memo:#FBEFC0;
     --scale:1;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -111,8 +111,9 @@
   @media (orientation:landscape){ #rotate:not(.hide){display:flex} }
 
   /* ---------- v7: 意味カラー ---------- */
-  .hl-blue{color:var(--key);font-weight:800}
+  .hl-blue{color:var(--key);font-weight:800;border-bottom:calc(3px*var(--scale)) solid var(--key);padding-bottom:2px}
   .hl-red{color:var(--warn);font-weight:800;border-bottom:calc(3px*var(--scale)) solid var(--warn);padding-bottom:2px}
+  .nw{white-space:nowrap}
   button.big.stop{border-color:var(--warn);color:var(--warn)}
   .dots i.on{background:var(--key);border-color:var(--key)}
 
@@ -237,8 +238,13 @@
   <symbol id="p-repeat" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M26 50 A24 24 0 1 1 50 74"/><path d="M60 64 L50 74 L60 84"/></g></symbol>
   <symbol id="p-thermo" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M50 14 V56"/><circle cx="50" cy="68" r="12"/>
-    <path d="M62 22 H70 M62 34 H70 M62 46 H70" stroke-width="4"/></g></symbol>
+    <path d="M30 30 L56 56"/><circle cx="64" cy="64" r="11"/><path d="M64 56 V36" stroke-width="5"/>
+    <path d="M14 74 a24 24 0 0 1 10 -26" stroke-width="6"/>
+    <path d="M44 34 l9 9 M36 42 l9 9" stroke-width="4"/></g></symbol>
+  <symbol id="p-cuff" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 12 V88"/><path d="M64 12 V88"/>
+    <rect x="20" y="40" width="60" height="22" rx="10"/>
+    <path d="M80 51 C92 51 92 70 80 70" stroke-width="5"/></g></symbol>
 </defs></svg>
 
 <header class="app">
@@ -403,8 +409,10 @@ const SCENARIOS = [
     steps:[
       {pict:"p-staff", head:"看護師が きます", body:"しろい ふくを きた 看護師が ひとりで きます。なまえは ○○さん です。", hl:{blue:["しろい ふくを きた 看護師"]},
        easy:"しろい ふくの 人。", memo:"（仮）初回はひとりで来ることを明示。白衣＋名札を識別項目にする。職種の名前は職能より見た目から。"},
-      {pict:"p-thermo", head:"あったかさと けつあつを はかります", body:"わきのしたに ねつかんを はさんで、うでの カフを まいて はかります。いたくないです。", hl:{red:["いたくないです"]},
-       easy:"あったかさと けつあつを はかるだけ。", memo:"（仮）血圧計カフの脱衣・巻き位置は服の上からで良いか事前に依頼先と確認。痛くないことを先に言う。"},
+      {pict:"p-thermo", head:"あったかさを はかります", body:"【わきのした】に【ねつかん】を はさんで、あったかさを はかります。", hl:{blue:["ねつかん"]},
+       easy:"ねつを はかるだけ。", memo:"（仮）体温測定のみのステップに分割（1画面1概念）。挟む位置は本人の服の状態に合わせると事業者へ確認したい。"},
+      {pict:"p-cuff", head:"けつあつを はかります", body:"【うでの カフ】を まいて けつあつを はかります。しめつけは 1ぶんぐらい、いたくないです。", hl:{red:["いたくないです"]},
+       easy:"うでを しめるだけ。いたくない。", memo:"（仮）血圧計カフの脱衣・巻き位置は服の上からで良いか事前に依頼先と確認。「1ぶん」は実測時間に合わせてもらう。痛くないことを先に言う。"},
       {pict:"p-med", head:"くすりの かくにん", body:"飲んでいる くすりを いっしょに みます。のむ じかんと のみあわせを たしかめます。", hl:{blue:["くすりを いっしょに みます"]},
        easy:"くすりの ジョイントを いっしょに みる。", memo:"（仮）お薬カレンダー有無・自己管理状況を事前ヒアリング。残薬チェックの可否は事業者判断で追記ほしい。"},
       {pict:"p-worry", head:"体調が すぐれない ひは", body:"からだが だるい・いたいの はじめは、かんぱつを はかります。つらいときは つたえて ください。", hl:{red:["つらいときは つたえて ください"]},
@@ -415,7 +423,8 @@ const SCENARIOS = [
   }
 ];
 
-const PICTS = [  ["p-thermo","ねつをはかる","体温・血圧測定（訪問看護）"],
+const PICTS = [  ["p-thermo","ねつをはかる","体温測定（訪問看護）"],
+  ["p-cuff","けつあつをはかる","血圧測定・腕帯（訪問看護）"],
 
   ["p-home","いえ","自宅・帰宅（名詞）"],["p-car","くるま","送迎（名詞）"],["p-meal","ごはん","食事（名詞）"],
   ["p-med","くすり","服薬（名詞）"],["p-bath","おふろ","入浴（名詞）"],["p-toilet","トイレ","標準図記号＋人の動作"],
@@ -520,6 +529,7 @@ function startScenario(id){
 function hlHTML(st){
   const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   let h = esc(st.body);
+  h = h.replace(/【([^】]+)】/g, '<span class="nw">$1</span>');
   ((st.hl||{}).blue||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-blue">'+t+'</span>'); });
   ((st.hl||{}).red||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-red">'+t+'</span>'); });
   return h;
