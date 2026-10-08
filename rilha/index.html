@@ -524,9 +524,9 @@ function startScenario(id){
 function hlHTML(st){
   const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   let h = esc(st.body);
-  h = h.replace(/【([^】]+)】/g, '<span class="nw">$1</span>');
   ((st.hl||{}).blue||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-blue">'+t+'</span>'); });
   ((st.hl||{}).red||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-red">'+t+'</span>'); });
+  h = h.replace(/【([^】]+)】/g, '<span class="nw">$1</span>');
   return h;
 }
 function escapeHtml(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
