@@ -242,11 +242,12 @@
     <circle cx="44" cy="26" r="8"/><path d="M44 34 V56 H58 M58 56 V80 M44 42 L60 32"/>
     <path d="M78 34 V16 M71 22 L78 15 L85 22" stroke-width="4"/></g></symbol>
   <symbol id="p-massage" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
-    <!-- 手のひら（角丸）＋指3本が体の面を押し、矢印が「おす」方向、下は体の表面 -->
-    <rect x="30" y="18" width="40" height="26" rx="12"/>
-    <path d="M40 44 V60 M50 44 V60 M60 44 V60" stroke-width="6"/>
-    <path d="M8 72 H92"/>
-    <path d="M82 14 V44 M74 36 l8 9 l8 -9" stroke-width="6"/></g></symbol>
+    <!-- 手のひら（角丸＋左の親指）＋両脇の指、中央は指先から面へ押す下矢印、下は体の表面 -->
+    <rect x="24" y="18" width="42" height="26" rx="12"/>
+    <path d="M24 30 c-8 2 -10 8 -8 13" stroke-width="6"/>
+    <path d="M34 44 V62 M56 44 V62" stroke-width="6"/>
+    <path d="M45 46 V60 M38 53 l7 9 l7 -9" stroke-width="6"/>
+    <path d="M10 74 H90"/></g></symbol>
   <symbol id="p-stretch" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <!-- 椅子＋座る人＋頭上へ伸ばす腕（先端矢印） -->
     <path d="M16 86 H84 M26 42 V86"/>
@@ -422,7 +423,7 @@ const SCENARIOS = [
        easy:"きのうの ようすを はなす。", memo:"（仮）問診はYES/NOで答えられる順番に。言語化が苦手な人は表情ピクトを指差させて拾う。"},
       {pict:"p-exercise", head:"すわった まま うごきます", body:"イスに すわって、腕と あしを あげ下げします。5回 ずつ やります。", hl:{blue:["5回 ずつ"]},
        easy:"すわって、5回。", memo:"（仮）回数・セットは評価後の個人プログラムに差替前提。椅子の固定（転倒防止）を説明に入れてほしい。"},
-      {pict:"p-massage", head:"かたく なった ところを ほぐします", body:"【かたく なった】ところを、【てのひら】で 【おして】 ほぐします。", hl:{blue:["かたく なった","てのひら"]},
+      {pict:"p-massage", head:"かたく なった ところを ほぐします", body:"かたく なった ところを、【てのひら】で【おして】 ほぐします。", hl:{blue:["てのひら","おして"]},
        easy:"ごりを てで おす。", memo:"（仮）マッサージ＝「押す」だけと表現を限定（揉む/さするは事業者に実操作を確認）。麻痺側・疼痛部を避ける範囲を指定してもらう。本人が「どこが硬いか」を指で示せるピクト併用が理想。"},
       {pict:"p-stretch", head:"かたく なった ところを のばします", body:"【うで】と【あし】を、【いたくない】ところまで ゆっくり 【のばします】。", hl:{blue:["のばします"],red:["いたくない"]},
        easy:"てと あしを たたむ。いたいまで しない。", memo:"（仮）ストレッチは「痛いところまで行かない」が安全の核＝赤で強調。可動域の上限は評価後に個人差替。反動をつけない指示は現場口頭で補足ってもらう。"},
