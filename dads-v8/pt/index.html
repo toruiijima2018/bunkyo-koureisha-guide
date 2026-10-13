@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ひとつずつ｜リハビリの訪問（DADS準拠版）</title>
+<style>
+  /* ============================================================
+     デジタル庁デザインシステムβ版 v2.18.0 準拠（デザイントークン）
+     - フォント: Noto Sans JP 指定（ローカルインストール優先。
+       オフライン動作のため外部CDNは読み込まない＝DADSも
+       「システムフォントの使用を制限しない」と明記）
+     - コントラスト: テキスト 4.5:1 以上（本アプリは AAA 7:1 級を維持）
+     - 行高: 本文 1.5 以上（本アプリは 1.7〜1.85）
+     - タップターゲット: 44px 以上（本アプリは 96px 以上を維持）
+     - フォーカスインジケーター: Yellow-300 #ffd43d + Black の2重構造
+       （DADS規定・いかなる場合も変更不可）
+     ============================================================ */
+  :root{
+    /* DADS プリミティブ/ニュートラル */
+    --color-white:#ffffff; --color-black:#000000;
+    --key-50:#e8f1fe; --key-100:#d9e6ff; --key-200:#c5d7fb; --key-300:#9db7f9;
+    --key-600:#3460fb; --key-700:#264af4; --key-800:#0031d8; --key-1000:#00118f; --key-1200:#000060;
+    --gray-200:#cccccc; --gray-300:#b3b3b3; --gray-500:#7f7f7f; --gray-700:#4d4d4d;
+    --gray-800:#333333; --gray-900:#1a1a1a;
+    /* DADS セマンティック */
+    --success-1:#259d63; --success-2:#197a4b;
+    --error-1:#ec0000; --error-2:#ce0000;
+    --warning-yellow-1:#b78f00; --warning-orange-1:#fb5b01;
+    --focus-yellow:#ffd43d; /* Yellow-300 */
+    --focus-blue:#0877d7;
+    /* DADS 角丸トークン */
+    --radius-8:0.5rem; --radius-12:0.75rem; --radius-16:1rem; --radius-24:1.5rem; --radius-32:2rem;
+    /* アプリ側セマンティック（DADSトークンから導出） */
+    --bg:var(--color-white);            /* DADS: 白地 */
+    --card:var(--color-white);
+    --ink:var(--gray-900);              /* #1a1a1a 白地比 17.4:1 */
+    --muted:var(--gray-700);            /* #4d4d4d 白地比 9.7:1 */
+    --line:#cccccc;                     /* 白地比 1.6:1 は非テキスト装飾。意味境界は 3:1 級の --line-strong */
+    --line-strong:var(--gray-500);      /* #7f7f7f 白地比 3.9:1（非テキスト 3:1 以上） */
+    --primary:var(--key-800);           /* #0031d8 白地比 8.6:1 */
+    --hl-blue-bg:var(--key-100); --hl-blue-ink:var(--key-1200);
+    --hl-red:var(--error-2);
+    --scale:1;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',Meiryo,system-ui,sans-serif;
+    font-size:calc(18px * var(--scale));line-height:1.7;overflow-x:hidden}
+  body{height:100dvh;display:flex;flex-direction:column}
+
+  /* フォーカスインジケーター（DADS規定・Yellow-300+Black 2重） */
+  :focus-visible{outline:4px solid var(--focus-blue);outline-offset:2px;box-shadow:0 0 0 8px var(--focus-yellow)}
+  button:focus-visible,.card:focus-visible{outline:4px solid var(--focus-blue);outline-offset:2px;box-shadow:0 0 0 8px var(--focus-yellow)}
+
+  /* ---------- ヘッダー ---------- */
+  header.app{flex:0 0 auto;background:var(--card);border-bottom:2px solid var(--line-strong);
+    padding:calc(6px * var(--scale)) calc(12px * var(--scale));display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  header.app .name{font-weight:700;font-size:calc(16px * var(--scale));letter-spacing:.02em}
+  header.app .name span{color:var(--muted);font-weight:400;font-size:calc(12px * var(--scale))}
+  header.app .sp{flex:1 1 auto}
+  .chip{border:2px solid var(--line-strong);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:calc(8px * var(--scale)) calc(14px * var(--scale));font-size:calc(14px * var(--scale));
+    cursor:pointer;font-family:inherit;min-height:44px}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  #propanel{flex:1 0 100%;display:none;gap:calc(8px * var(--scale));flex-wrap:wrap;align-items:center;
+    border-top:2px dashed var(--line-strong);padding-top:calc(8px * var(--scale))}
+  #propanel.on{display:flex}
+  #propanel .lab{font-size:calc(13px * var(--scale));color:var(--muted);font-weight:700}
+  .chip.small{font-size:calc(13px * var(--scale));min-height:40px;padding:calc(4px * var(--scale)) calc(11px * var(--scale))}
+
+  /* ---------- ビュー ---------- */
+  main{flex:1 1 auto;min-height:0;display:flex;padding:calc(10px * var(--scale))}
+  .view{display:none;flex:1;min-height:0;max-width:1400px;margin:0 auto;width:100%}
+  .view.on{display:flex;flex-direction:column}
+  .view.scroll{overflow-y:auto}
+  .view.scroll.on{display:block}
+  h1.vt{font-size:calc(24px * var(--scale));margin:0 0 4px;font-weight:700;line-height:1.4}
+  .lead{font-size:calc(15px * var(--scale));color:var(--muted);margin:0 0 calc(12px*var(--scale));line-height:1.7}
+  .kindlabel{font-size:calc(15px*var(--scale));font-weight:700;color:var(--primary);margin:calc(14px*var(--scale)) 0 calc(4px*var(--scale));
+    padding-left:2px;letter-spacing:.04em}
+
+  /* ---------- ボタン（DADS: 最小ターゲット44px→本アプリは96px） ---------- */
+  button.big{font-family:inherit;font-size:calc(24px * var(--scale));font-weight:700;
+    border-radius:var(--radius-24);border:3px solid var(--ink);background:var(--card);color:var(--ink);
+    min-height:calc(96px * var(--scale));min-width:calc(96px * var(--scale));
+    padding:calc(10px * var(--scale)) calc(20px * var(--scale));cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:calc(10px * var(--scale));flex:1 1 auto}
+  button.big svg{width:calc(38px * var(--scale));height:calc(38px * var(--scale));flex:0 0 auto}
+  button.big.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  button.big.ghost{border-color:var(--line-strong);color:var(--muted);font-size:calc(19px * var(--scale));min-height:calc(84px * var(--scale))}
+  button.big:active{transform:translateY(2px)}
+  button.big[disabled]{opacity:.4;cursor:default;color:var(--gray-500);border-color:var(--line-strong)}
+
+  /* ---------- ホーム ---------- */
+  .cards{display:grid;gap:calc(12px * var(--scale));grid-template-columns:1fr;max-width:680px;margin:0 auto;width:100%}
+  .card{background:var(--card);border:2px solid var(--line-strong);border-radius:var(--radius-24);
+    padding:calc(14px*var(--scale));display:flex;flex-direction:column;gap:calc(8px*var(--scale));
+    cursor:pointer;text-align:left;font-family:inherit;color:var(--ink)}
+  .card:hover{border-color:var(--ink)}
+  .card .row{display:flex;align-items:center;gap:calc(12px*var(--scale))}
+  .card svg.pict{width:calc(88px*var(--scale));height:calc(88px*var(--scale));color:var(--ink);flex:0 0 auto}
+  .card h3{margin:0;font-size:calc(21px*var(--scale));font-weight:700;line-height:1.4}
+  .card p{margin:0;color:var(--muted);font-size:calc(14px*var(--scale));line-height:1.7}
+  .rowbtns{display:flex;gap:calc(10px*var(--scale));flex-wrap:wrap;margin-top:calc(14px*var(--scale));max-width:680px;margin-left:auto;margin-right:auto}
+  .rowbtns button.big{flex:0 1 auto;font-size:calc(18px * var(--scale));min-height:calc(72px*var(--scale))}
+
+  /* ---------- 舞台 ---------- */
+  .stage{flex:1;min-height:0;background:var(--card);border:2px solid var(--line-strong);border-radius:var(--radius-32);
+    padding:clamp(6px,1.1vh,calc(12px*var(--scale)));display:flex;flex-direction:column;align-items:center;
+    gap:clamp(2px,0.7vh,calc(6px*var(--scale)));overflow:auto}
+  .rowtop{display:flex;width:100%;align-items:center;gap:10px;flex:0 0 auto}
+  .pictwrap{flex:1 1 auto;min-height:120px;width:100%;display:flex;align-items:center;justify-content:center}
+  svg.pict{height:100%;width:auto;max-height:min(38vmin,400px);max-width:min(38vmin,400px);aspect-ratio:1/1;color:var(--ink)}
+  .head{font-size:clamp(26px,4.6vmin,calc(42px*var(--scale)));font-weight:700;text-align:center;line-height:1.3;margin:0;flex:0 0 auto}
+  .body{font-size:clamp(20px,3.4vmin,calc(30px*var(--scale)));text-align:center;margin:0;max-width:32ch;line-height:1.85;flex:0 0 auto}
+  .stepno{font-size:calc(15px*var(--scale));color:var(--muted);letter-spacing:.06em;margin:0}
+  .dots{display:flex;gap:9px;justify-content:center;flex:0 0 auto;padding:calc(2px*var(--scale)) 0}
+  .dots i{width:calc(13px*var(--scale));height:calc(13px*var(--scale));border-radius:50%;border:2px solid var(--line-strong);display:block}
+  .dots i.on{background:var(--primary);border-color:var(--primary)}
+  .actions{display:flex;flex-direction:column;gap:clamp(4px,0.8vh,calc(8px*var(--scale)));width:100%;flex:0 0 auto;
+    padding-top:clamp(4px,0.8vh,calc(8px*var(--scale)));border-top:2px solid var(--line-strong);
+    position:sticky;bottom:0;background:var(--card)}
+  .actions.two{flex-direction:row;flex-wrap:wrap}
+  .arow{display:flex;gap:calc(8px*var(--scale));width:100%}
+  .arow.sub button.big{min-height:clamp(60px,10vh,calc(84px*var(--scale)));font-size:clamp(15px,2.2vmin,calc(19px*var(--scale)));padding:calc(6px*var(--scale)) calc(10px*var(--scale))}
+  .arow.sub button.big svg{width:clamp(26px,3.4vmin,calc(34px*var(--scale)));height:clamp(26px,3.4vmin,calc(34px*var(--scale)))}
+  .arow.main button.big{min-height:clamp(76px,12vh,calc(104px*var(--scale)));font-size:clamp(22px,3.2vmin,calc(28px*var(--scale)))}
+  @media (max-height:660px){ .hintbar{display:none} .pictwrap{min-height:96px} details.memo{display:none} }
+  @media (max-height:520px){ .head{font-size:clamp(22px,4.2vmin,30px)} .body{font-size:clamp(18px,3.2vmin,24px)} }
+  details.memo{width:100%;background:var(--key-50);border:2px solid var(--key-300);border-radius:var(--radius-16);
+    padding:calc(6px*var(--scale)) calc(12px*var(--scale));flex:0 0 auto}
+  details.memo summary{cursor:pointer;font-size:calc(15px*var(--scale));font-weight:700;color:var(--key-1000)}
+  details.memo p{margin:calc(4px*var(--scale)) 0 0;font-size:calc(16px*var(--scale))}
+  .hintbar{font-size:calc(14px*var(--scale));color:var(--muted);text-align:center;width:100%;flex:0 0 auto}
+  .notes{background:var(--card);border:2px solid var(--line-strong);border-radius:var(--radius-16);
+    padding:calc(12px*var(--scale));margin-top:calc(12px*var(--scale));font-size:calc(15px*var(--scale))}
+  .notes h4{margin:0 0 calc(4px*var(--scale))}
+  .notes ul{margin:0;padding-left:1.25em}
+  .tag{background:var(--key-50);border-radius:999px;padding:2px 10px;font-size:calc(13px*var(--scale));color:var(--key-1000);width:fit-content}
+
+  /* ---------- 説明者隔離 / 横置き ---------- */
+  .pro-only{display:none!important}
+  body.pro .pro-only{display:block!important}
+  body.pro .rowbtns.pro-only{display:flex!important}
+  #rotate{display:none;position:fixed;inset:0;z-index:60;background:var(--ink);color:#fff;
+    flex-direction:column;align-items:center;justify-content:center;gap:calc(14px*var(--scale));
+    text-align:center;padding:24px}
+  #rotate.hide{display:none!important}
+  @media (orientation:landscape){ #rotate:not(.hide){display:flex} }
+
+  /* ---------- 意味カラー（DADSセマンティック準拠） ---------- */
+  .hl-blue{color:var(--hl-blue-ink);font-weight:700;background:var(--hl-blue-bg);box-shadow:0 0 0 calc(2px*var(--scale)) var(--key-300);border-radius:var(--radius-8);padding:0 6px}
+  .hl-red{color:var(--hl-red);font-weight:700;border-bottom:calc(3px*var(--scale)) solid var(--hl-red);padding-bottom:2px}
+  .nw{white-space:nowrap}
+  button.big.stop{border-color:var(--error-2);color:var(--error-2)}
+
+  /* ---------- モードD ---------- */
+  .dcard-row{display:flex;flex-direction:column;gap:calc(12px*var(--scale));width:100%;max-width:560px}
+  .dcard{background:var(--card);border:3px solid var(--ink);border-radius:var(--radius-24);
+    min-height:calc(120px*var(--scale));cursor:pointer;font-family:inherit;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;gap:calc(14px*var(--scale));
+    padding:calc(10px*var(--scale)) calc(16px*var(--scale))}
+  .dcard svg{width:calc(72px*var(--scale));height:calc(72px*var(--scale));flex:0 0 auto}
+  .dcard b{font-size:calc(26px*var(--scale));font-weight:700;line-height:1.3}
+  .dcard:active{background:var(--key-50)}
+
+  /* ---------- 記録・一覧 ---------- */
+  table{border-collapse:collapse;width:100%;background:var(--card);font-size:calc(14px*var(--scale))}
+  th,td{border:1px solid var(--line-strong);padding:calc(5px*var(--scale)) calc(9px*var(--scale));text-align:left}
+  th{background:var(--key-50)}
+  .grid{display:grid;gap:calc(10px*var(--scale));grid-template-columns:repeat(auto-fill,minmax(148px,1fr))}
+  .pcell{background:var(--card);border:2px solid var(--line-strong);border-radius:var(--radius-16);padding:calc(9px*var(--scale));text-align:center}
+  .pcell svg{width:calc(86px*var(--scale));height:calc(86px*var(--scale));color:var(--ink)}
+  .pcell b{display:block;font-size:calc(14px*var(--scale))}
+  .pcell small{display:block;color:var(--muted);font-size:calc(12px*var(--scale));line-height:1.5}
+  @media print{header.app,.rowbtns,.actions,details.memo{display:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+
+  <symbol id="p-home" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 46 L50 16 L88 46"/><path d="M22 44 V84 H78 V44"/><path d="M42 84 V60 H58 V84"/></g></symbol>
+  <symbol id="p-car" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 58 V72 H88 V58 L70 40 H30 Z"/><circle cx="30" cy="74" r="8"/><circle cx="70" cy="74" r="8"/>
+    <path d="M32 58 V42 M50 58 V42 M68 58 V42" stroke-width="4"/></g></symbol>
+  <symbol id="p-meal" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="25"/><circle cx="50" cy="50" r="14" stroke-width="4"/>
+    <ellipse cx="15" cy="22" rx="6" ry="9"/><path d="M15 31 V76"/>
+    <path d="M78 14 V38 a7 7 0 0 0 14 0 V14"/><path d="M85 45 V76" stroke-width="4"/></g></symbol>
+  <symbol id="p-med" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="16" y="38" width="68" height="26" rx="13"/><path d="M50 38 V64"/></g></symbol>
+  <symbol id="p-bath" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="24" r="10"/><path d="M30 46 a20 20 0 0 1 40 0"/>
+    <path d="M12 60 V72 a16 16 0 0 0 16 16 h44 a16 16 0 0 0 16-16 V60 Z"/>
+    <path d="M20 60 H80" stroke-width="4"/><path d="M20 40 c0-8 8-8 8-16" stroke-width="4"/><path d="M72 40 c0-8 8-8 8-16" stroke-width="4"/></g></symbol>
+  <symbol id="p-toilet" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="16" r="9"/><path d="M32 25 V44"/><path d="M32 44 H50"/>
+    <path d="M14 50 H54 V56 a20 20 0 0 1 -40 0 Z"/><rect x="60" y="34" width="22" height="30" rx="5"/>
+    <path d="M54 50 H60" stroke-width="4"/></g></symbol>
+  <symbol id="p-phone" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 66 h68 a4 4 0 0 1 4 4 v10 a4 4 0 0 1 -4 4 H16 a4 4 0 0 1 -4 -4 V70 a4 4 0 0 1 4 -4 Z"/>
+    <rect x="20" y="42" width="22" height="24" rx="9"/><rect x="58" y="42" width="22" height="24" rx="9"/>
+    <path d="M34 52 H66"/></g></symbol>
+  <symbol id="p-money" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="34"/><path d="M36 26 L50 44 M64 26 L50 44"/><path d="M50 44 V76"/>
+    <path d="M33 54 H67 M33 64 H67"/></g></symbol>
+  <symbol id="p-cal" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="14" y="22" width="72" height="66" rx="6"/><path d="M14 40 H86"/><path d="M34 12 V28 M66 12 V28"/>
+    <path d="M30 54 h8 M46 54 h8 M62 54 h8 M30 72 h8 M46 72 h8" stroke-width="4"/></g></symbol>
+  <symbol id="p-clock" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="34"/><path d="M50 50 L33 40 M50 50 V24"/>
+    <path d="M50 16 V22 M84 50 H78 M50 84 V78 M16 50 H22" stroke-width="4"/></g></symbol>
+  <symbol id="p-walk" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="36" cy="18" r="9"/><path d="M36 27 V54"/><path d="M36 34 L22 44 M36 34 L50 42"/>
+    <path d="M36 54 L26 80 M36 54 L48 80"/><path d="M66 36 V80" stroke-width="4"/><path d="M66 36 a8 8 0 0 0 -12 2" stroke-width="4"/></g></symbol>
+  <symbol id="p-bed" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 34 V80"/><path d="M10 60 H84"/><path d="M84 60 V80"/><rect x="18" y="44" width="24" height="16" rx="6"/>
+    <path d="M10 80 H90" stroke-width="4"/></g></symbol>
+  <symbol id="p-talk" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="14" width="46" height="30" rx="10"/><path d="M22 44 L18 58 L38 44"/>
+    <rect x="46" y="52" width="46" height="30" rx="10"/><path d="M78 82 L82 96 L62 82"/></g></symbol>
+  <symbol id="p-worry" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="46" cy="54" r="32"/><path d="M26 50 L40 40 M66 50 L52 40"/>
+    <circle cx="35" cy="50" r="4" fill="currentColor" stroke="none"/><circle cx="57" cy="50" r="4" fill="currentColor" stroke="none"/>
+    <path d="M34 74 q12 -8 24 0"/><path d="M84 14 c4 6 6 9 6 12 a6 6 0 0 1 -12 0 c0 -3 2 -6 6 -12 Z" stroke-width="4"/></g></symbol>
+  <symbol id="p-smile" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="32"/><path d="M36 42 q4 -5 8 0 M56 42 q4 -5 8 0"/><path d="M34 62 q16 14 32 0"/></g></symbol>
+  <symbol id="p-normal" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="32"/><circle cx="38" cy="44" r="4" fill="currentColor" stroke="none"/><circle cx="62" cy="44" r="4" fill="currentColor" stroke="none"/>
+    <path d="M38 66 H62"/></g></symbol>
+  <symbol id="p-staff" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="40" cy="22" r="11"/><path d="M40 33 V60"/><path d="M40 42 L24 54 M44 36 L68 12"/>
+    <path d="M42 60 L32 84 M42 60 L52 84"/>
+    <rect x="10" y="54" width="22" height="20" rx="5"/><path d="M26 52 L22 54" stroke-width="4"/></g></symbol>
+  <symbol id="p-family" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="24" r="10"/><path d="M32 34 V58"/><path d="M32 42 L24 54 M32 42 L46 50"/>
+    <path d="M32 58 L26 80 M32 58 L38 80"/>
+    <circle cx="68" cy="38" r="8"/><path d="M68 46 V64"/><path d="M68 52 L56 50"/>
+    <path d="M68 64 L64 80 M68 64 L72 80"/><path d="M46 50 H56"/></g></symbol>
+  <symbol id="p-towel" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="16" y="30" width="68" height="38" rx="10"/><path d="M16 42 H84 M72 30 V68" stroke-width="4"/></g></symbol>
+  <symbol id="p-wallet" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="12" y="28" width="76" height="48" rx="8"/><path d="M12 44 H88" stroke-width="4"/><circle cx="72" cy="58" r="7"/></g></symbol>
+  <symbol id="p-paper" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 10 H60 L76 26 V90 H26 Z"/><path d="M60 10 V26 H76" stroke-width="4"/>
+    <path d="M38 44 H64 M38 58 H64 M38 72 H54" stroke-width="4"/></g></symbol>
+  <symbol id="p-smartphone" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="26" y="12" width="42" height="76" rx="8"/><path d="M40 78 H54" stroke-width="4"/>
+    <path d="M74 34 c6 10 6 22 0 32" stroke-width="4"/></g></symbol>
+  <symbol id="p-check" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 52 L42 72 L78 28"/></g></symbol>
+  <symbol id="p-back" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 50 H22"/><path d="M40 30 L20 50 L40 70"/></g></symbol>
+  <symbol id="p-speaker" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 38 V62 h14 L56 78 V22 L32 38 Z"/><path d="M68 38 a16 16 0 0 1 0 24" stroke-width="4"/>
+    <path d="M78 28 a30 30 0 0 1 0 44" stroke-width="4"/></g></symbol>
+  <symbol id="p-stop" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="34"/><path d="M38 38 h24 v24 h-24 Z"/></g></symbol>
+  <symbol id="p-repeat" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 50 A24 24 0 1 1 50 74"/><path d="M60 64 L50 74 L60 84"/></g></symbol>
+  <symbol id="p-thermo" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 30 L56 56"/><circle cx="64" cy="64" r="11"/><path d="M64 56 V36" stroke-width="5"/>
+    <path d="M14 74 a24 24 0 0 1 10 -26" stroke-width="6"/>
+    <path d="M44 34 l9 9 M36 42 l9 9" stroke-width="4"/></g></symbol>
+  <symbol id="p-cuff" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="24" y="18" width="30" height="64" rx="8"/>
+    <path d="M24 34 H54 M24 66 H54" stroke-width="4"/>
+    <circle cx="70" cy="38" r="12"/><path d="M65 38 h10 M70 33 v10" stroke-width="4"/>
+    <path d="M70 50 V70 M60 70 H80" stroke-width="4"/></g></symbol>
+  <symbol id="p-oxy" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 22 V62 a14 14 0 0 0 28 0 V22"/>
+    <path d="M30 34 H58" stroke-width="4"/>
+    <rect x="62" y="44" width="24" height="30" rx="6"/>
+    <path d="M68 54 h12 M68 64 h12" stroke-width="4"/></g></symbol>
+  <symbol id="p-exercise" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="46" cy="18" r="9"/><path d="M46 27 V48"/><path d="M46 34 L28 42 M46 34 L64 42"/>
+    <path d="M46 48 L34 62 M46 48 L58 62"/>
+    <path d="M16 66 H76"/><path d="M20 66 V84 M72 66 V84" stroke-width="4"/>
+    <path d="M84 30 l6 6 M84 42 l6 -6" stroke-width="4"/></g></symbol>
+  <symbol id="p-massage" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 78 q26 -18 52 0"/><path d="M24 78 V88 H76 V78" stroke-width="4"/>
+    <circle cx="50" cy="34" r="14"/>
+    <path d="M50 48 V62" /><path d="M38 26 l-4 -8 M62 26 l4 -8" stroke-width="4"/>
+    <path d="M44 16 l-4 -6 M56 16 l4 -6" stroke-width="4"/></g></symbol>
+  <symbol id="p-stretch" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="18" r="9"/><path d="M50 27 V52"/>
+    <path d="M50 34 L22 26 M50 34 L78 26"/>
+    <path d="M50 52 L34 78 M50 52 L66 78"/>
+    <path d="M14 22 l-4 -8 M86 22 l4 -8" stroke-width="4"/></g></symbol>
+  <!-- モードD: 丸の縮小系列（×なし・同じ物差しの目盛り） -->
+  <symbol id="p-circle-big" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="38"/></g></symbol>
+  <symbol id="p-circle-half" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="26"/></g></symbol>
+  <symbol id="p-circle-small" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="14"/></g></symbol>
+  <!-- モードD: うなずく人（×記号は描かない） -->
+  <symbol id="p-nod" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="26" r="12"/><path d="M50 38 V66"/><path d="M50 46 L32 58 M50 46 L68 58"/>
+    <path d="M50 66 L38 88 M50 66 L62 88"/>
+    <path d="M72 14 l6 6 l-6 6" stroke-width="4"/><path d="M28 14 l-6 6 l6 6" stroke-width="4"/></g></symbol>
+  <!-- 追加ピクト（現場要望） -->
+  <symbol id="p-shirt" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 22 L18 30 L24 44 L32 40 V84 H68 V40 L76 44 L82 30 L70 22"/>
+    <path d="M30 22 q20 14 40 0" stroke-width="4"/></g></symbol>
+  <symbol id="p-broom" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 12 V52"/><path d="M32 52 H68 L62 88 H38 Z"/>
+    <path d="M40 62 v16 M50 62 v16 M60 62 v16" stroke-width="4"/></g></symbol>
+  <symbol id="p-wash" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="16" y="28" width="68" height="56" rx="8"/>
+    <path d="M16 44 H84" stroke-width="4"/>
+    <path d="M28 56 q6 -8 12 0 q6 8 12 0 q6 -8 12 0" stroke-width="4"/>
+    <circle cx="50" cy="70" r="8"/></g></symbol>
+  <symbol id="p-basket" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 40 H82 L76 88 H24 Z"/>
+    <path d="M36 40 a14 14 0 0 1 28 0" stroke-width="4"/>
+    <path d="M32 56 H68 M36 68 H64" stroke-width="4"/></g></symbol>
+  <symbol id="p-band" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="28"/>
+    <path d="M30 40 q20 10 40 0 M30 52 q20 10 40 0 M30 64 q20 10 40 0" stroke-width="4"/>
+    <path d="M62 30 l8 -8 M62 44 l8 -8" stroke-width="4"/></g></symbol>
+  <symbol id="p-iv" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 12 V32 H60 V12"/>
+    <rect x="34" y="32" width="32" height="40" rx="6"/>
+    <path d="M50 72 V84 M42 84 H58" stroke-width="4"/>
+    <path d="M42 44 h16 M42 54 h16" stroke-width="4"/></g></symbol>
+  <symbol id="p-transfer" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 30 V84 M10 60 H34 M34 60 V84"/>
+    <circle cx="52" cy="24" r="9"/><path d="M52 33 V52"/><path d="M52 40 L40 48 M52 40 L64 48"/>
+    <path d="M52 52 L44 72 M52 52 L60 72"/>
+    <path d="M70 44 V84 M70 44 H88 M88 44 V84" stroke-width="4"/>
+    <path d="M64 30 l10 10 M74 30 l-10 10" stroke-width="4"/></g></symbol>
+  <!-- モードD: 首を振る人（×記号は描かない） -->
+  <symbol id="p-shake" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="26" r="12"/><path d="M50 38 V66"/><path d="M50 46 L32 58 M50 46 L68 58"/>
+    <path d="M50 66 L38 88 M50 66 L62 88"/>
+    <path d="M74 10 l8 8 l-8 8" stroke-width="4"/><path d="M82 10 l-8 8 l8 8" stroke-width="4"/>
+    <path d="M18 10 l8 8 l-8 8" stroke-width="4"/><path d="M26 10 l-8 8 l8 8" stroke-width="4"/></g></symbol>
+
+</defs></svg>
+
+<header class="app">
+  <div class="name">ひとつずつ<span>｜リハビリの 訪問（デジタル庁デザインシステム準拠版）</span></div>
+  <div class="sp"></div>
+  <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
+  <div id="propanel">
+    <span class="lab">説明者メニュー（本人に見せない設定・記録類はここ）：</span>
+    <button class="chip small" id="tg-auto" aria-pressed="true">よみあげ：オン</button>
+    <button class="chip small" id="tg-size" aria-pressed="false">もじ：ふつう</button>
+    <button class="chip small" id="tg-memo" aria-pressed="true">メモ：表示</button>
+    <button class="chip small" id="go-record">きろく</button>
+    <button class="chip small" id="go-picts">ピクト一覧</button>
+  </div>
+</header>
+
+<main>
+  <!-- ① ホーム -->
+  <section id="v-home" class="view scroll on">
+    <h1 class="vt">なにを しますか？</h1>
+    <p class="lead pro-only">利用者の目の前で見せながら説明する画面です。タブレットは<b>ななめ前</b>に置き、読み上げのあいだは<b>顔</b>を見てください。読み上げ中は「とめる」でいつでも止められます。</p>
+    <div id="scenarios"></div>
+    <div class="rowbtns pro-only">
+      <button class="big ghost" id="btn-record">きろくを見る</button>
+      <button class="big ghost" id="btn-picts">ピクト一覧（説明者の語彙）</button>
+    </div>
+  </section>
+
+  <!-- ② ガイダンス（離脱設計） -->
+  <section id="v-guide" class="view">
+    <div class="stage">
+      <p class="stepno">はじめに</p>
+      <div class="pictwrap"><svg class="pict" aria-hidden="true"><use href="#p-talk"/></svg></div>
+      <h2 class="head" id="guide-head">これから 5つ おはなしします</h2>
+      <p class="body">とちゅうで <b style="color:var(--hl-red)">とめても いいです</b>。<br>とめても、こまりません。</p>
+      <div class="actions two">
+        <button class="big primary" id="guide-start"><svg aria-hidden="true"><use href="#p-check"/></svg>はじめる</button>
+        <button class="big ghost stop" id="guide-stop"><svg aria-hidden="true"><use href="#p-back"/></svg>やめる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ 説明ステップ -->
+  <section id="v-step" class="view">
+    <div class="stage">
+      <div class="rowtop">
+        <p class="stepno" id="stepno">1 / 5</p><div class="sp" style="flex:1"></div>
+        <p class="stepno" id="scene-name"></p>
+      </div>
+      <div class="pictwrap"><svg class="pict" aria-hidden="true"><use href="#p-home" id="step-use"/></svg></div>
+      <h2 class="head" id="step-head">—</h2>
+      <p class="body" id="step-body">—</p>
+      <div class="dots" id="step-dots" role="list" aria-label="進みぐあい"></div>
+      <div class="hintbar pro-only" id="step-hint">① ななめ前に置く　② よみあげ中は かおを見る　③ おわったら ふせる</div>
+      <details class="memo" id="step-memo-box"><summary>せつめいしゃメモ（本人には見せない）</summary><p id="step-memo">—</p></details>
+      <div class="actions">
+        <div class="arow sub">
+          <button class="big ghost" id="step-back"><svg aria-hidden="true"><use href="#p-back"/></svg>もどる</button>
+          <button class="big ghost" id="step-speak"><svg aria-hidden="true"><use href="#p-speaker"/></svg><span id="speak-label">よみあげ</span></button>
+          <button class="big ghost" id="step-again"><svg aria-hidden="true"><use href="#p-repeat"/></svg>やさしい いいかた</button>
+        </div>
+        <div class="arow main">
+          <button class="big primary" id="step-ok"><svg aria-hidden="true"><use href="#p-check"/></svg>わかった</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ おわり -->
+  <section id="v-done" class="view">
+    <div class="stage">
+      <p class="stepno">おわり</p>
+      <div class="pictwrap"><svg class="pict" aria-hidden="true"><use href="#p-smile"/></svg></div>
+      <h2 class="head">おはなしは おわりです</h2>
+      <p class="body">ありがとう ございました。</p>
+      <div class="notes pro-only" style="width:100%;flex:0 0 auto">
+        <h4>できたか たしかめましょう（うながし）</h4>
+        <p id="done-q" style="margin:0">—</p>
+        <p class="stepno" style="margin-top:4px">※ タップだけで判断しない。答えを聞いて、できたことを記録する。</p>
+      </div>
+      <div class="actions two">
+        <button class="big primary pro-only" id="done-record">きろくを見る</button>
+        <button class="big primary" id="done-home">はじめに もどる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ モードD: きょうの ちょうし -->
+  <section id="v-cond" class="view">
+    <div class="stage">
+      <p class="stepno">しつもんに こたえる</p>
+      <h2 class="head">きょうの ちょうしは？</h2>
+      <p class="body" style="max-width:24ch">さわって ください。<br>こたえを よみあげます。</p>
+      <div class="dcard-row">
+        <button class="dcard" data-say="きょうは げんき です" data-ev="condition" data-val="いい"><svg aria-hidden="true"><use href="#p-circle-big"/></svg><svg aria-hidden="true"><use href="#p-smile"/></svg><b>いい</b></button>
+        <button class="dcard" data-say="きょうは ふつう です" data-ev="condition" data-val="ふつう"><svg aria-hidden="true"><use href="#p-circle-half"/></svg><svg aria-hidden="true"><use href="#p-normal"/></svg><b>ふつう</b></button>
+        <button class="dcard" data-say="つたえて くれて ありがとう。きょうは やることを すくなく します" data-ev="condition" data-val="ちょっとすぐれない"><svg aria-hidden="true"><use href="#p-circle-small"/></svg><svg aria-hidden="true"><use href="#p-worry"/></svg><b>ちょっと すぐれない</b></button>
+      </div>
+      <div class="hintbar pro-only">指さしを拾う設計（操作させるのではない）。すぐれないを選んだら説明枚数を減らす分岐を提案する。×・赤は使わない＝丸の縮小系列。</div>
+      <div class="actions two">
+        <button class="big ghost" id="cond-home"><svg aria-hidden="true"><use href="#p-back"/></svg>もどる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ モードD: はい／いいえ -->
+  <section id="v-yn" class="view">
+    <div class="stage">
+      <p class="stepno">しつもんに こたえる</p>
+      <h2 class="head" id="yn-q">〜 しますか？</h2>
+      <p class="body" style="max-width:24ch">さわって ください。<br>こたえを よみあげます。</p>
+      <div class="dcard-row">
+        <button class="dcard" data-say="はい です" data-ev="answer" data-val="はい"><svg aria-hidden="true"><use href="#p-nod"/></svg><b>はい</b></button>
+        <button class="dcard" data-say="いいえ です" data-ev="answer" data-val="いいえ"><svg aria-hidden="true"><use href="#p-shake"/></svg><b>いいえ</b></button>
+      </div>
+      <div class="notes pro-only" style="width:100%;flex:0 0 auto">
+        <h4>しつもんの ようし（説明者が本文を書き換えて使う）</h4>
+        <p style="margin:0">「きょう おふろに はいりますか？」「この くすり のみますか？」など。<br>
+        いいえ＝拒否は失敗ではなくアセスメント入力。記録に残すが本人には中立に。</p>
+      </div>
+      <div class="hintbar pro-only">質問文は下の「もんだいを かえる」で説明者が入力。2択以上にしない。</div>
+      <div class="actions two">
+        <button class="big ghost pro-only" id="yn-edit"><svg aria-hidden="true"><use href="#p-paper"/></svg>もんだいを かえる</button>
+        <button class="big ghost" id="yn-home"><svg aria-hidden="true"><use href="#p-back"/></svg>もどる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ 記録 -->
+  <section id="v-record" class="view scroll">
+    <h1 class="vt">きろく（説明のエビデンス）</h1>
+    <p class="lead">端末内（localStorage）にのみ保存。氏名は持ちません。CSVで自社ソフトへ転記、または要約を印刷して渡せます。<br>
+    ※ 監査・人事評価に使わないこと（利用規約に明記）。</p>
+    <div id="record-body"></div>
+    <div class="rowbtns">
+      <button class="big ghost" id="rec-csv">CSVを だす</button>
+      <button class="big ghost" id="rec-import">CSVを よみこむ</button>
+      <button class="big ghost" id="rec-print">印刷（ピクト要約）</button>
+      <button class="big ghost" id="rec-clear">きろくを けす（確認あり）</button>
+      <button class="big ghost" id="rec-home">ホーム</button>
+    </div>
+    <input type="file" id="rec-file" accept=".csv" style="display:none">
+  </section>
+
+  <!-- ⑧ ピクト一覧 -->
+  <section id="v-picts" class="view scroll">
+    <h1 class="vt">ピクト一覧（説明者の語彙）</h1>
+    <p class="lead">造形規則：viewBox 100 正規化・基本線幅8／細部4・線端round・外周8.3を空ける・1つの絵の要素は3つまで・動作は矢印・感情は表情。<br>
+      土台は JIS T 0103:2005 附属書1（規定）A=60mm／B=50mm／C=5mm と作図原則 a〜k に準拠。</p>
+    <div class="grid" id="pict-grid"></div>
+    <div class="notes">
+      <h4>借りる／描くの仕分け</h4>
+      <ul>
+        <li><b>借りる</b>：トイレ・電話・非常口などの公共サイン（エコモ標準案内用図記号／JIS Z 8210）、日常語彙（JIS T 0103 の313絵記号）</li>
+        <li><b>描く</b>：制度の語彙（けいやく・ほけんりょう・げんどがく・ケアプラン…）。標準が空白の領域</li>
+        <li><b>原則</b>：言葉を絵にしない。<b>本人の生活に起きること</b>を絵にする</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<div id="rotate" role="alert">
+  <svg width="120" height="120" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="30" y="18" width="40" height="66" rx="7" transform="rotate(-16 50 51)"/>
+    <path d="M16 42 a34 34 0 0 1 12 -21"/><path d="M22 11 l7 11 l-13 2"/></g></svg>
+  <p style="font-size:calc(24px*var(--scale));font-weight:700;margin:0">タブレットは 縦おきで つかってください</p>
+  <p style="margin:0;font-size:calc(16px*var(--scale));opacity:.85">ほんばんは タブレットの 縦表示 のみを よていしています。</p>
+  <button class="chip" id="rotate-ok" type="button">横おきで つづける（テストよう）</button>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   ひとつずつ（仮称）— DADS準拠版 v8
+   v8の変更（v7からの改修）:
+     ・デザインをデジタル庁デザインシステムβ版 v2.18.0 に完全準拠
+       （白地・Noto Sans JP・キーカラー blue-800・error-2・行高1.5+・
+        フォーカス Yellow-300+Black 2重・radiusトークン）
+     ・3サイト化（ヘルパー/看護師/PT）: content/<site>.json から生成
+     ・メニュー拡充: first（初回）/daily（毎回の再説明）/money（費用）の3区分
+     ・モードD実装: 「きょうの ちょうし」3択（丸の縮小系列・×なし）＋
+       はい/いいえ2択（うなずく人/首を振る人）。指さしを拾い、読み上げが代弁
+     ・localStorageキーを無版本化（hitotsuzutsu_log / hitotsuzutsu_set）。
+       旧キー（*_v2 / nurse_* 等）からの読み込みフォールバックあり
+     ・CSVインポート追加（差し替え更新でも記録を引き継げる）
+     ・記録に版番号メタ（v:8）
+   ============================================================ */
+
+const SITE = {"site": "pt", "role": "リハビリの 人"};
+const SCENARIOS = [
+ {
+  "id": "pt-first",
+  "title": "リハビリの 人が きた ひ",
+  "note": "初回オリエンテーション。訪問リハビリの全体像を本人に伝える（8〜10分）。旧版プロトの8ステップを改訂。",
+  "kind": "first",
+  "pict": "p-walk",
+  "check": "きょう リハビリの 人と なにを しましたか？",
+  "steps": [
+   {
+    "pict": "p-staff",
+    "head": "リハビリの 人が きます",
+    "body": "リハビリの 人が うちまで きます。1かいは ○ふん ぐらいです。",
+    "hl": {
+     "blue": [
+      "○ふん ぐらい"
+     ]
+    },
+    "easy": "うごき方を しった 人が きます。",
+    "memo": "（仮）「PT」の略語は画面に出さず「リハビリの 人」。所要時間は事業所の標準（20分/40分/60分）に差し替えてほしい。"
+   },
+   {
+    "pict": "p-talk",
+    "head": "きょうの ぐあいを はなす",
+    "body": "はじめに ねつき・いたみ・ごはんの ことを ききます。うまく いえなくても だいじょうぶです。",
+    "hl": {
+     "red": [
+      "うまく いえなくても だいじょうぶです"
+     ]
+    },
+    "easy": "きょうの ぐあいを はなす。",
+    "memo": "（仮）問診はYES/NOで答えられる順番に。バイタル測定は「ねつき・からだの ぐあい」と言い換えること。言語化が苦手な人は表情ピクトの指差しで拾う。"
+   },
+   {
+    "pict": "p-stretch",
+    "head": "からだを のばす",
+    "body": "うでと あしを ゆっくり のばします。いたくない ところまでです。",
+    "hl": {
+     "red": [
+      "いたくない ところまで"
+     ]
+    },
+    "easy": "てと あしを のばす。いたいまで しない。",
+    "memo": "（仮）関節可動域運動のこと。画面に「ROM」等は出さない。可動域の上限は評価後に個人差替。反動をつけない指示は口頭で補ってほしい。"
+   },
+   {
+    "pict": "p-exercise",
+    "head": "ちからを つける うごき",
+    "body": "イスに すわって、うでと あしを あげ下げします。○かい ずつ やります。",
+    "hl": {
+     "blue": [
+      "○かい ずつ"
+     ]
+    },
+    "easy": "すわって、○かい。",
+    "memo": "（仮）筋力トレーニングのこと。「トレ」等の略語は出さない。回数・セットは評価後の個人プログラムに差替前提。椅子の固定（転倒防止）を説明に入れてほしい。"
+   },
+   {
+    "pict": "p-massage",
+    "head": "てで ほぐす",
+    "body": "かたく なった ところを、てのひらで おして ほぐします。いたかったら いって ください。",
+    "hl": {
+     "red": [
+      "いたかったら いって ください"
+     ]
+    },
+    "easy": "てで おす。いたいと いえば やめる。",
+    "memo": "（仮）ほぐし＝「押す」に表現を限定（揉む/さするは事業所に実操作を確認）。麻痺側・疼痛部を避ける範囲を指定してもらいたい。"
+   },
+   {
+    "pict": "p-walk",
+    "head": "すこし あるく",
+    "body": "しっかり つかまって たちます。リハビリの 人が そばに いて、すこし あるきます。",
+    "hl": {
+     "blue": [
+      "そばに いて"
+     ]
+    },
+    "easy": "つかまる。そばに いる。すこし あるく。",
+    "memo": "（仮）歩行補助具（歩行器・杖）の有無を事前確認。居室のどこを歩くか（動線）は事業所に見てもらう。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめます",
+    "body": "「いたい」と いえば、すぐ やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "「いたい」と いえば、すぐ やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）中止基準（痛みの目安・その日の上限）を事業所の基準で追記してほしい最重要箇所。本人が自分から止められることを毎回確認する。"
+   },
+   {
+    "pict": "p-check",
+    "head": "うちで やる うごき",
+    "body": "あさと よるに ○かい ずつ、うちでも うごきます。ノートに ○を かきます。",
+    "hl": {
+     "blue": [
+      "ノートに ○を かきます"
+     ]
+    },
+    "easy": "あさと よる、○かい、○を かく。",
+    "memo": "（仮）「自主トレ」は画面に出さず「うちで やる うごき」。量は本人の継続率を見て調整。○つけノートは次回訪問時に持参して確認する設計。"
+   }
+  ]
+ },
+ {
+  "id": "d-nobasu",
+  "title": "からだを のばす",
+  "note": "毎回の訪問で、からだをのばす運動（関節が固まらないようにする運動）を始める前の再説明（1〜2分）。",
+  "kind": "daily",
+  "pict": "p-stretch",
+  "check": "いたい ときは なんですか？",
+  "steps": [
+   {
+    "pict": "p-talk",
+    "head": "まず ぐあいを きく",
+    "body": "のばす まえに、きょう いたい ところを おしえて ください。",
+    "hl": {
+     "blue": [
+      "いたい ところ"
+     ]
+    },
+    "easy": "どこが いたいですか？",
+    "memo": "（仮）前回の運動後の痛み・体調変化を毎回確認する場面。痛みの部位は本人に指差しで示してもらうのが理想。"
+   },
+   {
+    "pict": "p-stretch",
+    "head": "ゆっくり のばす",
+    "body": "うでと あしを、ゆっくり のばします。○かい ずつ やります。",
+    "hl": {
+     "blue": [
+      "○かい ずつ"
+     ]
+    },
+    "easy": "うでと あしを ゆっくり のばす。",
+    "memo": "（仮）回数は個人のプログラムに差替。反動をつけず数秒保持する操作は口頭と実演で。画面には「ROM」等の略語を出さない。"
+   },
+   {
+    "pict": "p-smile",
+    "head": "いきを はく",
+    "body": "のばして いる あいだ、ゆっくり いきを はきます。いきを とめなくて いいです。",
+    "hl": {
+     "blue": [
+      "ゆっくり いきを はきます"
+     ]
+    },
+    "easy": "いきを はく。",
+    "memo": "（仮）呼吸を止めないことは血圧変動の予防として毎回伝える。本人が自分でできる役割として残す。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめる",
+    "body": "いたくない ところまでです。「いたい」と いえば、すぐ やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "「いたい」と いえば、すぐ やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）痛みの中止基準は事業所の基準を明記してほしい。言い出しにくい人には「うなずくだけでも いい」と口頭で補う。"
+   },
+   {
+    "pict": "p-check",
+    "head": "きょうは できた",
+    "body": "きょうは いっしょに のばしました。つぎの かいも やります。",
+    "hl": {
+     "blue": [
+      "つぎの かいも"
+     ]
+    },
+    "easy": "できた。また つぎも。",
+    "memo": "（仮）できたことをその場で言葉にして本人に返す（成功体験の言語化）。のばした部位は記録に残す。"
+   }
+  ]
+ },
+ {
+  "id": "d-chikara",
+  "title": "ちからを つける うごき",
+  "note": "毎回の訪問で、すわって行うちからを出す運動を始める前の再説明（1〜2分）。",
+  "kind": "daily",
+  "pict": "p-exercise",
+  "check": "つかれたら どうしますか？",
+  "steps": [
+   {
+    "pict": "p-exercise",
+    "head": "イスに すわって うごく",
+    "body": "イスに すわって、うでと あしを あげ下げします。",
+    "hl": {
+     "blue": [
+      "イスに すわって"
+     ]
+    },
+    "easy": "すわって、うでと あしを あげる。",
+    "memo": "（仮）筋力トレーニングのこと。画面に「トレ」「MMT」等は出さない。背もたれ付きの重い椅子を使い、転倒防止を確認してから始める。"
+   },
+   {
+    "pict": "p-clock",
+    "head": "○かい ずつ ゆっくり",
+    "body": "○かい ずつ、ゆっくり やります。いそがなくて いいです。",
+    "hl": {
+     "blue": [
+      "○かい ずつ"
+     ],
+     "red": [
+      "いそがなくて いいです"
+     ]
+    },
+    "easy": "○かい、ゆっくり。",
+    "memo": "（仮）回数・セット数は評価後に個人差替。数え方は本人が声を出して数えると役割が残る（できることは本人に）。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめる",
+    "body": "「いたい」と いえば、すぐ やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "「いたい」と いえば、すぐ やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）痛みが出た部位と回数を記録し、次回の負荷調整に使う。中止基準は事業所の基準を追記してほしい。"
+   },
+   {
+    "pict": "p-bed",
+    "head": "あいだは やすむ",
+    "body": "つかれたら、あいだに やすんで いいです。がんばりすぎなくて いいです。",
+    "hl": {
+     "red": [
+      "やすんで いいです"
+     ]
+    },
+    "easy": "つかれたら やすむ。",
+    "memo": "（仮）セット間の休憩と水分摂取をここで促す。顔色・息切れの確認も行う（画面には出さず観察事項）。"
+   },
+   {
+    "pict": "p-check",
+    "head": "きょうは できた",
+    "body": "きょうは たくさん うごきました。すこしずつ ちからが ついてきます。",
+    "hl": {
+     "blue": [
+      "すこしずつ"
+     ]
+    },
+    "easy": "できた。すこしずつ つよくなる。",
+    "memo": "（仮）効果は数値ではなく「立ち上がりが楽になった」等、本人の生活のことばで伝えること。"
+   }
+  ]
+ },
+ {
+  "id": "d-utsuru",
+  "title": "ベッドから いすへ うつる",
+  "note": "毎回の訪問で、ベッドといすの間を移る動きを練習する前の再説明（2分）。",
+  "kind": "daily",
+  "pict": "p-bed",
+  "check": "ベッドから いすへ うつるとき、だれが そばに いますか？",
+  "steps": [
+   {
+    "pict": "p-bed",
+    "head": "まず よこに なる",
+    "body": "ベッドで まず よこに なります。それから あしを おろします。",
+    "hl": {
+     "blue": [
+      "よこに なります"
+     ]
+    },
+    "easy": "よこに なる。あしを おろす。",
+    "memo": "（仮）起き上がりの手順は本人の利き手・麻痺側に合わせて事業所で差替。ベッド高（足底が床につくか）を毎回確認。"
+   },
+   {
+    "pict": "p-exercise",
+    "head": "てで おして おきる",
+    "body": "てで ベッドを おして、ゆっくり おきあがります。",
+    "hl": {
+     "blue": [
+      "ゆっくり"
+     ]
+    },
+    "easy": "てで おして おきる。",
+    "memo": "（仮）起き上がり直後のふらつき（起立性）に注意。数秒座ったまま待つことを口頭で補ってほしい。"
+   },
+   {
+    "pict": "p-staff",
+    "head": "そばで ささえます",
+    "body": "リハビリの 人が そばで ささえます。ぜんぶ じぶんで がんばらなくて いいです。",
+    "hl": {
+     "red": [
+      "がんばらなくて いいです"
+     ]
+    },
+    "easy": "そばに いる。がんばらなくて いい。",
+    "memo": "（仮）介助量は本人ができることを残す方針で事業所が設定。家族が見ている場合は介助の手順統一もここで行う。"
+   },
+   {
+    "pict": "p-walk",
+    "head": "いすの ほうへ まわる",
+    "body": "おきたら、からだを いすの ほうへ まわします。あしが ゆかに ついてから すわります。",
+    "hl": {
+     "blue": [
+      "いすの ほうへ まわします"
+     ]
+    },
+    "easy": "いすへ まわる。すわる。",
+    "memo": "（仮）移乗の向き（麻痺側からか健側からか）は個人差が大きい。事業所で手順を差替えてほしい。いすは必ず固定確認。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめる",
+    "body": "「いたい」「こわい」と いえば、そこで やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "そこで やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）痛みだけでなく「こわい」も中止の合図に含める。転倒歴がある人には特に慎重に。中止基準は事業所基準を追記。"
+   },
+   {
+    "pict": "p-check",
+    "head": "まいかい すこしずつ",
+    "body": "うつる うごきは、まいかい すこしずつ れんしゅうします。",
+    "hl": {
+     "blue": [
+      "まいかい すこしずつ"
+     ]
+    },
+    "easy": "まいかい すこしずつ。",
+    "memo": "（仮）介助量の減少を記録し、本人に「この前より 手で押せています」など具体的な変化を言葉で返す。"
+   }
+  ]
+ },
+ {
+  "id": "d-aruku",
+  "title": "すこし あるく",
+  "note": "毎回の訪問で、家の中で歩く練習を始める前の再説明（1〜2分）。",
+  "kind": "daily",
+  "pict": "p-walk",
+  "check": "あるくとき、なにを つかみますか？",
+  "steps": [
+   {
+    "pict": "p-walk",
+    "head": "つかまって たつ",
+    "body": "しっかり つかまって たちます。くつが はいて あるか、かくにんします。",
+    "hl": {
+     "blue": [
+      "しっかり つかまって"
+     ]
+    },
+    "easy": "つかまって たつ。くつを はく。",
+    "memo": "（仮）歩行器・杖の有無は事前に確認。滑りやすい床（靴下のみ・スリッパ）は避ける。歩行ルートの障害物は訪問時に毎回チェック。"
+   },
+   {
+    "pict": "p-home",
+    "head": "○まで あるく",
+    "body": "きょうは ○まで あるいて、もどります。いそがなくて いいです。",
+    "hl": {
+     "blue": [
+      "○まで"
+     ],
+     "red": [
+      "いそがなくて いいです"
+     ]
+    },
+    "easy": "○まで あるく。",
+    "memo": "（仮）目標地点（玄関・トイレ・台所）は本人の生活目標に合わせて事業所が設定。距離ではなく「どこへ行くか」で示す。"
+   },
+   {
+    "pict": "p-staff",
+    "head": "そばに います",
+    "body": "リハビリの 人が ずっと そばに います。ひとりで あるきません。",
+    "hl": {
+     "blue": [
+      "ずっと そばに います"
+     ]
+    },
+    "easy": "そばに いる。",
+    "memo": "（仮）見守り位置（麻痺側後方など）は事業所基準。家族に介助法を伝える場面があればここで同席してもらう。"
+   },
+   {
+    "pict": "p-bed",
+    "head": "つかれたら すわる",
+    "body": "とちゅうで つかれたら、すわって やすんで いいです。がんばりすぎなくて いいです。",
+    "hl": {
+     "red": [
+      "やすんで いいです"
+     ]
+    },
+    "easy": "つかれたら すわる。",
+    "memo": "（仮）休憩地点（椅子の位置）をルート上に決めておく。息切れ・顔色の変化も観察し、必要なら中止。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめる",
+    "body": "「いたい」「こわい」と いえば、すぐ やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "すぐ やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）ふらつき時の支持方法（手すり・壁・介助者）を事前に見せておく。中止基準は事業所基準を追記。"
+   },
+   {
+    "pict": "p-check",
+    "head": "きょうは あるけた",
+    "body": "きょうは ここまで あるけました。つぎの かいも いっしょに あるきます。",
+    "hl": {
+     "blue": [
+      "ここまで あるけました"
+     ]
+    },
+    "easy": "あるけた。また つぎも。",
+    "memo": "（仮）歩けた距離・時間を記録し、前回との比較を本人のことばで伝える（「この前より 休みが少なかった」等）。"
+   }
+  ]
+ },
+ {
+  "id": "d-kurashi",
+  "title": "うちのなかの うごき",
+  "note": "毎回の訪問で、家の中の生活動作（トイレ・立ち上がり・廊下など）を練習する前の再説明（2分）。",
+  "kind": "daily",
+  "pict": "p-home",
+  "check": "きょうは どの うごきを れんしゅうしましたか？",
+  "steps": [
+   {
+    "pict": "p-home",
+    "head": "まいにちの うごきを れんしゅう",
+    "body": "うちで まいにち する うごきを れんしゅうします。きょうは ○を やります。",
+    "hl": {
+     "blue": [
+      "○を やります"
+     ]
+    },
+    "easy": "まいにちの うごきを れんしゅうする。",
+    "memo": "（仮）練習する動作（トイレ・着替え・台所など）は本人の生活目標から事業所が選ぶ。リハビリ室ではなく必ず実際の場所で練習する。"
+   },
+   {
+    "pict": "p-toilet",
+    "head": "トイレの れんしゅう",
+    "body": "いつもの トイレで、つかまり方と たち方を れんしゅうします。",
+    "hl": {
+     "blue": [
+      "いつもの トイレで"
+     ]
+    },
+    "easy": "トイレで れんしゅうする。",
+    "memo": "（仮）手すりの位置・高さ、服の着脱手順は住宅環境に合わせて差替。ポータブルトイレ利用者はその機種で。"
+   },
+   {
+    "pict": "p-family",
+    "head": "かぞくも いっしょに",
+    "body": "かぞくの 人も みられます。おなじ やりかたを みんなで まもります。",
+    "hl": {
+     "blue": [
+      "おなじ やりかた"
+     ]
+    },
+    "easy": "かぞくと いっしょに。",
+    "memo": "（仮）介助方法の統一が目的。家族がやりすぎて本人の役割が減らないよう、家族への声かけも事業所で確認してほしい。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "いたいと いえば やめる",
+    "body": "「いたい」と いえば、すぐ やめます。がまんしなくて いいです。",
+    "hl": {
+     "red": [
+      "すぐ やめます",
+      "がまんしなくて いいです"
+     ]
+    },
+    "easy": "いたいと いえば やめる。",
+    "memo": "（仮）実際の生活動作中は転倒リスクが高い。中止の合図を家族にも共有すること。中止基準は事業所基準を追記。"
+   },
+   {
+    "pict": "p-check",
+    "head": "つぎも やって みましょう",
+    "body": "れんしゅうした うごきを、つぎも やって みましょう。また かくにんします。",
+    "hl": {
+     "blue": [
+      "つぎも やって みましょう"
+     ]
+    },
+    "easy": "つぎも やって みる。",
+    "memo": "（仮）安全が確認できた動作だけ「自分でやってよい」と伝える。未確認の動作は家族に見守ってもらうよう申し送る。"
+   }
+  ]
+ },
+ {
+  "id": "d-shukudai",
+  "title": "うちで やる うごき",
+  "note": "毎回の訪問で、家でやる動きの続け具合を本人と確認するときの再説明（2〜3分）。「自主トレ」の語は画面に出さない。",
+  "kind": "daily",
+  "pict": "p-paper",
+  "check": "うちで やる うごきは、いつ やりますか？",
+  "steps": [
+   {
+    "pict": "p-paper",
+    "head": "ノートを ひらく",
+    "body": "うごきの ノートを いっしょに ひらきます。○を かいた ところを みせて ください。",
+    "hl": {
+     "blue": [
+      "うごきの ノート"
+     ]
+    },
+    "easy": "ノートを みせて ください。",
+    "memo": "（仮）○つけノートの様式は事業所指定に差替。本人が自分で○をつけられる工夫（ペンの位置・紙の貼り場所）も確認する。"
+   },
+   {
+    "pict": "p-smile",
+    "head": "できた ぶんだけ",
+    "body": "これだけ やりましたね。できた ぶんだけ で だいじょうぶです。",
+    "hl": {
+     "red": [
+      "だいじょうぶです"
+     ]
+    },
+    "easy": "たくさん できた。",
+    "memo": "（仮）できない日を責めない。実施率そのものより「続いていること」を言葉にして返すこと。"
+   },
+   {
+    "pict": "p-repeat",
+    "head": "いっしょに かくにん",
+    "body": "うちで やる うごきを、もういちど いっしょに やります。いたい ときは やめて いいです。",
+    "hl": {
+     "red": [
+      "やめて いいです"
+     ]
+    },
+    "easy": "もういちど いっしょに。いたいと いえば やめる。",
+    "memo": "（仮）フォームの確認と修正を行う中核の場面。自宅で実際にやっている方法と違う癖があればその場で合わせる。"
+   },
+   {
+    "pict": "p-cal",
+    "head": "あさと よるに ○かい",
+    "body": "あさと よるに、○かい ずつ。せいかつに あう じかんで いいです。",
+    "hl": {
+     "blue": [
+      "あさと よるに"
+     ],
+     "red": [
+      "あう じかんで いいです"
+     ]
+    },
+    "easy": "あさと よる、○かい。",
+    "memo": "（仮）回数は事業所が設定。時間帯は本人の生活リズム（食事の後など既存の習慣に結びつける）に合わせる方針を明記してほしい。"
+   },
+   {
+    "pict": "p-worry",
+    "head": "できない ひも ある",
+    "body": "できない ひが あっても いいです。がまんせず、その ひの ことを おしえて ください。",
+    "hl": {
+     "red": [
+      "あっても いいです"
+     ]
+    },
+    "easy": "できない ひも ある。",
+    "memo": "（仮）しなかった理由（痛み・体調・意欲）を責めずに聞き、負荷調整の材料にする。家族への申し送り事項があれば記録する。"
+   },
+   {
+    "pict": "p-check",
+    "head": "つぎまで ○を かきましょう",
+    "body": "つぎの かいまで、できたら ノートに ○を かきましょう。また いっしょに みます。",
+    "hl": {
+     "blue": [
+      "つぎの かいまで",
+      "○を かきましょう"
+     ]
+    },
+    "easy": "また ○を かく。",
+    "memo": "（仮）ノートを本人・家族の見える場所に置くことを毎回確認。「見せる相手がいる」ことが継続の支えになる。"
+   }
+  ]
+ },
+ {
+  "id": "pt-money",
+  "title": "おかねの はなし",
+  "note": "費用の説明（初回契約時・請求時の都度、3分）。既存のtablet版テキストを維持し、用語のみ点検。",
+  "kind": "money",
+  "pict": "p-money",
+  "check": "おかねで わからない ことが あったら、どうしますか？",
+  "steps": [
+   {
+    "pict": "p-money",
+    "head": "まいつき はらいます",
+    "body": "おかねは、まい つき、はらいます。",
+    "hl": {
+     "blue": [
+      "まい つき"
+     ]
+    },
+    "easy": "まい つき、おかねを はらいます。",
+    "memo": "（仮）引き落とし日・請求月のタイミングは事業所の請求サイクルに合わせて口頭で補足してほしい。"
+   },
+   {
+    "pict": "p-wallet",
+    "head": "じぶんで はらう ぶん",
+    "body": "つかった おかねの 10のうち 1を はらいます。",
+    "hl": {
+     "red": [
+      "10のうち 1"
+     ]
+    },
+    "easy": "10のうち 1だけ。",
+    "memo": "（仮）所得区分で2割・3割負担の人は「10のうち 2」「10のうち 3」に差替。高額介護サービス費の該当者には別途事業所から説明を。"
+   },
+   {
+    "pict": "p-paper",
+    "head": "はらう ほうほう",
+    "body": "こうざから ひかれます。げんきんでは ありません。",
+    "hl": {
+     "blue": [
+      "こうざから ひかれます"
+     ]
+    },
+    "easy": "こうざから。",
+    "memo": "（仮）口座振替でない場合（請求書払い・集金等）は事業所の実際の方法に差替えてほしい。"
+   },
+   {
+    "pict": "p-paper",
+    "head": "おかねの おしらせ",
+    "body": "おうちに おてがみが きます。すてないで ください。",
+    "hl": {
+     "red": [
+      "すてないで ください"
+     ]
+    },
+    "easy": "おてがみは すてない。",
+    "memo": "（仮）どの通知（請求明細・負担割合証など）かを具体的に示し、保管場所を家族と決めてほしい。認知機能が低下した本人には「家族に渡す」でもよい。"
+   },
+   {
+    "pict": "p-phone",
+    "head": "こまったら そうだん",
+    "body": "わからなく なったら、ひとりで かかえなくて いいです。でんわして ください。",
+    "hl": {
+     "red": [
+      "でんわして ください"
+     ]
+    },
+    "easy": "わからなければ でんわ。",
+    "memo": "（仮）実際の連絡先（ケアマネジャー・事業所の電話番号）は紙に大きく書いて本人と家族の両方に渡すこと。架空の番号は書かない。"
+   }
+  ]
+ }
+];
+const PICTS = [["p-home", "いえ", "自宅・帰宅（名詞）"], ["p-car", "くるま", "送迎（名詞）"], ["p-meal", "ごはん", "食事（名詞）"], ["p-med", "くすり", "服薬（名詞）"], ["p-bath", "おふろ", "入浴（名詞）"], ["p-toilet", "トイレ", "標準図記号＋人の動作"], ["p-phone", "でんわ", "連絡（名詞）"], ["p-money", "おかね", "費用（名詞）"], ["p-cal", "カレンダー", "日程（名詞）"], ["p-clock", "とけい", "時刻（名詞）"], ["p-walk", "あるく", "動作（人＋杖）"], ["p-bed", "やすむ", "休息（名詞）"], ["p-talk", "はなす", "相談（関係性）"], ["p-worry", "こまった", "感情（表情・汗）"], ["p-smile", "あんしん", "感情（表情）"], ["p-normal", "ふつう", "感情（表情・水平口）"], ["p-staff", "くる ひと", "訪問する人（肩かけバッグ＋挙手）"], ["p-family", "かぞく", "関係性（大小2人＋つないだ手）"], ["p-towel", "タオル", "清拭（名詞）"], ["p-wallet", "おさいふ", "支払い（名詞）"], ["p-paper", "しょるい", "通知・書類（名詞）"], ["p-smartphone", "スマホ", "連絡手段"], ["p-check", "できた", "確認（記号＋文字併記）"], ["p-back", "もどる", "操作"], ["p-speaker", "よみあげ", "操作"], ["p-stop", "とめる", "操作"], ["p-repeat", "もういちど", "操作"], ["p-thermo", "ねつ", "体温計（名詞）"], ["p-cuff", "うで まき", "血圧計（名詞）"], ["p-oxy", "ゆび きかい", "酸素を測る機械（名詞）"], ["p-exercise", "すわって うごかす", "座位運動（動作）"], ["p-massage", "てで おす", "ほぐす（動作）"], ["p-stretch", "のばす", "ストレッチ（動作）"], ["p-circle-big", "おおきい まる", "調子：いい（モードD）"], ["p-circle-half", "なかの まる", "調子：ふつう（モードD）"], ["p-circle-small", "ちいさい まる", "調子：ちょっと すぐれない（モードD）"], ["p-nod", "うなずく ひと", "はい（モードD）"], ["p-shake", "くびを ふる ひと", "いいえ（モードD）"], ["p-shirt", "きがえる", "着替え（名詞）"], ["p-broom", "そうじ", "掃除（名詞）"], ["p-wash", "せんたく", "洗濯（名詞）"], ["p-basket", "かいもの かご", "買い物（名詞）"], ["p-band", "ほうたい", "包帯・手当て（名詞）"], ["p-iv", "てんてき", "点滴（名詞）"], ["p-transfer", "うつる", "移乗（ベッド→いす）"]];
+const APP_VER = 8;
+
+/* キーは無版本（企画素案§7）。旧キーからの移行フォールバック */
+const KEY_LOG = "hitotsuzutsu_log", KEY_SET = "hitotsuzutsu_set";
+const OLD_KEYS = ["hitotsuzutsu_log_v2","hitotsuzutsu_set_v2","nurse_log_v1","nurse_set_v1","pt_log_v1","pt_set_v1"];
+
+const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false };
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ---------- 設定 ---------- */
+function readSetStore(){
+  let raw = localStorage.getItem(KEY_SET);
+  if(raw === null){ for(const k of OLD_KEYS){ const v = localStorage.getItem(k+""); if(v && k.includes("set")){ raw = v; break; } } }
+  return raw;
+}
+function readLogStore(){
+  let raw = localStorage.getItem(KEY_LOG);
+  if(raw === null || raw === "[]"){
+    for(const k of OLD_KEYS){ if(!k.includes("log")) continue; const v = localStorage.getItem(k);
+      if(v && v !== "[]"){ try{ const arr = JSON.parse(v); if(Array.isArray(arr) && arr.length){ raw = v; break; } }catch(e){} } }
+  }
+  return raw;
+}
+function loadSet(){
+  try{ const o = JSON.parse(readSetStore()||"{}");
+    if(typeof o.auto==="boolean") S.auto=o.auto;
+    if(typeof o.big==="boolean") S.big=o.big;
+    if(typeof o.memo==="boolean") S.memo=o.memo; }catch(e){}
+  applySet();
+}
+function saveSet(){ try{ localStorage.setItem(KEY_SET, JSON.stringify({auto:S.auto,big:S.big,memo:S.memo,v:APP_VER})); }catch(e){} }
+function applySet(){
+  document.documentElement.style.setProperty("--scale", S.big ? "1.16" : "1");
+  $("#tg-auto").textContent = S.auto ? "よみあげ：オン" : "よみあげ：オフ";
+  $("#tg-auto").setAttribute("aria-pressed", S.auto ? "true":"false");
+  $("#tg-size").textContent = S.big ? "もじ：おおきく" : "もじ：ふつう";
+  $("#tg-size").setAttribute("aria-pressed", S.big ? "true":"false");
+  $("#tg-memo").textContent = S.memo ? "メモ：表示" : "メモ：かくす";
+  $("#tg-memo").setAttribute("aria-pressed", S.memo ? "true":"false");
+  $$("#step-memo-box").forEach(e=> e.style.display = (S.pro && S.memo) ? "" : "none");
+}
+
+/* ---------- 読み上げ ---------- */
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  try{
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang="ja-JP"; u.rate=0.8; u.pitch=1.0;
+    u.onstart = ()=>{ S.speaking = true; setSpeakLabel(); };
+    u.onend   = ()=>{ S.speaking = false; setSpeakLabel(); };
+    u.onerror = ()=>{ S.speaking = false; setSpeakLabel(); };
+    window.speechSynthesis.speak(u);
+    S.speaking = true; setSpeakLabel();
+  }catch(e){}
+}
+function stopSpeak(){ try{ window.speechSynthesis.cancel(); }catch(e){} S.speaking = false; setSpeakLabel(); }
+function setSpeakLabel(){ const l = $("#speak-label"); if(l) l.textContent = S.speaking ? "とめる" : "よみあげ"; }
+
+/* ---------- ビュー ---------- */
+const VIEWS = ["home","guide","step","done","cond","yn","record","picts"];
+function show(v){
+  if(v!=="cond" && v!=="yn") stopSpeak();
+  S.view = v;
+  VIEWS.forEach(n=>{ const el = $("#v-"+n); if(el) el.classList.toggle("on", n===v); });
+  window.scrollTo(0,0);
+}
+
+/* ---------- 記録 ---------- */
+function log(e){ S.log.push(Object.assign({t:new Date().toISOString(), v:APP_VER}, e)); persist(); }
+function persist(){ try{ localStorage.setItem(KEY_LOG, JSON.stringify(
+  JSON.parse(readLogStore()||"[]").concat(S.log))); S.log=[]; }catch(e){} }
+function allLog(){ try{ return JSON.parse(readLogStore()||"[]"); }catch(e){ return []; } }
+
+/* ---------- ホーム ---------- */
+const KIND_LABEL = {"first":"はじめての せつめい","daily":"まいかいの せつめい","money":"おかねの はなし","special":"そのほか"};
+const KIND_ORDER = ["first","daily","money","special"];
+function makeCard(opts){
+  const el = document.createElement("button");
+  el.className="card"; el.type="button";
+  el.innerHTML = '<div class="row"><svg class="pict" aria-hidden="true"><use href="#'+opts.pict+'"/></svg>'
+    + '<div><h3>'+opts.title+'</h3><p>'+opts.note+'</p></div></div>'
+    + (opts.tag ? '<p class="tag">'+opts.tag+'</p>' : '');
+  el.addEventListener("click", opts.onclick);
+  return el;
+}
+function renderHome(){
+  const box = $("#scenarios"); box.innerHTML = "";
+  /* モードDを常に先頭に（コミュニケーション補助が主目的） */
+  const dwrap = document.createElement("div");
+  dwrap.innerHTML = '<p class="kindlabel">あなたの きもちを みせる</p>';
+  const dcards = document.createElement("div"); dcards.className="cards";
+  dcards.appendChild(makeCard({pict:"p-circle-big", title:"きょうの ちょうし", note:"ぐあいを えらんで さわります。こえに します。", tag:"しつもん", onclick:()=>openCond()}));
+  dcards.appendChild(makeCard({pict:"p-nod", title:"はい・いいえ", note:"しつもんに こたえます。こえに します。", tag:"しつもん", onclick:()=>openYN()}));
+  dwrap.appendChild(dcards); box.appendChild(dwrap);
+  KIND_ORDER.forEach(kind=>{
+    const list = SCENARIOS.filter(s=>(s.kind||"daily")===kind);
+    if(!list.length) return;
+    const w = document.createElement("div");
+    w.innerHTML = '<p class="kindlabel">'+KIND_LABEL[kind]+'</p>';
+    const cards = document.createElement("div"); cards.className="cards";
+    list.forEach(sc=>{
+      cards.appendChild(makeCard({pict:sc.pict, title:sc.title, note:sc.note, tag:sc.steps.length+"ステップ", onclick:()=>startScenario(sc.id)}));
+    });
+    w.appendChild(cards); box.appendChild(w);
+  });
+  show("home");
+}
+
+/* ---------- モードD ---------- */
+function openCond(){ show("cond"); if(S.auto) speak("きょうの ちょうしは？"); }
+function openYN(){ show("yn"); if(S.auto) speak($("#yn-q").textContent); }
+function bindDCards(viewId){
+  $$("#"+viewId+" .dcard").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const say = b.getAttribute("data-say"), ev = b.getAttribute("data-ev"), val = b.getAttribute("data-val");
+      log({ev:ev, sid:viewId, val:val});
+      speak(say); /* 読み上げが本人の言葉を代弁 */
+    });
+  });
+}
+$("#cond-home").addEventListener("click", renderHome);
+$("#yn-home").addEventListener("click", renderHome);
+$("#yn-edit").addEventListener("click", ()=>{
+  const q = prompt("しつもんを いれて ください（はい・いいえで こたえられる もの）", $("#yn-q").textContent);
+  if(q && q.trim()){ $("#yn-q").textContent = q.trim(); if(S.auto) speak(q.trim()); }
+});
+bindDCards("v-cond"); bindDCards("v-yn");
+
+/* ---------- ガイダンス（離脱設計） ---------- */
+function startScenario(id){
+  const sc = SCENARIOS.find(s=>s.id===id);
+  S.sid=id; S.idx=0; S.easy=false; S.startedAt=new Date().toISOString();
+  $("#guide-head").textContent = "これから " + sc.steps.length + "つ おはなしします";
+  log({ev:"start", sid:id, steps:sc.steps.length});
+  show("guide");
+  if(S.auto) speak("これから " + sc.steps.length + "つ おはなしします。とちゅうで とめても いいです。");
+}
+
+/* ---------- ステップ ---------- */
+function hlHTML(st){
+  const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  let h = esc(st.body);
+  ((st.hl||{}).blue||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-blue">'+t+'</span>'); });
+  ((st.hl||{}).red||[]).forEach(t=>{ h = h.split(t).join('<span class="hl-red">'+t+'</span>'); });
+  h = h.replace(/【([^】]+)】/g, '<span class="nw">$1</span>');
+  return h;
+}
+function escapeHtml(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function renderStep(){
+  const sc = SCENARIOS.find(s=>s.id===S.sid), st = sc.steps[S.idx];
+  $("#scene-name").textContent = sc.title;
+  $("#stepno").textContent = (S.idx+1) + " / " + sc.steps.length;
+  $("#step-use").setAttribute("href", "#"+st.pict);
+  $("#step-head").textContent = st.head;
+  $("#step-body").innerHTML = S.easy ? escapeHtml(st.easy||st.body) : hlHTML(st);
+  $("#step-memo").textContent = st.memo || "—";
+  const dots = $("#step-dots"); dots.innerHTML="";
+  sc.steps.forEach((_,i)=>{ const d=document.createElement("i"); d.setAttribute("role","listitem"); if(i===S.idx) d.className="on"; dots.appendChild(d); });
+  $("#step-back").disabled = (S.idx===0);
+  $("#step-again").disabled = S.easy || !st.easy;
+  show("step");
+  log({ev:"show", sid:S.sid, step:S.idx+1, easy:S.easy});
+  if(S.auto) speak(st.head + "。" + (S.easy ? (st.easy||st.body) : st.body));
+}
+function nextStep(){
+  const sc = SCENARIOS.find(s=>s.id===S.sid);
+  log({ev:"ok", sid:S.sid, step:S.idx+1});
+  if(S.idx < sc.steps.length-1){ S.idx++; S.easy=false; renderStep(); } else { finish(); }
+}
+function finish(){
+  const sc = SCENARIOS.find(s=>s.id===S.sid);
+  const sec = S.startedAt ? Math.round((Date.now()-new Date(S.startedAt).getTime())/1000) : null;
+  log({ev:"finish", sid:S.sid, sec:sec});
+  $("#done-q").textContent = sc.check || "—";
+  show("done");
+  if(S.auto) speak("おはなしは おわりです。ありがとう ございました。");
+}
+
+/* ---------- 記録ビュー ---------- */
+function renderRecord(){
+  const rows = allLog().slice().reverse();
+  const body = $("#record-body");
+  if(!rows.length){ body.innerHTML = '<p class="lead">まだ きろくは ありません。</p>'; }
+  else{
+    const rep = rows.filter(r=>r.ev==="easy").length;
+    const cond = rows.filter(r=>r.ev==="condition").length;
+    const ans = rows.filter(r=>r.ev==="answer").length;
+    let html = '<p class="lead">記録 '+rows.length+'件／やさしい いいかた 使用 '+rep+'回／ちょうし '+cond+'回／はい・いいえ '+ans+'回</p>';
+    html += '<table><caption class="lead">さいしん 200けん</caption><thead><tr><th scope="col">日時</th><th scope="col">場面</th><th scope="col">ステップ</th><th scope="col">できごと</th><th scope="col">こたえ</th></tr></thead><tbody>';
+    const EV = {start:"説明を開始",show:"提示",ok:"わかった",easy:"やさしい いいかた",back:"もどる",finish:"おわり",condition:"きょうの ちょうし",answer:"はい・いいえ"};
+    const sidName = sid=>{
+      if(!sid) return "—";
+      const sc = SCENARIOS.find(s=>s.id===sid);
+      if(sc) return sc.title;
+      if(sid==="v-cond") return "きょうの ちょうし";
+      if(sid==="v-yn") return "はい・いいえ";
+      return sid;
+    };
+    rows.slice(0,200).forEach(r=>{
+      html += "<tr><td>"+String(r.t).replace("T"," ").slice(0,19)+"</td><td>"+sidName(r.sid)+"</td><td>"+(r.step||"—")+"</td><td>"+(EV[r.ev]||r.ev)+"</td><td>"+(r.val||"")+"</td></tr>";
+    });
+    html += "</tbody></table>"; body.innerHTML = html;
+  }
+  show("record");
+}
+
+/* ---------- ピクト一覧 ---------- */
+function renderPicts(){
+  const g = $("#pict-grid"); g.innerHTML="";
+  PICTS.forEach(([id,name,note])=>{
+    const d = document.createElement("div"); d.className="pcell";
+    d.innerHTML = '<svg aria-hidden="true"><use href="#'+id+'"/></svg><b>'+name+'</b><small>'+note+'</small>';
+    g.appendChild(d);
+  });
+  show("picts");
+}
+
+/* ---------- CSV ---------- */
+const EV_NAMES = {start:"説明を開始",show:"提示",ok:"わかった",easy:"やさしい いいかた",back:"もどる",finish:"おわり",condition:"きょうの ちょうし",answer:"はい・いいえ"};
+function exportCSV(){
+  const rows = allLog();
+  const lines = ["日時,版,場面ID,場面,ステップ,できごと,こたえ,やさしいいいかた,秒"];
+  rows.forEach(r=>{
+    const nm = r.sid ? (((SCENARIOS.find(s=>s.id===r.sid)||{}).title)||r.sid) : "";
+    lines.push([r.t, r.v||"", r.sid||"", nm, r.step||"", EV_NAMES[r.ev]||r.ev, r.val||"", r.easy?"はい":"", r.sec||""]
+      .map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(","));
+  });
+  const blob = new Blob(["\uFEFF"+lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "setsumei_kiroku.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function importCSV(){ $("#rec-file").click(); }
+$("#rec-file").addEventListener("change", ev=>{
+  const f = ev.target.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = ()=>{
+    try{
+      const text = String(rd.result).replace(/^\uFEFF/,"");
+      const lines = text.split(/\r?\n/).filter(l=>l.trim());
+      if(lines.length<2) throw new Error("empty");
+      const n = lines.length-1;
+      if(confirm(n+"件の きろくを よみこんで ますか？（いまの きろくに たします）")){
+        const arr = allLog();
+        lines.slice(1).forEach(l=>{
+          const cells = l.match(/("([^"]|"")*"|[^,]*)(,|$)/g) || [];
+          const vals = cells.map(c=>c.replace(/,$/,"").replace(/^"|"$/g,"").replace(/""/g,'"'));
+          arr.push({t:vals[0]||new Date().toISOString(), v:vals[1]?Number(vals[1])||8:8, sid:vals[2]||"", step:vals[4]?Number(vals[4]):undefined, ev:"import", val:vals[6]||"", imported:true, orig:[vals[3],vals[5]].filter(Boolean).join("/")});
+        });
+        localStorage.setItem(KEY_LOG, JSON.stringify(arr));
+        renderRecord();
+      }
+    }catch(e){ alert("CSVを よみこめ ませんでした。"); }
+    ev.target.value = "";
+  };
+  rd.readAsText(f, "utf-8");
+});
+
+/* ---------- イベント ---------- */
+$("#tg-pro").addEventListener("click", ()=>{
+  const p = $("#propanel"), on = p.classList.toggle("on");
+  document.body.classList.toggle("pro", on);
+  S.pro = on; applySet();
+  $("#tg-pro").setAttribute("aria-pressed", on ? "true":"false");
+});
+$("#rotate-ok").addEventListener("click", ()=> $("#rotate").classList.add("hide"));
+$("#tg-auto").addEventListener("click", ()=>{ S.auto=!S.auto; saveSet(); applySet(); });
+$("#tg-size").addEventListener("click", ()=>{ S.big=!S.big; saveSet(); applySet(); });
+$("#tg-memo").addEventListener("click", ()=>{ S.memo=!S.memo; saveSet(); applySet(); });
+$("#go-record").addEventListener("click", renderRecord);
+$("#btn-record").addEventListener("click", renderRecord);
+$("#go-picts").addEventListener("click", renderPicts);
+$("#btn-picts").addEventListener("click", renderPicts);
+$("#guide-start").addEventListener("click", renderStep);
+$("#guide-stop").addEventListener("click", ()=>{ log({ev:"back", sid:S.sid, step:"guide"}); renderHome(); });
+$("#step-back").addEventListener("click", ()=>{
+  log({ev:"back", sid:S.sid, step:S.idx+1});
+  if(S.idx>0){ S.idx--; S.easy=false; renderStep(); } else { renderHome(); }
+});
+$("#step-speak").addEventListener("click", ()=>{
+  if(S.speaking){ stopSpeak(); return; }
+  const sc = SCENARIOS.find(s=>s.id===S.sid), st = sc.steps[S.idx];
+  speak(st.head + "。" + (S.easy ? (st.easy||st.body) : st.body));
+});
+$("#step-again").addEventListener("click", ()=>{
+  S.easy = true;
+  const st = SCENARIOS.find(s=>s.id===S.sid).steps[S.idx];
+  log({ev:"easy", sid:S.sid, step:S.idx+1});
+  $("#step-body").innerHTML = escapeHtml(st.easy||st.body);
+  $("#step-again").disabled = true;
+  speak(st.easy||st.body);
+});
+$("#step-ok").addEventListener("click", nextStep);
+$("#done-record").addEventListener("click", renderRecord);
+$("#done-home").addEventListener("click", renderHome);
+$("#rec-csv").addEventListener("click", exportCSV);
+$("#rec-import").addEventListener("click", importCSV);
+$("#rec-print").addEventListener("click", ()=>window.print());
+$("#rec-clear").addEventListener("click", ()=>{
+  if(confirm("この端末の きろくを ぜんぶ けします。よろしいですか？")){
+    try{ localStorage.removeItem(KEY_LOG); OLD_KEYS.filter(k=>k.includes("log")).forEach(k=>localStorage.removeItem(k)); }catch(e){}
+    renderRecord();
+  }
+});
+$("#rec-home").addEventListener("click", renderHome);
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ stopSpeak(); renderHome(); }
+  if(S.view==="step"){
+    if(e.key==="ArrowRight") nextStep();
+    if(e.key==="ArrowLeft" && S.idx>0){ S.idx--; S.easy=false; renderStep(); }
+  }
+});
+
+/* ---------- 起動 ---------- */
+loadSet(); renderHome();
+</script>
+</body>
+</html>
