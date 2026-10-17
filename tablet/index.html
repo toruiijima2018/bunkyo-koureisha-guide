@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v8）</title>
+<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v9）</title>
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
@@ -118,6 +118,19 @@
   .nw{white-space:nowrap}
   button.big.stop{border-color:var(--warn);color:var(--warn)}
   .dots i.on{background:var(--key);border-color:var(--key)}
+  /* ---------- v9 せってい: テーマ ---------- */
+  body[data-theme="white"]{--bg:#FFFFFF;--card:#FFFFFF;--ink:#000000;--muted:#333333;--line:#8A8A8A;--memo:#FFF6BF}
+  body[data-theme="blue"]{--bg:#EAF2FA;--card:#F7FBFF;--ink:#10243A;--muted:#3A5A78;--line:#A9C4DC;--memo:#FFF3C4}
+  #v-setting .setblock{background:var(--card);border:2px solid var(--line);border-radius:16px;
+    padding:12px;margin:0 0 12px;font-size:15px}
+  #v-setting .setblock h4{margin:0 0 8px;font-size:17px}
+  #v-setting label.r{display:inline-flex;align-items:center;gap:6px;margin:0 14px 6px 0;min-height:44px}
+  #v-setting input[type=text]{width:100%;font-size:17px;padding:8px;font-family:inherit;border:2px solid var(--line);border-radius:10px;background:#fff;color:#111}
+  #v-setting select{font-size:17px;padding:8px;font-family:inherit;border:2px solid var(--line);border-radius:10px;background:#fff;color:#111;min-height:44px}
+  #v-setting .hint{font-size:13px;color:var(--muted);margin:4px 0 0}
+  #v-setting textarea{width:100%;font-size:17px;padding:8px;font-family:inherit;border:2px solid var(--line);border-radius:10px;background:#fff;color:#111;min-height:64px}
+  #v-setting .steprow{border-top:2px dashed var(--line);padding:10px 0}
+
 
   /* ---------- 記録・一覧 ---------- */
   table{border-collapse:collapse;width:100%;background:var(--card);font-size:calc(14px*var(--scale))}
@@ -242,7 +255,7 @@
 </defs></svg>
 
 <header class="app">
-  <div class="name">ひとつずつ<span>｜目の前説明タブレット v8</span></div>
+  <div class="name">ひとつずつ<span>｜目の前説明タブレット v9</span></div>
   <div class="sp"></div>
   <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
   <div id="propanel">
@@ -253,6 +266,7 @@
     <button class="chip small" id="tg-memo" aria-pressed="true">メモ：表示</button>
     <button class="chip small" id="go-record">きろく</button>
     <button class="chip small" id="go-picts">ピクト一覧</button>
+    <button class="chip small" id="go-setting">せってい</button>
   </div>
 </header>
 
@@ -353,6 +367,28 @@
         <li><b>描く</b>：制度の語彙（けいやく・ほけんりょう・げんどがく・ケアプラン…）。標準が空白の領域で、ここが本お題の成果物</li>
         <li><b>原則</b>：言葉を絵にしない。<b>本人の生活に起きること</b>を絵にする</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ⑦ せってい（説明者用・本人には見せない） -->
+  <section id="v-setting" class="view scroll">
+    <h1 class="vt">せってい（フィールドテスト用）</h1>
+    <p class="lead">本人には見せない設定です。変えた内容はこの端末に保存されます。</p>
+    <div class="setblock"><h4>色</h4><div id="set-theme"></div></div>
+    <div class="setblock"><h4>文字の大きさ</h4><div id="set-fsize"></div></div>
+    <div class="setblock"><h4>音</h4><div id="set-snd"></div></div>
+    <div id="set-steps"></div>
+    <div class="setblock"><h4>設定のうつし（別端末への共有用）</h4>
+      <div class="rowbtns">
+        <button class="big ghost" id="set-export">設定を コピー欄に だす</button>
+        <button class="big ghost" id="set-import">コピー欄から よみこむ</button>
+      </div>
+      <textarea id="set-json" style="margin-top:8px" placeholder="ここに設定JSONが出ます／貼ります"></textarea>
+    </div>
+    <div class="rowbtns">
+      <button class="big primary" id="set-save">保存して もどる</button>
+      <button class="big ghost" id="set-reset">初期に もどす</button>
+      <button class="big ghost" id="set-home">もどる（保存しない）</button>
     </div>
   </section>
 </main>
@@ -482,6 +518,7 @@ function applySet(){
   $("#tg-memo").setAttribute("aria-pressed", S.memo ? "true":"false");
   const sndEl = $("#tg-snd"); if(sndEl){ sndEl.textContent = S.snd ? "音：オン" : "音：オフ"; sndEl.setAttribute("aria-pressed", S.snd?"true":"false"); }
   $$("#step-memo-box").forEach(e=> e.style.display = (S.pro && S.memo) ? "" : "none");
+  try{ applyCfg(); }catch(e){}
 }
 
 
@@ -519,12 +556,141 @@ function soundWrap(id, type){
   b.addEventListener("click", ()=>{ if(window.SFX && SFX[type]) SFX[type](); }, true);
 }
 
+
+/* ---------- せってい（フィールドテスト用・説明者のみ） ---------- */
+const KEY_CFG = "hitotsuzutsu_cfg_v1";
+let CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}};
+function loadCfg(){
+  try{
+    const o = JSON.parse(localStorage.getItem(KEY_CFG)||"{}");
+    if(o.theme) CFG.theme=o.theme;
+    if(typeof o.fsize==="number") CFG.fsize=o.fsize;
+    if(o.hidden) CFG.hidden=o.hidden;
+    if(o.text) CFG.text=o.text;
+  }catch(e){}
+}
+function saveCfg(){ try{ localStorage.setItem(KEY_CFG, JSON.stringify(CFG)); }catch(e){} }
+function todayJST(){ return new Date(Date.now()+9*3600*1000).toISOString().slice(0,10); }
+function isHidden(sid, idx){
+  const v = CFG.hidden && CFG.hidden[sid+":"+idx];
+  if(v===true || v==="always") return true;
+  if(typeof v==="string" && v.length===10) return v===todayJST();
+  return false;
+}
+function textOv(sid, idx){ return ((CFG.text||{})[sid]||{})[idx] || null; }
+function visibleFlow(sid){
+  const sc = SCENARIOS.find(s=>s.id===sid);
+  return sc.steps.map((st,i)=>({st:st, orig:i})).filter(x=>!isHidden(sid, x.orig));
+}
+function applyCfg(){
+  document.body.dataset.theme = (CFG.theme && CFG.theme!=="cream") ? CFG.theme : "";
+  const scales = [1, 1.16, 1.32];
+  const fs = (typeof CFG.fsize==="number") ? CFG.fsize : 0;
+  document.documentElement.style.setProperty("--scale", String(scales[fs]||1));
+  const names = ["もじ：ふつう","もじ：おおきい","もじ：とっても"];
+  const t = document.querySelector("#tg-size");
+  if(t){ t.textContent = names[fs]||names[0]; t.setAttribute("aria-pressed", fs>0?"true":"false"); }
+  if(CFG.snd!==null && typeof CFG.snd==="boolean"){ S.snd = CFG.snd; }
+}
+function escA(t){ return String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function renderSettings(){
+  const themes = [["cream","クリーム（既定）"],["white","白（コントラスト強）"],["blue","うす青（落ち着く）"]];
+  document.querySelector("#set-theme").innerHTML = themes.map(([v,n])=>
+    '<label class="r"><input type="radio" name="s-theme" value="'+v+'"'+(CFG.theme===v?" checked":"")+'> '+n+'</label>').join("");
+  const fs = [["0","ふつう"],["1","おおきい"],["2","とっても おおきい"]];
+  document.querySelector("#set-fsize").innerHTML = fs.map(([v,n])=>
+    '<label class="r"><input type="radio" name="s-fsize" value="'+v+'"'+(String(CFG.fsize)===v?" checked":"")+'> '+n+'</label>').join("");
+  const sn = S.snd ? "1":"0";
+  document.querySelector("#set-snd").innerHTML =
+    '<label class="r"><input type="radio" name="s-snd" value="1"'+(sn==="1"?" checked":"")+'> 音：オン</label>'+
+    '<label class="r"><input type="radio" name="s-snd" value="0"'+(sn==="0"?" checked":"")+'> 音：オフ</label>';
+  let h = "";
+  SCENARIOS.forEach(sc=>{
+    h += '<div class="setblock"><h4>'+escA(sc.title)+'</h4>';
+    sc.steps.forEach((st,i)=>{
+      const ov = textOv(sc.id, i) || {};
+      const shown = !isHidden(sc.id, i);
+      const hv = (CFG.hidden||{})[sc.id+":"+i];
+      const sel = (hv===true||hv==="always") ? "always" : ((typeof hv==="string"&&hv.length===10) ? "today" : "show");
+      h += '<div class="steprow" data-sid="'+escA(sc.id)+'" data-idx="'+i+'">'
+        + '<label class="r">この画面: <select data-k="vis">'
+        + '<option value="show"'+(sel==="show"?" selected":"")+'>だす</option>'
+        + '<option value="today"'+(sel==="today"?" selected":"")+'>今日だけ 隠す</option>'
+        + '<option value="always"'+(sel==="always"?" selected":"")+'>ずっと 隠す</option>'
+        + '</select></label>'
+        + '<div>見出し</div><input type="text" data-k="head" placeholder="現場では何て言ってる？" value="'+escA(ov.head!=null?ov.head:st.head)+'">'
+        + '<div>本文</div><textarea data-k="body" placeholder="現場では何て言ってる？ その言い方で書いてみてください">'+escA(ov.body!=null?ov.body:st.body)+'</textarea>'
+        + '<div>やさしい いいかた</div><textarea data-k="easy" placeholder="現場では何て言ってる？">'+escA(ov.easy!=null?ov.easy:st.easy)+'</textarea>'
+        + '<p class="hint">ヒント：現場では何て言ってる？ その言い方を上の欄に書くと、事業者チェックが速くなります。</p>'
+        + '</div>';
+    });
+    h += '</div>';
+  });
+  document.querySelector("#set-steps").innerHTML = h;
+  show("setting");
+}
+function collectSettings(){
+  const t = document.querySelector('input[name="s-theme"]:checked');
+  if(t) CFG.theme = t.value;
+  const f = document.querySelector('input[name="s-fsize"]:checked');
+  if(f) CFG.fsize = parseInt(f.value,10)||0;
+  const sn = document.querySelector('input[name="s-snd"]:checked');
+  if(sn){ S.snd = (sn.value==="1"); CFG.snd = S.snd; }
+  CFG.hidden = {}; CFG.text = {};
+  document.querySelectorAll("#set-steps .steprow").forEach(row=>{
+    const sid = row.dataset.sid, idx = parseInt(row.dataset.idx,10);
+    const vis = row.querySelector('[data-k="vis"]').value;
+    if(vis==="always") CFG.hidden[sid+":"+idx] = "always";
+    else if(vis==="today") CFG.hidden[sid+":"+idx] = todayJST();
+    const head = row.querySelector('[data-k="head"]').value;
+    const body = row.querySelector('[data-k="body"]').value;
+    const easy = row.querySelector('[data-k="easy"]').value;
+    const sc = SCENARIOS.find(s=>s.id===sid), st = sc.steps[idx];
+    if(head!==st.head || body!==st.body || easy!==st.easy){
+      if(!CFG.text[sid]) CFG.text[sid] = {};
+      CFG.text[sid][idx] = {head:head, body:body, easy:easy};
+    }
+  });
+  saveCfg(); saveSet(); applySet(); applyCfg();
+}
+function bindSettings(){
+  const g = s => document.querySelector(s);
+  if(g("#go-setting")) g("#go-setting").addEventListener("click", ()=>{ SFX.tap(); renderSettings(); });
+  if(g("#set-save")) g("#set-save").addEventListener("click", ()=>{ SFX.tap(); collectSettings(); renderHome(); });
+  if(g("#set-home")) g("#set-home").addEventListener("click", ()=>{ SFX.tap(); renderHome(); });
+  if(g("#set-reset")) g("#set-reset").addEventListener("click", ()=>{
+    const b = g("#set-reset");
+    if(!b.dataset.arm){
+      b.dataset.arm = "1"; b.textContent = "ほんとうに もどす？（もう一度 おす）";
+      setTimeout(()=>{ delete b.dataset.arm; b.textContent = "初期に もどす"; }, 3000);
+      return;
+    }
+    delete b.dataset.arm; b.textContent = "初期に もどす";
+    try{ localStorage.removeItem(KEY_CFG); }catch(e){}
+    CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}};
+    applyCfg(); renderSettings();
+  });
+  if(g("#set-export")) g("#set-export").addEventListener("click", ()=>{
+    SFX.tap();
+    g("#set-json").value = localStorage.getItem(KEY_CFG)||"{}";
+  });
+  if(g("#set-import")) g("#set-import").addEventListener("click", ()=>{
+    try{
+      const o = JSON.parse(g("#set-json").value||"{}");
+      if(o.theme) CFG.theme=o.theme;
+      if(typeof o.fsize==="number") CFG.fsize=o.fsize;
+      if(o.hidden) CFG.hidden=o.hidden;
+      if(o.text) CFG.text=o.text;
+      saveCfg(); applyCfg(); renderSettings();
+    }catch(e){ alert("よみこめませんでした。JSONを たしかめてください。"); }
+  });
+}
+
 /* ---------- 読み上げ ---------- */
 function speak(text){
   if(!("speechSynthesis" in window)) return;
   try{
     window.speechSynthesis.cancel();
-    SFX.speak();
     try{ if(window.SFX) SFX.speak(); }catch(e){}
     const u = new SpeechSynthesisUtterance(text);
     u.lang="ja-JP"; u.rate=0.8; u.pitch=1.0;
@@ -548,7 +714,7 @@ function setSpeakLabel(){
 /* ---------- ビュー ---------- */
 function show(v){
   stopSpeak(); S.view = v;
-  ["home","guide","step","done","record","picts"].forEach(n=>{
+  ["home","guide","step","done","record","picts","setting"].forEach(n=>{
     const el = $("#v-"+n); if(el) el.classList.toggle("on", n===v);
   });
   window.scrollTo(0,0);
@@ -579,10 +745,12 @@ function renderHome(){
 function startScenario(id){
   const sc = SCENARIOS.find(s=>s.id===id);
   S.sid=id; S.idx=0; S.easy=false; S.startedAt=new Date().toISOString();
+  S.flow = visibleFlow(id); S.vidx = 0;
+  if(!S.flow.length){ renderHome(); if(S.auto) speak("すべて 非表示に なっています。せっていで もどしてください。"); return; }
   $("#guide-head").textContent = "これから いっしょに みます";
   log({ev:"start", sid:id, steps:sc.steps.length});
   show("guide");
-  if(S.auto) speak("これから " + sc.steps.length + "つ おはなしします。とちゅうで とめても いいです。");
+  if(S.auto) speak("これから いっしょに みます。やめても いいです。");
 }
 
 /* ---------- ステップ ---------- */
@@ -596,25 +764,30 @@ function hlHTML(st){
 }
 function escapeHtml(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function renderStep(){
-  const sc = SCENARIOS.find(s=>s.id===S.sid), st = sc.steps[S.idx];
+  const sc = SCENARIOS.find(s=>s.id===S.sid);
+  if(!S.flow || !S.flow.length) S.flow = visibleFlow(S.sid);
+  if(S.vidx==null) S.vidx = 0;
+  if(S.vidx >= S.flow.length) S.vidx = S.flow.length-1;
+  const cur = S.flow[S.vidx], st0 = cur.st, orig = cur.orig;
+  const ov = textOv(S.sid, orig) || {};
+  const st = {pict:st0.pict, head:(ov.head!=null?ov.head:st0.head), body:(ov.body!=null?ov.body:st0.body), easy:(ov.easy!=null?ov.easy:st0.easy), hl:st0.hl, memo:st0.memo};
   $("#scene-name").textContent = sc.title;
-  $("#stepno").textContent = (S.idx+1) + " / " + sc.steps.length;
+  $("#stepno").textContent = (S.vidx+1) + " / " + S.flow.length;
   $("#step-use").setAttribute("href", "#"+st.pict);
   $("#step-head").textContent = st.head;
   $("#step-body").innerHTML = S.easy ? escapeHtml(st.easy) : hlHTML(st);
   $("#step-memo").textContent = st.memo || "—";
   const dots = $("#step-dots"); dots.innerHTML="";
-  sc.steps.forEach((_,i)=>{ const d=document.createElement("i"); if(i===S.idx) d.className="on"; dots.appendChild(d); });
-  $("#step-back").disabled = (S.idx===0);
+  S.flow.forEach((_,i)=>{ const d=document.createElement("i"); if(i===S.vidx) d.className="on"; dots.appendChild(d); });
+  $("#step-back").disabled = (S.vidx===0);
   $("#step-again").disabled = S.easy;
   show("step");
-  log({ev:"show", sid:S.sid, step:S.idx+1, easy:S.easy});
+  log({ev:"show", sid:S.sid, step:orig+1, easy:S.easy});
   if(S.auto) speak(st.head + "。" + (S.easy?st.easy:st.body));
 }
 function nextStep(){
-  const sc = SCENARIOS.find(s=>s.id===S.sid);
-  log({ev:"ok", sid:S.sid, step:S.idx+1});
-  if(S.idx < sc.steps.length-1){ S.idx++; S.easy=false; renderStep(); } else { finish(); }
+  log({ev:"ok", sid:S.sid, step:S.flow[S.vidx].orig+1});
+  if(S.vidx < S.flow.length-1){ S.vidx++; S.easy=false; renderStep(); } else { finish(); }
 }
 function finish(){
   const sc = SCENARIOS.find(s=>s.id===S.sid);
@@ -680,7 +853,7 @@ $("#tg-pro").addEventListener("click", ()=>{
 });
 $("#rotate-ok").addEventListener("click", ()=> $("#rotate").classList.add("hide"));
 $("#tg-auto").addEventListener("click", ()=>{ S.auto=!S.auto; saveSet(); applySet(); });
-$("#tg-size").addEventListener("click", ()=>{ S.big=!S.big; saveSet(); applySet(); });
+$("#tg-size").addEventListener("click", ()=>{ const fs=(typeof CFG!=="undefined"&&typeof CFG.fsize==="number")?CFG.fsize:0; CFG.fsize=(fs+1)%3; saveCfg(); saveSet(); applySet(); applyCfg(); });
 $("#tg-memo").addEventListener("click", ()=>{ S.memo=!S.memo; saveSet(); applySet(); });
 $("#tg-snd").addEventListener("click", ()=>{ S.snd=!S.snd; saveSet(); applySet(); });
 $("#go-record").addEventListener("click", renderRecord);
@@ -690,18 +863,22 @@ $("#btn-picts").addEventListener("click", renderPicts);
 $("#guide-start").addEventListener("click", renderStep);
 $("#guide-stop").addEventListener("click", ()=>{ log({ev:"back", sid:S.sid, step:"guide"}); renderHome(); });
 $("#step-back").addEventListener("click", ()=>{
-  log({ev:"back", sid:S.sid, step:S.idx+1});
-  if(S.idx>0){ S.idx--; S.easy=false; renderStep(); } else { renderHome(); }
+  log({ev:"back", sid:S.sid, step:(S.flow&&S.flow[S.vidx]?S.flow[S.vidx].orig+1:null)});
+  if(S.vidx>0){ S.vidx--; S.easy=false; renderStep(); } else { renderHome(); }
 });
 $("#step-speak").addEventListener("click", ()=>{
   if(S.speaking){ stopSpeak(); return; }
-  const sc = SCENARIOS.find(s=>s.id===S.sid), st = sc.steps[S.idx];
-  speak(st.head + "。" + (S.easy?st.easy:st.body));
+  const cur2 = S.flow[S.vidx], st0b = cur2.st;
+  const ovb = textOv(S.sid, cur2.orig) || {};
+  const hb = (ovb.head!=null?ovb.head:st0b.head), bb = (S.easy?(ovb.easy!=null?ovb.easy:st0b.easy):(ovb.body!=null?ovb.body:st0b.body));
+  speak(hb + "。" + bb);
 });
 $("#step-again").addEventListener("click", ()=>{
   S.easy = true;
-  const st = SCENARIOS.find(s=>s.id===S.sid).steps[S.idx];
-  log({ev:"easy", sid:S.sid, step:S.idx+1});
+  const cur3 = S.flow[S.vidx];
+  const ov3 = textOv(S.sid, cur3.orig) || {};
+  const st = {easy:(ov3.easy!=null?ov3.easy:cur3.st.easy)};
+  log({ev:"easy", sid:S.sid, step:S.flow[S.vidx].orig+1});
   $("#step-body").innerHTML = escapeHtml(st.easy);
   $("#step-again").disabled = true;
   speak(st.easy);
@@ -722,7 +899,7 @@ document.addEventListener("keydown", e=>{
   if(e.key==="Escape"){ stopSpeak(); renderHome(); }
   if(S.view==="step"){
     if(e.key==="ArrowRight") nextStep();
-    if(e.key==="ArrowLeft" && S.idx>0){ S.idx--; S.easy=false; renderStep(); }
+    if(e.key==="ArrowLeft" && S.vidx>0){ S.vidx--; S.easy=false; renderStep(); }
   }
 });
 
@@ -738,7 +915,7 @@ function bindSfx(){
   soundWrap("#rotate-ok","sel");
 }
 /* ---------- 起動 ---------- */
-loadSet(); renderHome(); bindSfx(); applySet();
+loadSet(); loadCfg(); renderHome(); bindSfx(); bindSettings(); applySet(); applyCfg();
 </script>
 </body>
 </html>
