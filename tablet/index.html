@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v7）</title>
+<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v8）</title>
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
@@ -32,7 +32,9 @@
   #propanel .lab{font-size:calc(13px * var(--scale));color:var(--muted);font-weight:700}
   .chip.small{font-size:calc(13px * var(--scale));min-height:40px;padding:calc(4px * var(--scale)) calc(11px * var(--scale))}
 
-  /* ---------- ビュー ---------- */
+  
+
+/* ---------- ビュー ---------- */
   main{flex:1 1 auto;min-height:0;display:flex;padding:calc(10px * var(--scale))}
   .view{display:none;flex:1;min-height:0;max-width:1400px;margin:0 auto;width:100%}
   .view.on{display:flex;flex-direction:column}
@@ -240,13 +242,14 @@
 </defs></svg>
 
 <header class="app">
-  <div class="name">ひとつずつ<span>｜目の前説明タブレット v7</span></div>
+  <div class="name">ひとつずつ<span>｜目の前説明タブレット v8</span></div>
   <div class="sp"></div>
   <button class="chip" id="tg-pro" aria-pressed="false" aria-controls="propanel">せつめいしゃ用</button>
   <div id="propanel">
     <span class="lab">説明者メニュー（本人に見せない設定・記録類はここ）：</span>
     <button class="chip small" id="tg-auto" aria-pressed="true">よみあげ：オン</button>
     <button class="chip small" id="tg-size" aria-pressed="false">もじ：ふつう</button>
+    <button class="chip small" id="tg-snd" aria-pressed="true">音：オン</button>
     <button class="chip small" id="tg-memo" aria-pressed="true">メモ：表示</button>
     <button class="chip small" id="go-record">きろく</button>
     <button class="chip small" id="go-picts">ピクト一覧</button>
@@ -257,7 +260,6 @@
   <!-- ① ホーム -->
   <section id="v-home" class="view scroll on">
     <h1 class="vt">なにを せつめい しますか？</h1>
-    <p class="lead pro-only">利用者の目の前で見せながら説明する画面です。タブレットは<b>ななめ前</b>に置き、読み上げのあいだは<b>顔</b>を見てください。読み上げ中は上の「とめる」でいつでも止められます。</p>
     <div class="cards" id="scenarios"></div>
     <div class="rowbtns pro-only">
       <button class="big ghost" id="btn-record">きろくを見る</button>
@@ -269,14 +271,15 @@
   <section id="v-guide" class="view">
     <div class="stage">
       <p class="stepno">はじめに</p>
+      <!-- v8 B1: 数字×は使わず、最低限の認知レベルを叩き台として "いっしょに みる" -->
       <div class="pictwrap"><svg class="pict" aria-hidden="true"><use href="#p-talk"/></svg></div>
-      <h2 class="head" id="guide-head">これから 5つ おはなしします</h2>
-      <p class="body">とちゅうで <b style="color:var(--warn)">とめても いいです</b>。<br>とめても、こまりません。</p>
+      <h2 class="head" id="guide-head">これから いっしょに みます</h2>
+      <p class="body">やめて いいです。<br>やめても、こまりません。</p>
       <div class="actions two">
         <button class="big primary" id="guide-start"><svg aria-hidden="true"><use href="#p-check"/></svg>はじめる</button>
         <button class="big ghost stop" id="guide-stop"><svg aria-hidden="true"><use href="#p-back"/></svg>やめる</button>
       </div>
-    </div>
+    </div>  
   </section>
 
   <!-- ③ 説明ステップ -->
@@ -454,7 +457,7 @@ const PICTS = [
   ["p-stop","とめる","操作"],["p-repeat","もういちど","操作"]
 ];
 
-const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false };
+const S = { view:"home", sid:null, idx:0, easy:false, startedAt:null, auto:true, big:false, memo:true, pro:false, log:[], speaking:false, snd:true };
 const $  = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const KEY_LOG = "hitotsuzutsu_log_v2", KEY_SET = "hitotsuzutsu_set_v2";
@@ -464,10 +467,11 @@ function loadSet(){
   try{ const o = JSON.parse(localStorage.getItem(KEY_SET)||"{}");
     if(typeof o.auto==="boolean") S.auto=o.auto;
     if(typeof o.big==="boolean") S.big=o.big;
-    if(typeof o.memo==="boolean") S.memo=o.memo; }catch(e){}
+    if(typeof o.memo==="boolean") S.memo=o.memo;
+    if(typeof o.snd==="boolean") S.snd=o.snd; }catch(e){}
   applySet();
 }
-function saveSet(){ try{ localStorage.setItem(KEY_SET, JSON.stringify({auto:S.auto,big:S.big,memo:S.memo})); }catch(e){} }
+function saveSet(){ try{ localStorage.setItem(KEY_SET, JSON.stringify({auto:S.auto,big:S.big,memo:S.memo,snd:S.snd})); }catch(e){} }
 function applySet(){
   document.documentElement.style.setProperty("--scale", S.big ? "1.16" : "1");
   $("#tg-auto").textContent = S.auto ? "よみあげ：オン" : "よみあげ：オフ";
@@ -476,7 +480,43 @@ function applySet(){
   $("#tg-size").setAttribute("aria-pressed", S.big ? "true":"false");
   $("#tg-memo").textContent = S.memo ? "メモ：表示" : "メモ：かくす";
   $("#tg-memo").setAttribute("aria-pressed", S.memo ? "true":"false");
+  const sndEl = $("#tg-snd"); if(sndEl){ sndEl.textContent = S.snd ? "音：オン" : "音：オフ"; sndEl.setAttribute("aria-pressed", S.snd?"true":"false"); }
   $$("#step-memo-box").forEach(e=> e.style.display = (S.pro && S.memo) ? "" : "none");
+}
+
+
+/* ---------- 効果音（Web Audio API・外部ファイル不要・単一HTML維持） ---------- */
+let AC = null;
+function ac(){
+  if(!AC){ const C = window.AudioContext || window.webkitAudioContext; if(C) try{ AC = new C(); } catch(e){} }
+  return AC;
+}
+function tone(price, ms, wave, gain, delay){
+  const a = ac(); if(!a || !S.snd) return;
+  try{
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = wave||"sine"; o.frequency.value = price;
+    g.gain.value = 0.01;
+    o.connect(g); g.connect(a.destination);
+    const t = a.currentTime + (delay||0);
+    g.gain.setValueAtTime((gain||0.08), t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + (ms/1000));
+    o.start(t); o.stop(t + (ms/1000)+0.05);
+  }catch(e){}
+}
+const SFX = {
+  tap:    ()=> tone(520, 60, "sine", 0.08),
+  ok:     ()=> tone(440, 90, "triangle", 0.12),
+  again:  ()=> tone(660, 80, "sine", 0.09),
+  back:   ()=> tone(330, 70, "sine", 0.08),
+  stop:   ()=> tone(220, 120, "square", 0.10),
+  start:  ()=> tone(520, 120, "triangle", 0.10),
+  speak:  ()=> tone(480, 80, "sine", 0.09),
+  sel:    ()=> tone(390, 50, "sine", 0.07)
+};
+function soundWrap(id, type){
+  const b = document.querySelector(id); if(!b) return;
+  b.addEventListener("click", ()=>{ if(window.SFX && SFX[type]) SFX[type](); }, true);
 }
 
 /* ---------- 読み上げ ---------- */
@@ -484,6 +524,8 @@ function speak(text){
   if(!("speechSynthesis" in window)) return;
   try{
     window.speechSynthesis.cancel();
+    SFX.speak();
+    try{ if(window.SFX) SFX.speak(); }catch(e){}
     const u = new SpeechSynthesisUtterance(text);
     u.lang="ja-JP"; u.rate=0.8; u.pitch=1.0;
     u.onstart = ()=>{ S.speaking = true; setSpeakLabel(); };
@@ -494,6 +536,7 @@ function speak(text){
   }catch(e){}
 }
 function stopSpeak(){
+  try{ if(window.SFX) SFX.stop(); }catch(e){}
   try{ window.speechSynthesis.cancel(); }catch(e){}
   S.speaking = false; setSpeakLabel();
 }
@@ -536,7 +579,7 @@ function renderHome(){
 function startScenario(id){
   const sc = SCENARIOS.find(s=>s.id===id);
   S.sid=id; S.idx=0; S.easy=false; S.startedAt=new Date().toISOString();
-  $("#guide-head").textContent = "これから " + sc.steps.length + "つ おはなしします";
+  $("#guide-head").textContent = "これから いっしょに みます";
   log({ev:"start", sid:id, steps:sc.steps.length});
   show("guide");
   if(S.auto) speak("これから " + sc.steps.length + "つ おはなしします。とちゅうで とめても いいです。");
@@ -639,6 +682,7 @@ $("#rotate-ok").addEventListener("click", ()=> $("#rotate").classList.add("hide"
 $("#tg-auto").addEventListener("click", ()=>{ S.auto=!S.auto; saveSet(); applySet(); });
 $("#tg-size").addEventListener("click", ()=>{ S.big=!S.big; saveSet(); applySet(); });
 $("#tg-memo").addEventListener("click", ()=>{ S.memo=!S.memo; saveSet(); applySet(); });
+$("#tg-snd").addEventListener("click", ()=>{ S.snd=!S.snd; saveSet(); applySet(); });
 $("#go-record").addEventListener("click", renderRecord);
 $("#btn-record").addEventListener("click", renderRecord);
 $("#go-picts").addEventListener("click", renderPicts);
@@ -682,8 +726,19 @@ document.addEventListener("keydown", e=>{
   }
 });
 
+/* ---------- 効果音の結び付け ---------- */
+function bindSfx(){
+  soundWrap("#guide-start","start"); soundWrap("#guide-stop","stop");
+  soundWrap("#step-ok","ok"); soundWrap("#step-speak","speak"); soundWrap("#step-again","again");
+  soundWrap("#step-back","back"); soundWrap("#done-home","tap"); soundWrap("#done-record","tap");
+  soundWrap("#tg-pro","tap"); soundWrap("#tg-auto","tap"); soundWrap("#tg-size","tap"); soundWrap("#tg-memo","tap");
+  soundWrap("#tg-snd","tap");
+  soundWrap("#btn-record","tap"); soundWrap("#btn-picts","tap");
+  soundWrap("#rec-csv","tap"); soundWrap("#rec-print","tap"); soundWrap("#rec-clear","tap"); soundWrap("#rec-home","tap");
+  soundWrap("#rotate-ok","sel");
+}
 /* ---------- 起動 ---------- */
-loadSet(); renderHome();
+loadSet(); renderHome(); bindSfx(); applySet();
 </script>
 </body>
 </html>
