@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v9）</title>
+<title>ひとつずつ｜目の前説明タブレット（プロトタイプ v10）</title>
 <style>
   :root{
     --bg:#F9F2E1; --card:#FFFDF6; --ink:#1B2A41; --muted:#45566A; --line:#DCD2BC;
@@ -252,6 +252,27 @@
 
   <symbol id="p-repeat" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M26 50 A24 24 0 1 1 50 74"/><path d="M60 64 L50 74 L60 84"/></g></symbol>
+  <!-- モードD: 丸の縮小系列（×なし・同じ物差しの目盛り） -->
+  <symbol id="p-circle-big" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="38"/></g></symbol>
+  <symbol id="p-circle-half" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="26"/></g></symbol>
+  <symbol id="p-circle-small" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8">
+    <circle cx="50" cy="50" r="14"/></g></symbol>
+  <symbol id="p-normal" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="50" r="32"/><circle cx="38" cy="44" r="4" fill="currentColor" stroke="none"/><circle cx="62" cy="44" r="4" fill="currentColor" stroke="none"/>
+    <path d="M38 66 H62"/></g></symbol>
+  <!-- モードD: うなずく人（×記号は描かない） -->
+  <symbol id="p-nod" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="26" r="12"/><path d="M50 38 V66"/><path d="M50 46 L32 58 M50 46 L68 58"/>
+    <path d="M50 66 L38 88 M50 66 L62 88"/>
+    <path d="M72 14 l6 6 l-6 6" stroke-width="4"/><path d="M28 14 l-6 6 l6 6" stroke-width="4"/></g></symbol>
+  <!-- モードD: 首を振る人（×記号は描かない） -->
+  <symbol id="p-shake" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="50" cy="26" r="12"/><path d="M50 38 V66"/><path d="M50 46 L32 58 M50 46 L68 58"/>
+    <path d="M50 66 L38 88 M50 66 L62 88"/>
+    <path d="M74 10 l8 8 l-8 8" stroke-width="4"/><path d="M82 10 l-8 8 l8 8" stroke-width="4"/>
+    <path d="M18 10 l8 8 l-8 8" stroke-width="4"/><path d="M26 10 l-8 8 l8 8" stroke-width="4"/></g></symbol>
 </defs></svg>
 
 <header class="app">
@@ -267,6 +288,7 @@
     <button class="chip small" id="go-record">きろく</button>
     <button class="chip small" id="go-picts">ピクト一覧</button>
     <button class="chip small" id="go-setting">せってい</button>
+    <button class="chip small" id="go-home">ホーム</button>
   </div>
 </header>
 
@@ -377,6 +399,7 @@
     <div class="setblock"><h4>色</h4><div id="set-theme"></div></div>
     <div class="setblock"><h4>文字の大きさ</h4><div id="set-fsize"></div></div>
     <div class="setblock"><h4>音</h4><div id="set-snd"></div></div>
+    <div class="setblock"><h4>ホームの表示</h4><div id="set-homemode"></div></div>
     <div id="set-steps"></div>
     <div class="setblock"><h4>設定のうつし（別端末への共有用）</h4>
       <div class="rowbtns">
@@ -478,10 +501,39 @@ const SCENARIOS = [
       {pict:"p-phone", head:"こまったら そうだん", body:"わからなく なったら、でんわして ください。", hl:{red:["でんわして ください"]},
        easy:"わからなく なったら でんわ。", memo:"不安の中心は「お金は難しい」という自覚。聞いていい、と言い切る。"}
     ]
+  },
+  {
+    id:"cond", title:"きょうの ちょうしは？", note:"体調の指さし（声に出して代弁）", pict:"p-circle-big",
+    check:"きょうの ちょうしは どうでしたか？",
+    steps:[
+      {pict:"p-circle-big", head:"げんき", body:"おおきい まるに さわったら、「きょうは げんき です」と よみあげます。", hl:{blue:["げんき"]},
+       easy:"げんき。", memo:"指さしを拾う（操作させない）。触れたら読み上げが代弁＝本人の言葉になる。記録はステップ番号で残る。"},
+      {pict:"p-circle-half", head:"ふつう", body:"なかの まるに さわったら、「きょうは ふつう です」と よみあげます。", hl:{blue:["ふつう"]},
+       easy:"ふつう。", memo:"半○・小○の理解は当事者テストで検証予定。丸の大きさを主記号、表情は補助。"},
+      {pict:"p-circle-small", head:"ちょっと すぐれない", body:"ちいさい まるに さわったら、「つたえて くれて ありがとう」と よみあげます。", hl:{red:["つたえて くれて ありがとう"]},
+       easy:"つたえて くれて ありがとう。", memo:"不調の選択は警告にしない（受容）。すぐれない日は説明の枚数を減らす分岐を検討（離脱設計）。×・赤・下向き矢印は使わない。"}
+    ]
+  },
+  {
+    id:"yn", title:"はい・いいえ", note:"質問に指さしで答える（声に出して代弁）", pict:"p-nod",
+    check:"「はい」「いいえ」で 答えられましたか？",
+    steps:[
+      {pict:"p-nod", head:"はい", body:"うなずく 人に さわったら、「はい です」と よみあげます。", hl:{blue:["はい"]},
+       easy:"はい。", memo:"質問文（例：きょう おふろに はいりますか？）は せってい画面で本文を書き換えて使う。2択以上にしない。"},
+      {pict:"p-shake", head:"いいえ", body:"くびを ふる 人に さわったら、「いいえ です」と よみあげます。いいえは 失敗では ありません。", hl:{red:["いいえは 失敗では ありません"]},
+       easy:"いいえ。", memo:"いいえ＝拒否はアセスメント入力（罰にしない）。記録は残るが本人には中立に。×記号は描かない。"}
+    ]
   }
 ];
 
 const PICTS = [
+  ["p-circle-big","おおきい まる","調子：いい（モードD・丸の縮小系列）"],
+  ["p-circle-half","なかの まる","調子：ふつう（モードD）"],
+  ["p-circle-small","ちいさい まる","調子：すぐれない（モードD）"],
+  ["p-normal","ふつうの かお","表情（水平口・モードD補助）"],
+  ["p-nod","うなずく 人","はい（モードD・×なし）"],
+  ["p-shake","くびを ふる 人","いいえ（モードD・×なし）"],
+
   ["p-home","いえ","自宅・帰宅（名詞）"],["p-car","くるま","送迎（名詞）"],["p-meal","ごはん","食事（名詞）"],
   ["p-med","くすり","服薬（名詞）"],["p-bath","おふろ","入浴（名詞）"],["p-toilet","トイレ","標準図記号＋人の動作"],
   ["p-phone","でんわ","連絡（名詞）。本番はエコモ標準案内用図記号（JIS Z 8210）から借用予定"],["p-money","おかね","費用（名詞）"],["p-cal","カレンダー","日程（名詞）"],
@@ -559,7 +611,7 @@ function soundWrap(id, type){
 
 /* ---------- せってい（フィールドテスト用・説明者のみ） ---------- */
 const KEY_CFG = "hitotsuzutsu_cfg_v1";
-let CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}};
+let CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}, homeSteps:true};
 function loadCfg(){
   try{
     const o = JSON.parse(localStorage.getItem(KEY_CFG)||"{}");
@@ -567,6 +619,7 @@ function loadCfg(){
     if(typeof o.fsize==="number") CFG.fsize=o.fsize;
     if(o.hidden) CFG.hidden=o.hidden;
     if(o.text) CFG.text=o.text;
+    if(typeof o.homeSteps==="boolean") CFG.homeSteps=o.homeSteps;
   }catch(e){}
 }
 function saveCfg(){ try{ localStorage.setItem(KEY_CFG, JSON.stringify(CFG)); }catch(e){} }
@@ -604,6 +657,10 @@ function renderSettings(){
   document.querySelector("#set-snd").innerHTML =
     '<label class="r"><input type="radio" name="s-snd" value="1"'+(sn==="1"?" checked":"")+'> 音：オン</label>'+
     '<label class="r"><input type="radio" name="s-snd" value="0"'+(sn==="0"?" checked":"")+'> 音：オフ</label>';
+  const hm = CFG.homeSteps ? "1":"0";
+  document.querySelector("#set-homemode").innerHTML =
+    '<label class="r"><input type="radio" name="s-home" value="1"'+(hm==="1"?" checked":"")+'> ステップ一覧（確認用）</label>'+
+    '<label class="r"><input type="radio" name="s-home" value="0"'+(hm==="0"?" checked":"")+'> シナリオ（利用者向け）</label>';
   let h = "";
   SCENARIOS.forEach(sc=>{
     h += '<div class="setblock"><h4>'+escA(sc.title)+'</h4>';
@@ -636,6 +693,8 @@ function collectSettings(){
   if(f) CFG.fsize = parseInt(f.value,10)||0;
   const sn = document.querySelector('input[name="s-snd"]:checked');
   if(sn){ S.snd = (sn.value==="1"); CFG.snd = S.snd; }
+  const hm2 = document.querySelector('input[name="s-home"]:checked');
+  if(hm2) CFG.homeSteps = (hm2.value==="1");
   CFG.hidden = {}; CFG.text = {};
   document.querySelectorAll("#set-steps .steprow").forEach(row=>{
     const sid = row.dataset.sid, idx = parseInt(row.dataset.idx,10);
@@ -656,6 +715,7 @@ function collectSettings(){
 function bindSettings(){
   const g = s => document.querySelector(s);
   if(g("#go-setting")) g("#go-setting").addEventListener("click", ()=>{ SFX.tap(); renderSettings(); });
+  if(g("#go-home")) g("#go-home").addEventListener("click", ()=>{ try{ if(window.SFX) SFX.tap(); }catch(e){} renderHome(); });
   if(g("#set-save")) g("#set-save").addEventListener("click", ()=>{ SFX.tap(); collectSettings(); renderHome(); });
   if(g("#set-home")) g("#set-home").addEventListener("click", ()=>{ SFX.tap(); renderHome(); });
   if(g("#set-reset")) g("#set-reset").addEventListener("click", ()=>{
@@ -667,7 +727,7 @@ function bindSettings(){
     }
     delete b.dataset.arm; b.textContent = "初期に もどす";
     try{ localStorage.removeItem(KEY_CFG); }catch(e){}
-    CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}};
+    CFG = {theme:"cream", fsize:0, snd:null, hidden:{}, text:{}, homeSteps:true};
     applyCfg(); renderSettings();
   });
   if(g("#set-export")) g("#set-export").addEventListener("click", ()=>{
@@ -681,6 +741,7 @@ function bindSettings(){
       if(typeof o.fsize==="number") CFG.fsize=o.fsize;
       if(o.hidden) CFG.hidden=o.hidden;
       if(o.text) CFG.text=o.text;
+      if(typeof o.homeSteps==="boolean") CFG.homeSteps=o.homeSteps;
       saveCfg(); applyCfg(); renderSettings();
     }catch(e){ alert("よみこめませんでした。JSONを たしかめてください。"); }
   });
@@ -729,16 +790,42 @@ function allLog(){ try{ return JSON.parse(localStorage.getItem(KEY_LOG)||"[]"); 
 /* ---------- ホーム ---------- */
 function renderHome(){
   const box = $("#scenarios"); box.innerHTML = "";
-  SCENARIOS.forEach(sc=>{
-    const el = document.createElement("button");
-    el.className="card"; el.type="button";
-    el.innerHTML = '<div class="row"><svg class="pict" aria-hidden="true"><use href="#'+sc.pict+'"/></svg>'
-      + '<div><h3>'+sc.title+'</h3><p>'+sc.note+'</p></div></div>'
-      + '<p class="tag">'+sc.steps.length+'ステップ</p>';
-    el.addEventListener("click", ()=>startScenario(sc.id));
-    box.appendChild(el);
-  });
+  if(CFG.homeSteps){
+    SCENARIOS.forEach(sc=>{
+      const hd = document.createElement("p"); hd.className="lead"; hd.textContent = sc.title+"（確認用一覧）";
+      box.appendChild(hd);
+      sc.steps.forEach((st0,i)=>{
+        const ov0 = textOv(sc.id,i)||{};
+        const el = document.createElement("button");
+        el.className="card"; el.type="button";
+        const hid = isHidden(sc.id,i);
+        el.innerHTML = '<div class="row"><svg class="pict" aria-hidden="true"><use href="#'+st0.pict+'"/></svg>'
+          + '<div><h3>'+escapeHtml(ov0.head!=null?ov0.head:st0.head)+'</h3><p>'+(hid?"非表示中（確認用に表示）":sc.title)+'</p></div></div>'
+          + '<p class="tag">'+(i+1)+" / "+sc.steps.length+'</p>';
+        el.addEventListener("click", ()=>{ try{ if(window.SFX) SFX.tap(); }catch(e){} startAtStep(sc.id,i); });
+        box.appendChild(el);
+      });
+    });
+  } else {
+    SCENARIOS.forEach(sc=>{
+      const el = document.createElement("button");
+      el.className="card"; el.type="button";
+      el.innerHTML = '<div class="row"><svg class="pict" aria-hidden="true"><use href="#'+sc.pict+'"/></svg>'
+        + '<div><h3>'+sc.title+'</h3><p>'+sc.note+'</p></div></div>'
+        + '<p class="tag">'+sc.steps.length+'ステップ</p>';
+      el.addEventListener("click", ()=>startScenario(sc.id));
+      box.appendChild(el);
+    });
+  }
   show("home");
+}
+function startAtStep(sid, orig){
+  const sc0 = SCENARIOS.find(s=>s.id===sid);
+  S.sid=sid; S.idx=0; S.easy=false; S.startedAt=new Date().toISOString();
+  S.flow = sc0.steps.map((st,i)=>({st:st, orig:i}));
+  S.vidx = orig;
+  log({ev:"start", sid:sid, steps:sc0.steps.length});
+  renderStep();
 }
 
 /* ---------- ガイダンス（離脱設計） ---------- */
